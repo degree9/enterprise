@@ -1,2 +1,2 @@
-# D9 Enterprise Platform
-A Commercially Supported ClojureScript platform by Degree9.
+# D9 Enterprise
+A commercially supported ClojureScript platform by Degree9.
