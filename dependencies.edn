@@ -1,0 +1,2 @@
+[[org.clojure/clojurescript "1.9.946"]
+ [degree9/boot-semver       "1.7.0"         :scope "test"]]
