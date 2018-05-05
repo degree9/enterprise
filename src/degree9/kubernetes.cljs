@@ -2,62 +2,105 @@
   (:refer-clojure :exclude [namespace])
   (:require
     [cljs.nodejs :as node]
+    [clojure.string :as s]
     [goog.object :as obj]
     [feathers.errors :as error]))
 
 ;; Kubernetes API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (def k8s (node/require "@kubernetes/client-node"))
 
+(def fs (node/require "fs"))
+
 (def path (node/require "path"))
 
-(def fs (node/require   "fs"))
+(def ^:private k8s-svc (str "/var/run/secrets/kubernetes.io/serviceaccount"))
 
-(def svc-root  (str "/var/run/secrets/kubernetes.io/serviceaccount"))
-(def svc-ca    (str svc-root "/ca.crt"))
-(def svc-token (str svc-root "/token"))
+(def ^:private k8s-crt (str k8s-svc "/ca.crt"))
 
-(def k8s-config
-  (or js/process.env.KUBECONFIG (.join path js/process.env.HOME ".kube" "config")))
+(def ^:private k8s-token (str k8s-svc "/token"))
 
-(defn file-exists? [path]
+(def ^:private k8s-host js/process.env.KUBERNETES_SERVICE_HOST)
+
+(def ^:private k8s-port js/process.env.KUBERNETES_SERVICE_PORT)
+
+(def ^:private k8s-config (or js/process.env.KUBECONFIG
+                            (.join path js/process.env.HOME ".kube" "config")))
+
+(defn- exists [path]
   (.existsSync fs path))
 
-(defn mkconfig []
-  (k8s.KubeConfig.))
+(defn- read-file [path]
+  (.readFileSync fs path))
 
-(defn config-file [path]
-  (let [kconfig (mkconfig)]
-    (.loadFromFile kconfig path)
-    kconfig))
+(defn kube-config []
+  (let [config (k8s.KubeConfig.)]
+    (when (exists k8s-config)
+      (.loadFromFile config k8s-config))
+    config))
 
+(def CoreV1Api k8s.Core_v1Api)
 
-;(defn get-k8sconfig
-;  (let [kenv js/process.env.KUBECONFIG
-;        kconfig (.join path js/process.env.HOME ".kube" "config")
-;    (cond
-;      (file-exists? kenv) kenv
-;      (file-exists? kconfig) kconfig))
+(defn cluster-config [api]
+  (.log js/console api k8s-crt k8s-token))
 
-;(defn kubernetes [& [api config]]
-;  (if-let [svc-token (and (file-exists? svc-token) svc-token)]
-      ;(file-exists? kconfig)
-      ;(let [kconf   (config-file kconfig)
-      ;      kserver (goog.object/get kconf "server")
-      ;      k8s-api (k8s.Core_v1Api. kserver)
-      ;  (.setDefaultAuthentication k8s-api kconf)
-      ;  k8s-api
-;      (file-exists? (:token svc-account)) (.log js/console "K8S Api Should Load service account token."))))
+(defn file-config [api]
+  (let [config  (kube-config)
+        cluster (.getCurrentCluster config)
+        server  (obj/get cluster "server")
+        k8s-api (api. server)]
+    (.setDefaultAuthentication k8s-api config)
+    k8s-api))
 
+(defn config [api]
+  (cond
+    (and k8s-host k8s-port) (cluster-config api)
+    (exists k8s-config) (file-config api)
+    :else (api "http://localhost:8080")))
 
+(defn watcher
+  "A watcher for Kubernetes, implements reconnecting by calling watcher again once stream closes."
+  ([path callback]
+   (watcher path callback
+     #(watcher path callback)))
+  ([path callback reconnect-callback]
+   (watcher path #js{} callback reconnect-callback))
+  ([path opts callback reconnect-callback]
+   (.watch (k8s.Watch. (kube-config))
+     path
+     opts
+     callback
+     reconnect-callback)))
 
-;(.log js/console "K8S" (kubernetes))
+(defn watch-handler
+  "Returns a default watch-handler which prints to console."
+  [& [opts]]
+  (let [default  (:default  opts #(.log js/console %))
+        added    (:added    opts default)
+        deleted  (:deleted  opts default)
+        modified (:modified opts default)]
+    (fn [type obj]
+      (case type
+        "ADDED"    (added obj)
+        "DELETED"  (deleted obj)
+        "MODIFIED" (modified obj)
+        (default type obj)))))
 
+;;;
 
 (def Config k8s.Config)
 
-(def apps-api (k8s.Apps_v1Api.))
+(def apps-api (config k8s.Apps_v1Api))
 
-(def core-api (k8s.Config.defaultClient))
+(def core-api (config k8s.Core_v1Api))
+
+(def custom-objects (config k8s.Custom_objectsApi))
+
+;(def co-test (.createClusterCustomObject custom-objects "kate.degree9.io" "v1" "tenants" (clj->js {:kind "Tenant" :apiVersion "kate.degree9.io/v1" :metadata {:name "some-tenant"}})))
+
+;(-> co-test
+;  (.then js->clj)
+;  (.then prn)
+;  (.catch prn))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Kubernetes Helpers ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -67,27 +110,48 @@
   (js->clj k8s :keywordize-keys true))
 
 (defn- k8s-response [res]
-  (clj->js (:body (k8s->clj res))))
+  (obj/get res "body"))
 
-(defn- k8s-error
-  "Format a Kubernetes error as a [message details] pair."
-  [err]
-  (let [{:keys [body]} (k8s->clj err)
-        message (:message body)
-        details (:details body)]
-    [message (clj->js details)]))
+(defn k8s-error [err]
+  (let [{:keys [message data code]} (k8s-response err)]
+    (case code
+      404 (error/not-found message data)
+      409 (error/conflict message data)
+      500 (error/general message data)
+      (error/general message data))))
 
-(defn- not-found
-  "Emits a NotFound error from a Kubernetes error response."
-  [err]
-  (let [[message details] (k8s-error err)]
-    (error/not-found message details)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn- already-exists
-  "Emits a Conflict error from a Kubernetes error response."
-  [err]
-  (let [[message details] (k8s-error err)]
-    (error/conflict message details)))
+;; Kubernetes Services ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defn create-customresource
+  "Create a Kubernetes custom resource."
+  [group version plural body]
+  (-> custom-objects
+    (.createClusterCustomObject group version plural (clj->js body))
+    (.then k8s-response)
+    (.catch k8s-error)))
+
+(defn custom-resource [& [opts]]
+  (let [kind (:kind opts)
+        group (:group opts)
+        apiversion (:apiVersion opts "v1")
+        plural (:plural opts (s/lower-case (str kind "s")))]
+    (reify
+      Object
+      (setup [this app]
+        (obj/set this "kind" kind)
+        (obj/set this "group" group)
+        (obj/set this "apiVersion" apiversion)
+        (obj/set this "plural" plural))
+      ;(find [this params]
+      ;  ())
+      (get [this id & [params]]
+        (read-customresource id))
+      (create [this data & [params]]
+        (create-customresource group apiversion plural data)))))
+      ;(remove [this id params]
+      ;  ()))))
 
 (defn- create-namespace
   "Create a Kubernetes namespace."
@@ -95,7 +159,7 @@
   (-> core-api
     (.createNamespace data)
     (.then k8s-response)
-    (.catch already-exists)))
+    (.catch k8s-error)))
 
 (defn- read-namespace
   "Read a Kubernetes namespace."
@@ -103,18 +167,8 @@
   (-> core-api
     (.readNamespace name)
     (.then k8s-response)
-    (.catch not-found)))
+    (.catch k8s-error)))
 
-(defn- read-deployment
-  "List Deployments from a Kubernetes namespace."
-  [name namespace]
-  (-> apps-api
-    (.readNamespacedDeployment name namespace)
-    (.then k8s-response)
-    (.catch prn)))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; Kubernetes Services ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn namespace [& [opts]]
   (let []
     (reify
@@ -127,6 +181,22 @@
         (create-namespace data)))))
       ;(remove [this id params]
       ;  ()))))
+
+(defn- create-deployment
+  "Create a Kubernetes deployment."
+  [data namespace]
+  (-> core-api
+    (.createNamespacedDeployment data namespace)
+    (.then k8s-response)
+    (.catch k8s-error)))
+
+(defn- read-deployment
+  "List Deployments from a Kubernetes namespace."
+  [name namespace]
+  (-> apps-api
+    (.readNamespacedDeployment name namespace)
+    (.then k8s-response)
+    (.catch k8s-error)))
 
 (defn deployment [& [opts]]
   (let []
