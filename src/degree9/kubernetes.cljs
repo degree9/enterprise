@@ -38,8 +38,6 @@
       (.loadFromFile config k8s-config))
     config))
 
-(def CoreV1Api k8s.Core_v1Api)
-
 (defn cluster-config [api]
   (.log js/console api k8s-crt k8s-token))
 
@@ -85,13 +83,12 @@
         "MODIFIED" (modified obj)
         (default type obj)))))
 
-;;;
 
-(def Config k8s.Config)
-
-(def apps-api (config k8s.Apps_v1Api))
+;(def Config k8s.Config)
 
 (def core-api (config k8s.Core_v1Api))
+
+(def apps-api (config k8s.Apps_v1Api))
 
 (def custom-objects (config k8s.Custom_objectsApi))
 
@@ -113,7 +110,7 @@
   (obj/get res "body"))
 
 (defn k8s-error [err]
-  (let [{:keys [message data code]} (k8s-response err)]
+  (let [{:keys [message data code]} (k8s->clj (k8s-response err))]
     (case code
       404 (error/not-found message data)
       409 (error/conflict message data)
@@ -122,9 +119,24 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Kubernetes Services ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Kubernetes Custom Resource ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn- list-customresource
+  "List a Kubernetes custom resource."
+  [group version plural]
+  (-> custom-objects
+    (.listClusterCustomObject group version plural)
+    (.then k8s-response)
+    (.catch k8s-error)))
 
-(defn create-customresource
+(defn- get-customresource
+  "Get a Kubernetes custom resource."
+  [group version plural id]
+  (-> custom-objects
+    (.getClusterCustomObject group version plural id)
+    (.then k8s-response)
+    (.catch k8s-error)))
+
+(defn- create-customresource
   "Create a Kubernetes custom resource."
   [group version plural body]
   (-> custom-objects
@@ -132,11 +144,35 @@
     (.then k8s-response)
     (.catch k8s-error)))
 
+(defn- replace-customresource
+  "Replace a Kubernetes custom resource."
+  [group version plural id data]
+  (-> custom-objects
+    (.replaceClusterCustomObject group version plural id (clj->js data))
+    (.then k8s-response)
+    (.catch k8s-error)))
+
+(defn- patch-customresource
+  "Patch a Kubernetes custom resource."
+  [group version plural id data]
+  (-> custom-objects
+    (.patchClusterCustomObject group version plural id (clj->js data))
+    (.then k8s-response)
+    (.catch k8s-error)))
+
+(defn- delete-customresource
+  "Delete a Kubernetes custom resource."
+  [group version plural id opts]
+  (-> custom-objects
+    (.deleteClusterCustomObject group version plural id opts)
+    (.then k8s-response)
+    (.catch k8s-error)))
+
 (defn custom-resource [& [opts]]
-  (let [kind (:kind opts)
-        group (:group opts)
+  (let [kind       (:kind opts)
+        group      (:group opts)
         apiversion (:apiVersion opts "v1")
-        plural (:plural opts (s/lower-case (str kind "s")))]
+        plural     (:plural opts (s/lower-case (str kind "s")))]
     (reify
       Object
       (setup [this app]
@@ -144,15 +180,21 @@
         (obj/set this "group" group)
         (obj/set this "apiVersion" apiversion)
         (obj/set this "plural" plural))
-      ;(find [this params]
-      ;  ())
-      (get [this id & [params]]
-        (read-customresource id))
-      (create [this data & [params]]
-        (create-customresource group apiversion plural data)))))
-      ;(remove [this id params]
-      ;  ()))))
+      (find [this params]
+        (list-customresource group apiversion plural))
+      (get [this id params]
+        (get-customresource group apiversion plural id))
+      (create [this data params]
+        (create-customresource group apiversion plural data))
+      (update [this id data params]
+        (replace-customresource group apiversion plural id data))
+      (patch [this id data params]
+        (patch-customresource group apiversion plural id data))
+      (remove [this id params]
+        (delete-customresource group apiversion plural id (obj/get params "query"))))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Kubernetes Namespace ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn- create-namespace
   "Create a Kubernetes namespace."
   [data]
@@ -181,20 +223,72 @@
         (create-namespace data)))))
       ;(remove [this id params]
       ;  ()))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn- create-deployment
-  "Create a Kubernetes deployment."
+;; Kubernetes Secrets ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn- list-secret
+  "List all Kubernetes secrets from a Kubernetes namespace ."
+  [namespace]
+  (-> core-api
+    (.listNamespacedSecret namespace)
+    (.then k8s-response)
+    (.catch k8s-error)))
+
+(defn- read-secret
+  "Read a Secret from a Kubernetes namespace."
+  [name namespace]
+  (-> core-api
+    (.readNamespacedSecret name namespace)
+    (.then k8s-response)
+    (.catch k8s-error)))
+
+(defn- create-secret
+  "Create a Kubernetes secret within a Kubernetes namespace."
   [data namespace]
   (-> core-api
-    (.createNamespacedDeployment data namespace)
+    (.createNamespacedSecret namespace data)
+    (.then k8s-response)
+    (.catch k8s-error)))
+
+(defn secret [& [opts]]
+  (let []
+    (reify
+      Object
+      (find [this params]
+        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
+          (list-secret namespace)))
+      (get [this id params]
+        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
+          (read-secret id namespace)))
+      (create [this data & [params]]
+        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
+          (create-secret data namespace))))))
+      ;(remove [this id params]
+      ;  ()))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Kubernetes Deployment ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn- list-deployment
+  "List all Kubernetes deployments from a Kubernetes namespace ."
+  [namespace]
+  (-> apps-api
+    (.listNamespacedDeployment namespace)
     (.then k8s-response)
     (.catch k8s-error)))
 
 (defn- read-deployment
-  "List Deployments from a Kubernetes namespace."
+  "Read a Deployment from a Kubernetes namespace."
   [name namespace]
   (-> apps-api
     (.readNamespacedDeployment name namespace)
+    (.then k8s-response)
+    (.catch k8s-error)))
+
+(defn- create-deployment
+  "Create a Kubernetes deployment within a Kubernetes namespace."
+  [data namespace]
+  (-> apps-api
+    (.createNamespacedDeployment namespace data)
     (.then k8s-response)
     (.catch k8s-error)))
 
@@ -202,13 +296,15 @@
   (let []
     (reify
       Object
-      ;(find [this params]
-      ;  ())
-      (get [this id & [{:keys [] :as params}]]
-        (.log js/console id params)
-        (read-deployment id nil)))))
-      ;(create [this data & [params]]
-      ;  (create-namespace data))))
+      (find [this params]
+        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
+          (list-deployment namespace)))
+      (get [this id params]
+        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
+          (read-deployment id namespace)))
+      (create [this data & [params]]
+        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
+          (create-deployment data namespace))))))
       ;(remove [this id params]
       ;  ()))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
