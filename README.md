@@ -8,7 +8,7 @@ A commercially supported ClojureScript platform by Degree9.
     <img width="135" src="http://degree9.io/images/degree9.png">
   </a>
   <br>
-  D9 Enterprise is developed and maintained by Degree9
+  <b>D9 Enterprise is developed and maintained by Degree9</b>
 </p>
 
 ---
