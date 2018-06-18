@@ -13,4 +13,7 @@ A commercially supported ClojureScript platform by Degree9.
 
 ---
 
-This library is provided as an extension to [degree9/meta](http://github.com/degree9/meta). Where [meta] only provides the basic application server/client, D9 Enterprise provides a collection of services which can be mounted to server endpoints. As well as a few helpful service hooks and client components.
+This library is provided as an extension to [degree9/meta](http://github.com/degree9/meta).  
+Where [meta] only provides the basic application server/client, D9 Enterprise provides a collection of services which can be mounted to server endpoints, as well as helpful service hooks and client components.
+
+
