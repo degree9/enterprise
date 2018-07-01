@@ -2,11 +2,12 @@
 (defn get-deps    []     (read-file "./dependencies.edn"))
 
 (set-env!
- :dependencies   (get-deps)
+ :dependencies (get-deps)
  :resource-paths #{"src"})
 
 (require
- '[degree9.boot-semver :refer :all])
+ '[degree9.boot-semver :refer :all]
+ '[crisptrutski.boot-cljs-test :refer [test-cljs]])
 
 (task-options!
  pom    {:project 'degree9/enterprise
