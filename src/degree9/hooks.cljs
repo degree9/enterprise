@@ -1,5 +1,5 @@
 (ns degree9.hooks
-  (:require [goog.object :as obj]))
+ (:require [goog.object :as obj]))
 
 ;; Hook Logging ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn- log-hook [hook]

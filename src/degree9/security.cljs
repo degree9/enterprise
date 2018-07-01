@@ -1,7 +1,7 @@
 (ns degree9.security
  (:require
-   [feathers.core :as feathers]
-   [feathers.authentication :as auth]))
+  [feathers.core :as feathers]
+  [feathers.authentication :as auth]))
 
 (defn secure-services
  "Takes a feathers app and adds a hook to enforce a valid JWT on every endpoint"
