@@ -16,6 +16,20 @@ A commercially supported ClojureScript platform by Degree9.
 This library is provided as an extension to [degree9/meta](http://github.com/degree9/meta).  
 Where [meta] only provides the basic application server/client, D9 Enterprise provides a collection of services which can be mounted to server endpoints, as well as helpful service hooks and client components.
 
+## CLJS REPL
+
+Using shadow cljs + browser REPL is the easiest way to develop.
+
+e.g. to develop the Shopify integration:
+
+`shadow-cljs watch shopify`
+
+then:
+
+`shadow-cljs browser-repl shopify`
+
+should open a browser tab and a REPL connected to `degree9.shopify.core`.
+
 ## Testing
 
 Tests currently run against phantomjs and all namespaces.
