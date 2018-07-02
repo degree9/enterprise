@@ -19,5 +19,8 @@
   "homepage": "https://github.com/degree9/enterprise#readme",
   "dependencies": {
     "esm": "^3.0.61"
+  },
+  "devDependencies": {
+    "shadow-cljs": "^2.4.13"
   }
 }
