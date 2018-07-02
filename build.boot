@@ -42,4 +42,6 @@
    ; @see https://github.com/degree9/enterprise/issues/4
    :namespaces #{#"degree9\.shopify.*"}
    :cljs-opts test-cljs-options
+   ; exit? isn't compatible with watch
+   :exit? false
    xs)))
