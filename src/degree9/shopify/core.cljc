@@ -1,7 +1,7 @@
 (ns degree9.shopify.core
  (:require
-  ; #?@(:browser []
-  ;     :cljs ["node-fetch" :as fetch])
+  #?@(:browser []
+      :cljs ["node-fetch" :as fetch])
   [cljs.test :refer-macros [deftest is]]
   degree9.shopify.data
   cemerick.url))
@@ -38,26 +38,27 @@
 (def with-url-defaults
  (comp
   str
-  with-auth
+  ; with-auth
   endpoint->url))
 
 (def with-params-defaults identity)
 
-(defn default-callback
- [err response body]
- (prn err response body))
+(defn default-fetch-callback
+ [response]
+ (prn response))
 
 (defn api!
  ([endpoint]
   (api! (default-auth) endpoint))
- ([auth endpoint] (api! auth endpoint default-callback))
+ ([auth endpoint] (api! auth endpoint default-fetch-callback))
  ([auth endpoint cb]
-  (let [url (with-url-defaults endpoint)]
-        ; params (with-params-defaults params)]
-   ; (request url cb)
-   (.then
-    (fetch url)
-    cb))))
+  (let [url (with-url-defaults endpoint)
+        headers (doto (js/Headers.)
+                 (.append "Authorization" (str "Basic " (js/btoa degree9.shopify.data/api-key ":" degree9.shopify.data/api-secret))))]
+   (js/fetch url (clj->js {:headers headers})))))
+   ; (.then
+   ;  (js/fetch url)
+   ;  cb))))
 
 (defn ??api!
  []

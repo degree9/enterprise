@@ -1,5 +1,7 @@
 ; https://github.com/shadow-cljs/quickstart-browser/blob/master/src/starter/browser.cljs
-(ns repl.start)
+(ns repl.start
+ (:require
+  degree9.shopify.core))
 
 ;; start is called by init and after code reloading finishes
 (defn ^:dev/after-load start []
