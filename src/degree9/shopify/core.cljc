@@ -1,10 +1,10 @@
 (ns degree9.shopify.core
  (:require
-  degree9.shopify.http-shim
+  ; #?@(:browser []
+  ;     :cljs ["node-fetch" :as fetch])
   [cljs.test :refer-macros [deftest is]]
   degree9.shopify.data
-  cemerick.url
-  ["request" :as request]))
+  cemerick.url))
 
 (defn username-password->auth
  [username password]
@@ -54,7 +54,10 @@
  ([auth endpoint cb]
   (let [url (with-url-defaults endpoint)]
         ; params (with-params-defaults params)]
-   (request url cb))))
+   ; (request url cb)
+   (.then
+    (fetch url)
+    cb))))
 
 (defn ??api!
  []

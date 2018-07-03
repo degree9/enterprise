@@ -13,3 +13,4 @@ pom.xml.asc
 .nrepl-port
 node_modules
 .shadow-cljs
+/repl-public/js

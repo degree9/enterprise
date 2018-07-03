@@ -24,15 +24,16 @@
   [crisptrutski/boot-cljs-test "0.3.5-SNAPSHOT" :scope "test"]]
 
  :builds
- {:shopify {:target :browser
-            :output-dir "target/shopify"
-            :output-to "target/shopify/script.js"
-            :modules
-            {:main
-             {:entries [degree9.shopify.core]}}
-            :devtools
-            {
-             :autoload true
-             :preloads [degree9.shopify.core]
-             :before-load-async degree9.shopify.core/stop
-             :after-load degree9.shopify.core/start}}}}
+ {:app {:target :browser
+        :output-dir "repl-public/js"
+        :asset-path "/js"
+        :compiler-options
+        {:reader-features #{:browser}}
+
+        :modules
+        {:main
+         {:entries [repl.start]}}
+
+        :devtools
+        {:http-root "repl-public"
+         :http-port 8020}}}}
