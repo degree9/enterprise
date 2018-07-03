@@ -16,6 +16,7 @@
   [degree9/featherscript "0.4.0-SNAPSHOT"]
   [degree9/meta "0.3.0-SNAPSHOT"]
   [com.cemerick/url "0.1.1"]
+  [cljs-http "0.1.45"]
 
   ; testing
   [thheller/shadow-cljs "2.4.13" :scope "test"]
@@ -28,4 +29,10 @@
             :output-to "target/shopify/script.js"
             :modules
             {:main
-             {:entries [degree9.shopify.core]}}}}}
+             {:entries [degree9.shopify.core]}}
+            :devtools
+            {
+             :autoload true
+             :preloads [degree9.shopify.core]
+             :before-load-async degree9.shopify.core/stop
+             :after-load degree9.shopify.core/start}}}}
