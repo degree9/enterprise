@@ -24,8 +24,12 @@
   [crisptrutski/boot-cljs-test "0.3.5-SNAPSHOT" :scope "test"]]
 
  :builds
- {:app {:target :browser
+ {:app {
+        :target :node-script
+        ; :target :browser
+        :main repl.start/init
         :output-dir "repl-public/js"
+        :output-to "repl-node/main.js"
         :asset-path "/js"
         :compiler-options
         {:reader-features #{:browser}}

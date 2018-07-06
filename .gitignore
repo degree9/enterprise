@@ -14,3 +14,4 @@ pom.xml.asc
 node_modules
 .shadow-cljs
 /repl-public/js
+repl-node

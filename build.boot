@@ -1,5 +1,6 @@
 (defn read-file   [file] (read-string (slurp file)))
-(defn get-deps    []     (read-file "./dependencies.edn"))
+(defn shadow-cljs-edn [] (read-file "./shadow-cljs.edn"))
+(defn get-deps    []     (:dependencies (shadow-cljs-edn)))
 
 (set-env!
  :dependencies (get-deps)

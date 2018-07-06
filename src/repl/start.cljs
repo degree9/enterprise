@@ -17,3 +17,8 @@
 ;; this is called before any code is reloaded
 (defn ^:dev/before-load stop []
   (js/console.log "stop"))
+
+;; put dummy code in here to test the REPL itself, e.g. hot code reloading, etc.
+(defn foo
+ []
+ "bazi")
