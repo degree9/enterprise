@@ -18,17 +18,82 @@ Where [meta] only provides the basic application server/client, D9 Enterprise pr
 
 ## CLJS REPL
 
-Using shadow cljs + browser REPL is the easiest way to develop.
+Using shadow cljs + node + REPL is the easiest way to develop without including
+and rebuilding `enterprise` as an embedded dependency of some other repository.
 
-e.g. to develop the Shopify integration:
+We can't reliably use the browser REPL approach because some code must be
+executed in node. For example, the Shopify API doesn't allow CORS, so browser
+based POST is not an option.
 
-`shadow-cljs watch shopify`
+Shadow CLJS is being used simply because it seemed to provide what we need and
+I wasn't sure how to setup the equivalent through Boot.
 
-then:
+All the REPL config for shadow is in `shadow-cljs.edn`.
+The dependencies are being parsed from `shadow-cljs.edn` into `build.boot`.
 
-`shadow-cljs browser-repl shopify`
+The shadow CLJS docs are pretty good:
 
-should open a browser tab and a REPL connected to `degree9.shopify.core`.
+https://shadow-cljs.github.io/docs/UsersGuide.html
+
+The default shadow cljs config is for `app` and targets `node-script`, but also
+can support the `browser` target too (the config covers both options).
+
+### Shadow CLJS + Node + REPL
+
+First run `watch` to compile the needed JS file.
+
+`$ shadow-cljs watch app`
+
+This will start a REPL server, watch files and output to `repl-node/main.js`.
+
+Next, in a new terminal tab, run the compiled file with node.
+
+`$ node repl-node/main.js`
+
+This will provide the execution context for the REPL, as a browser normally
+would. All `prn` and console logs will show up here.
+
+Finally, in a new terminal tab, start the CLJS REPL connected to the server.
+
+`$ shadow-cljs cljs-repl app`
+
+This allows for executing cljs code in the node execution environment.
+
+Note that the `watch` command from shadow cljs WILL reload files dynamically but
+does NOT automatically reload the _state_ of namespaces from the perspective of
+the REPL.
+
+To reload an already-loaded namespace, use `:reload` or `:reload-all`.
+
+For example:
+
+`(require 'repl.start :reload)`
+
+Would allow edits to `repl.start/foo` to appear in the REPL client without
+needing to stop and start the REPL server.
+
+### Shadow CLJS + Browser + REPL
+
+Edit `shadow-cljs.edn` so that the `:target` for `:app` is `:browser`.
+
+Run the watch command:
+
+`$ shadow-cljs watch app`
+
+This will output compiled browser-friendly JS files to `repl-public/js/main.js`.
+
+A web server will also be available at `http://localhost:8020`.
+
+Open a browser (e.g. Chrome) to the localhost web server URL. All `prn` and
+console logs will show up here.
+
+In a new terminal tab, start the browser REPL.
+
+`$ shadow-cljs browser-repl app`
+
+Be careful not to refresh the browser as it can mess with the state of the REPL.
+
+To reload namespaces, see the node instructions above.
 
 ## Testing
 
