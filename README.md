@@ -38,6 +38,14 @@ https://shadow-cljs.github.io/docs/UsersGuide.html
 The default shadow cljs config is for `app` and targets `node-script`, but also
 can support the `browser` target too (the config covers both options).
 
+### Install shadow CLJS
+
+Shadow CLJS is a dev dependency for npm in this repo.
+
+It might be easier to install it globally though:
+
+`$ npm install -g shadow-cljs`
+
 ### Shadow CLJS + Node + REPL
 
 First run `watch` to compile the needed JS file.
