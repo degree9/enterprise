@@ -1,4 +1,4 @@
-(ns degree9.shopify.spec
+(ns degree9.shopify.auth.spec
  (:require
   [cljs.spec.alpha :as spec]))
 

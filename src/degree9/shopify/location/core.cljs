@@ -1,4 +1,4 @@
-(ns degree9.shopify.inventory.location
+(ns degree9.shopify.location.core
  (:require
   degree9.shopify.core))
 

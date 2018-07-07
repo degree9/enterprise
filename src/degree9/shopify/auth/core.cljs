@@ -1,13 +1,14 @@
-(ns degree9.shopify.auth
+(ns degree9.shopify.auth.core
  (:require
-  degree9.shopify.spec
-  degree9.shopify.url
+  degree9.shopify.auth.spec
+  degree9.shopify.auth.data
+  degree9.shopify.url.core
   [cljs.spec.alpha :as spec]))
 
 (defn auth?
  "True if the passed value is valid auth credentials"
  [maybe-auth]
- (spec/valid? ::credentials maybe-auth))
+ (spec/valid? :degree9.shopify.auth/credentials maybe-auth))
 
 (defn username-password->auth
  "Given a username and password, returns auth credentials"
@@ -19,13 +20,13 @@
 ; default auth using the creds in data
 (def default-auth
  (partial username-password->auth
-  degree9.shopify.data/api-key
-  degree9.shopify.data/api-secret))
+  degree9.shopify.auth.data/api-key
+  degree9.shopify.auth.data/api-secret))
 
 (defn with-url-auth
  "Given a URL and auth credentials, returns a URL with auth"
  [url auth]
- {:pre [(degree9.shopify.url/url? url)
+ {:pre [(degree9.shopify.url.core/url? url)
         (auth? auth)]}
  (-> url
   (assoc :username (:degree9.shopify.auth/username auth))

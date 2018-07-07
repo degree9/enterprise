@@ -1,7 +1,7 @@
-(ns degree9.shopify.url
+(ns degree9.shopify.url.core
  (:require
   cemerick.url
-  degree9.shopify.data))
+  degree9.shopify.url.data))
 
 (defn url?
  [maybe-url]
@@ -13,5 +13,5 @@
   :post [(url? %)]}
  (->
   (cemerick.url/url endpoint)
-  (assoc :protocol degree9.shopify.data/protocol)
-  (assoc :host degree9.shopify.data/host)))
+  (assoc :protocol degree9.shopify.url.data/protocol)
+  (assoc :host degree9.shopify.url.data/host)))

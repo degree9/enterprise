@@ -1,8 +1,8 @@
 (ns degree9.shopify.core
  (:require
   ["request" :as request]
-  degree9.shopify.auth
-  degree9.shopify.url))
+  degree9.shopify.auth.core
+  degree9.shopify.url.core))
 
 (defn default-request-callback
  "The default callback for a request if none is provided"
@@ -13,14 +13,16 @@
 
 (defn api!
  ([endpoint]
-  (api! endpoint (degree9.shopify.auth/default-auth)))
+  (api! endpoint (degree9.shopify.auth.core/default-auth)))
  ([endpoint auth]
   (api! endpoint auth default-request-callback))
  ([endpoint auth cb]
-  (let [url (degree9.shopify.url/endpoint->url endpoint)]
-        ; headers (doto (js/Headers.))]
-                 ; (.append "Authorization" (str "Basic " (js/btoa degree9.shopify.data/api-key ":" degree9.shopify.data/api-secret))))]
-   (prn "*" url)
+  {:pre [(degree9.shopify.auth.core/auth? auth)]}
+  (let [; build the base url from the passed endpoint
+        url (degree9.shopify.url.core/endpoint->url endpoint)
+        ; ensure url contains auth details
+        url (degree9.shopify.auth.core/with-url-auth url auth)]
+   (prn "*" (str url))
    (request
-    url
+    (str url)
     default-request-callback))))
