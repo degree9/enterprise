@@ -103,8 +103,16 @@ Be careful not to refresh the browser as it can mess with the state of the REPL.
 
 To reload namespaces, see the node instructions above.
 
-## Testing
+### Shadow CLJS + Testing
 
-Tests currently run against phantomjs and all namespaces.
+Shadow CLJS runs tests for us too, but uses the `test` build rather than `app`.
 
-`$ boot watch test-cljs`
+The node test runner in shadow CLJS does NOT need a standalone node instance
+running as it is configured with `:autorun`.
+
+`$ shadow-cljs compile test`
+
+This only runs once though. The `watch` tool can help, install on Mac OS with
+`brew install watch` and wrap shadow CLJS with it.
+
+`$ watch shadow-cljs compile test`
