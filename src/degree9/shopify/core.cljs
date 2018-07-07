@@ -4,12 +4,19 @@
   degree9.shopify.auth.core
   degree9.shopify.url.core))
 
+(defn body->clj
+ [body]
+ (when body
+  (js->clj
+   (JSON.parse body)
+   :keywordize-keys true)))
+
 (defn default-request-callback
  "The default callback for a request if none is provided"
  [error response body]
  (prn error)
  (prn response)
- (prn body))
+ (prn (body->clj body)))
 
 (defn api!
  ([endpoint]
@@ -22,7 +29,4 @@
         url (degree9.shopify.url.core/endpoint->url endpoint)
         ; ensure url contains auth details
         url (degree9.shopify.auth.core/with-url-auth url auth)]
-   (prn "*" (str url))
-   (request
-    (str url)
-    default-request-callback))))
+   (request (str url) cb))))

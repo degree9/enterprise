@@ -40,4 +40,9 @@
 
         :devtools
         {:http-root "repl-public"
-         :http-port 8020}}}}
+         :http-port 8020}}
+  :test {
+         :target :node-test
+         :output-to "test/main.js"
+         :ns-regexp ".*shopify.*"
+         :autorun true}}}
