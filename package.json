@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/degree9/enterprise#readme",
   "dependencies": {
+    "dotenv": "^6.0.0",
     "esm": "^3.0.61",
     "node-fetch": "^2.1.2",
     "request": "^2.87.0",

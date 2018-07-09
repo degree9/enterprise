@@ -16,6 +16,25 @@ A commercially supported ClojureScript platform by Degree9.
 This library is provided as an extension to [degree9/meta](http://github.com/degree9/meta).  
 Where [meta] only provides the basic application server/client, D9 Enterprise provides a collection of services which can be mounted to server endpoints, as well as helpful service hooks and client components.
 
+## Environment variables
+
+This library supports nodejs process environment variables and [dotenv](https://github.com/motdotla/dotenv).
+
+There is a convenience namespace `degree9.env` that inits dotenv and exposes the
+native nodejs functionality.
+
+See `.env.example` in the root of the repository for an example that can be
+copied into place and updated with real secrets.
+
+- `degree9.env/get`: Takes a key and optional fallback value, returns the value,
+  fallback or empty string as appropriate. Accepts keyword and string keys in
+  all casings. e.g.
+  ```clojure
+  (degree9.env/get :home) ; "/Users/foo"`
+  (degree9.env/get "HOME") ; "/Users/foo"`
+  ```
+- `degree9.env/dir`: Returns the set of all available env keywords.
+
 ## CLJS REPL
 
 Using shadow cljs + node + REPL is the easiest way to develop without including

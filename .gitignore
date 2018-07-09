@@ -16,3 +16,4 @@ node_modules
 /repl-public/js
 repl-node
 test
+.env

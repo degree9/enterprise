@@ -1,5 +1,6 @@
-(ns degree9.shopify.url.data)
+(ns degree9.shopify.url.data
+ (:require
+  degree9.env))
 
-; @TODO - don't hardcode the subdomain to cannabit-dev
-(def host "cannabit-dev.myshopify.com")
-(def protocol "https")
+(def host (partial degree9.env/get :shopify-host))
+(def protocol (partial degree9.env/get :shopify-protocol "https"))

@@ -18,8 +18,8 @@
                  (str "/" endpoint))]
   (->
    (cemerick.url/url endpoint)
-   (assoc :protocol degree9.shopify.url.data/protocol)
-   (assoc :host degree9.shopify.url.data/host))))
+   (assoc :protocol (degree9.shopify.url.data/protocol))
+   (assoc :host (degree9.shopify.url.data/host)))))
 
 ; TESTS
 

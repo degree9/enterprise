@@ -21,8 +21,8 @@
 ; default auth using the creds in data
 (def default-auth
  (partial username-password->auth
-  degree9.shopify.auth.data/api-key
-  degree9.shopify.auth.data/api-secret))
+  (degree9.shopify.auth.data/api-key)
+  (degree9.shopify.auth.data/api-secret)))
 
 (defn with-url-auth
  "Given a URL and auth credentials, returns a URL with auth"
@@ -46,8 +46,8 @@
   (is (= expected (username-password->auth "foo" "bar")))))
 
 (deftest ??default-auth
- (let [expected {:degree9.shopify.auth/username degree9.shopify.auth.data/api-key
-                 :degree9.shopify.auth/password degree9.shopify.auth.data/api-secret}]
+ (let [expected {:degree9.shopify.auth/username (degree9.shopify.auth.data/api-key)
+                 :degree9.shopify.auth/password (degree9.shopify.auth.data/api-secret)}]
   (is (= expected (default-auth)))))
 
 (deftest ??with-url-auth
