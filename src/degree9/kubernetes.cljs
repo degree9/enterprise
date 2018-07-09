@@ -4,7 +4,8 @@
     [cljs.nodejs :as node]
     [clojure.string :as s]
     [goog.object :as obj]
-    [feathers.errors :as error]))
+    [feathers.errors :as error]
+    degree9.env))
 
 ;; Kubernetes API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (def k8s (node/require "@kubernetes/client-node"))
@@ -19,12 +20,12 @@
 
 (def ^:private k8s-token (str k8s-svc "/token"))
 
-(def ^:private k8s-host js/process.env.KUBERNETES_SERVICE_HOST)
+(def ^:private k8s-host (degree9.env/get :kubernetes-service-host))
 
-(def ^:private k8s-port js/process.env.KUBERNETES_SERVICE_PORT)
+(def ^:private k8s-port (degree9.env/get :kubernetes-service-port))
 
-(def ^:private k8s-config (or js/process.env.KUBECONFIG
-                            (.join path js/process.env.HOME ".kube" "config")))
+(def ^:private k8s-config (or (degree9.env/get :kubeconfig)
+                            (.join path (degree9.env/get :home) ".kube" "config")))
 
 (defn- exists [path]
   (.existsSync fs path))

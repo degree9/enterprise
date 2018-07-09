@@ -7,12 +7,14 @@
  (:refer-clojure :exclude [get]))
 
 (defn env-obj []
- cljs.nodejs.process.env)
+ (.-env js/process))
 
 (defn dir []
- (js->clj
-  (js-keys
-   (env-obj))))
+ (map
+  camel-snake-kebab.core/->kebab-case-keyword
+  (js->clj
+   (js-keys
+    (env-obj)))))
 
 (defn get [k]
  (str
@@ -23,6 +25,12 @@
 
 ; TESTS
 
+(deftest ??dir
+ (doseq [e [:pwd :home :user]]
+  (is
+   (contains?
+    (set (dir))
+    e))))
+
 (deftest ??get
- (prn (dir))
- (is (= "" (get :pwd))))
+ (is (clojure.string/includes? (get :pwd) "enterprise")))
