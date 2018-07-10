@@ -11,3 +11,9 @@ pom.xml.asc
 .lein-plugins/
 .lein-failures
 .nrepl-port
+node_modules
+.shadow-cljs
+/repl-public/js
+repl-node
+test
+.env

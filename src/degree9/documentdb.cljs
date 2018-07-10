@@ -3,7 +3,8 @@
             [clojure.string :as s]
             [goog.object :as obj]
             [meta.promise :as p]
-            [feathers.services :as svc]))
+            [feathers.services :as svc]
+            degree9.env))
 
 ;; DB Definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (def documentdb (node/require "documentdb"))
@@ -132,8 +133,8 @@
 
 ;; DB Service ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn Database [& [opts]]
-  (let [endpoint  (:endpoint  opts node/process.env.DOCUMENTDB_ENDPOINT)
-        masterkey (:masterkey opts node/process.env.DOCUMENTDB_KEY)
+  (let [endpoint  (:endpoint  opts (degree9.env/get :documentdb-endpoint))
+        masterkey (:masterkey opts (degree9.env/get :documentdb-key))
 
         id (:idField opts "id")
 
@@ -155,9 +156,9 @@
       ;  (remove* store database collection id (js->clj params))))))
 
 (defn Collection [collection & [opts]]
-  (let [endpoint  (:endpoint  opts node/process.env.DOCUMENTDB_ENDPOINT)
-        masterkey (:masterkey opts node/process.env.DOCUMENTDB_KEY)
-        database  (:database  opts node/process.env.DOCUMENTDB_DATABASE)
+  (let [endpoint  (:endpoint  opts (degree9.env/get :documentdb-endpoint))
+        masterkey (:masterkey opts (degree9.env/get :documentdb-key))
+        database  (:database  opts (degree9.env/get :documentdb-database))
 
         id (:idField opts "id")
 
