@@ -1,3 +1,5 @@
+; implements the REST API for the Locations resource
+; @see https://help.shopify.com/en/api/reference/inventory/location
 (ns degree9.shopify.location.core
  (:require
   degree9.shopify.core
@@ -18,7 +20,10 @@
   :degree9.shopify.location/locations
   maybe-locations))
 
-(def locations! (partial degree9.shopify.core/api! "/admin/locations.json"))
+(def locations!
+ (partial
+  degree9.shopify.core/api!
+  :endpoint "/admin/locations.json"))
 
 ; TESTS
 
