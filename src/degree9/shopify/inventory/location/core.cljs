@@ -1,23 +1,23 @@
 ; implements the REST API for the Locations resource
 ; @see https://help.shopify.com/en/api/reference/inventory/location
-(ns degree9.shopify.location.core
+(ns degree9.shopify.inventory.location.core
  (:require
   degree9.shopify.core
-  degree9.shopify.location.spec
-  degree9.shopify.location.data
+  degree9.shopify.inventory.location.spec
+  degree9.shopify.inventory.location.data
   [cljs.spec.alpha :as spec]
   [cljs.test :refer-macros [deftest is]]))
 
 (defn location?
  [maybe-location]
  (spec/valid?
-  :degree9.shopify.location/location
+  :degree9.shopify.inventory.location/location
   maybe-location))
 
 (defn locations?
  [maybe-locations]
  (spec/valid?
-  :degree9.shopify.location/locations
+  :degree9.shopify.inventory.location/locations
   maybe-locations))
 
 ; Fetch all locations
@@ -31,7 +31,7 @@
 ; @see https://help.shopify.com/en/api/reference/inventory/location#show
 (defn location!
  [id & {:keys [auth callback params]}]
- {:pre [(spec/valid? :degree9.shopify.location/id id)]
+ {:pre [(spec/valid? :degree9.shopify.inventory.location/id id)]
   :post [(location? (:location %))]}
  (let [endpoint (str "/admin/locations/" id ".json")]
   (degree9.shopify.core/api!
@@ -56,7 +56,7 @@
 ; @see https://help.shopify.com/en/api/reference/inventory/location#inventory_levels
 (defn inventory-levels!
  [id & {:keys [auth callback params]}]
- {:pre [(spec/valid? :degree9.shopify.location/id id)]}
+ {:pre [(spec/valid? :degree9.shopify.inventory.location/id id)]}
  (let [endpoint (str "/admin/locations/" id "/inventory_levels.json")]
   (degree9.shopify.core/api!
    :endpoint endpoint
@@ -67,9 +67,15 @@
 ; TESTS
 
 (deftest ??location?
- (is (-> degree9.shopify.location.data/locations-example :locations first location?))
+ (is (-> degree9.shopify.inventory.location.data/locations-response-example :locations first location?))
  (is (not (location? {:foo :bar}))))
 
 (deftest ??locations?
- (is (-> degree9.shopify.location.data/locations-example :locations locations?))
+ (is (-> degree9.shopify.inventory.location.data/locations-response-example :locations locations?))
  (is (not (locations? [{:foo :bar}]))))
+
+(deftest ??location!
+ (is (-> degree9.shopify.inventory.location.data/location-response-example :location location?)))
+
+(deftest ??count!
+ (is (-> degree9.shopify.inventory.location.data/count-response-example :count pos-int?)))

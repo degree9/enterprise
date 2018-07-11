@@ -1,4 +1,4 @@
-(ns degree9.shopify.location.data)
+(ns degree9.shopify.inventory.location.data)
 
 (def location-response-example
  {:location
