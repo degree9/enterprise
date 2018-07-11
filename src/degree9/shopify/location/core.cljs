@@ -20,13 +20,15 @@
   :degree9.shopify.location/locations
   maybe-locations))
 
-; https://help.shopify.com/en/api/reference/inventory/location#index
+; Fetch all locations
+; @see https://help.shopify.com/en/api/reference/inventory/location#index
 (def locations!
  (partial
   degree9.shopify.core/api!
   :endpoint "/admin/locations.json"))
 
-; https://help.shopify.com/en/api/reference/inventory/location#show
+; Fetch a single location
+; @see https://help.shopify.com/en/api/reference/inventory/location#show
 (defn location!
  [id & {:keys [auth callback params]}]
  {:pre [(spec/valid? :degree9.shopify.location/id id)]
@@ -38,11 +40,29 @@
    :callback callback
    :params params)))
 
-; https://help.shopify.com/en/api/reference/inventory/location#count
+; Fetch the total locations count
+; @see https://help.shopify.com/en/api/reference/inventory/location#count
 (def count!
  (partial
   degree9.shopify.core/api!
   :endpoint "/admin/locations/count.json"))
+
+; Fetch the inventory levels for a location
+; Note: Requires `read_inventory` scope
+; Note: API only!
+;       looks like location inventories are NOT available in the web UI and can
+;       only be read/write through the API.
+;       @see https://help.shopify.com/en/api/guides/inventory-migration-guide
+; @see https://help.shopify.com/en/api/reference/inventory/location#inventory_levels
+(defn inventory-levels!
+ [id & {:keys [auth callback params]}]
+ {:pre [(spec/valid? :degree9.shopify.location/id id)]}
+ (let [endpoint (str "/admin/locations/" id "/inventory_levels.json")]
+  (degree9.shopify.core/api!
+   :endpoint endpoint
+   :auth auth
+   :callback callback
+   :params params)))
 
 ; TESTS
 

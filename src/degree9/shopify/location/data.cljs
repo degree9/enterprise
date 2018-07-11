@@ -56,3 +56,6 @@
 
 (def count-response-example
  {:count 3})
+
+(def inventory-levels-response-example
+ {:inventory_levels []})
