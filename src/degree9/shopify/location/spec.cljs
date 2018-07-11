@@ -2,6 +2,8 @@
  (:require
   [cljs.spec.alpha :as spec]))
 
+(spec/def :degree9.shopify.location/id pos-int?)
+
 (spec/def :degree9.shopify.location/admin_graphql_api_id string?)
 (spec/def :degree9.shopify.location/province_code
  (spec/nilable string?))

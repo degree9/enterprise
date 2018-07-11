@@ -20,10 +20,29 @@
   :degree9.shopify.location/locations
   maybe-locations))
 
+; https://help.shopify.com/en/api/reference/inventory/location#index
 (def locations!
  (partial
   degree9.shopify.core/api!
   :endpoint "/admin/locations.json"))
+
+; https://help.shopify.com/en/api/reference/inventory/location#show
+(defn location!
+ [id & {:keys [auth callback params]}]
+ {:pre [(spec/valid? :degree9.shopify.location/id id)]
+  :post [(location? (:location %))]}
+ (let [endpoint (str "/admin/locations/" id ".json")]
+  (degree9.shopify.core/api!
+   :endpoint endpoint
+   :auth auth
+   :callback callback
+   :params params)))
+
+; https://help.shopify.com/en/api/reference/inventory/location#count
+(def count!
+ (partial
+  degree9.shopify.core/api!
+  :endpoint "/admin/locations/count.json"))
 
 ; TESTS
 
