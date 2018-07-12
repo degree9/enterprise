@@ -19,14 +19,17 @@
  (prn (body->clj body)))
 
 (defn api!
- ([endpoint]
-  (api! endpoint (degree9.shopify.auth.core/default-auth)))
- ([endpoint auth]
-  (api! endpoint auth default-request-callback))
- ([endpoint auth cb]
-  {:pre [(degree9.shopify.auth.core/auth? auth)]}
-  (let [; build the base url from the passed endpoint
-        url (degree9.shopify.url.core/endpoint->url endpoint)
-        ; ensure url contains auth details
-        url (degree9.shopify.auth.core/with-url-auth url auth)]
-   (request (str url) cb))))
+ [& {:keys [endpoint auth callback params]}]
+ (let [callback (or callback default-request-callback)
+       auth (or auth (degree9.shopify.auth.core/default-auth))
+       ; build the base url from the passed endpoint
+       url (degree9.shopify.url.core/endpoint->url endpoint)
+       ; ensure url contains auth details
+       url (degree9.shopify.auth.core/with-url-auth url auth)
+       params (merge
+               {:method "GET"
+                :uri (str url)}
+               params)]
+  (request
+   (clj->js params)
+   callback)))
