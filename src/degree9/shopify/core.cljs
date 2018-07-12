@@ -26,45 +26,15 @@
 
 (def lib (memoize -lib))
 
-(defn api!'
- [& {:keys [endpoint-method auth params shop-name]}]
- (let [endpoint-method (or endpoint-method "")
+(defn api!
+ [& {:keys [endpoint auth params shop-name]}]
+ (let [endpoint (str endpoint)
        promise
        (oops.core/ocall+
         (lib shop-name auth)
-        endpoint-method
+        endpoint
         (clj->js params))]
   (-> promise
    (.then #(prn (js->clj % :keywordize-keys true)))
    (.catch #(taoensso.timbre/error %)))
   promise))
-
-(defn body->clj
- [body]
- (when body
-  (js->clj
-   (JSON.parse body)
-   :keywordize-keys true)))
-
-(defn default-request-callback
- "The default callback for a request if none is provided"
- [error response body]
- (prn error)
- (prn response)
- (prn (body->clj body)))
-
-(defn api!
- [& {:keys [endpoint auth callback params]}]
- (let [callback (or callback default-request-callback)
-       auth (or auth (degree9.shopify.auth.core/default-auth))
-       ; build the base url from the passed endpoint
-       url (degree9.shopify.url.core/endpoint->url endpoint)
-       ; ensure url contains auth details
-       url (degree9.shopify.auth.core/with-url-auth url auth)
-       params (merge
-               {:method "GET"
-                :uri (str url)}
-               params)]
-  (request
-   (clj->js params)
-   callback)))

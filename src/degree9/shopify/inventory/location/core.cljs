@@ -25,7 +25,7 @@
 (def locations!
  (partial
   degree9.shopify.core/api!
-  :endpoint "/admin/locations.json"))
+  :endpoint "location.list"))
 
 ; Fetch a single location
 ; @see https://help.shopify.com/en/api/reference/inventory/location#show
@@ -45,7 +45,7 @@
 (def count!
  (partial
   degree9.shopify.core/api!
-  :endpoint "/admin/locations/count.json"))
+  :endpoint "location.count"))
 
 ; Fetch the inventory levels for a location
 ; Note: Requires `read_inventory` scope
@@ -55,9 +55,9 @@
 ;       @see https://help.shopify.com/en/api/guides/inventory-migration-guide
 ; @see https://help.shopify.com/en/api/reference/inventory/location#inventory_levels
 (defn inventory-levels!
- [id & {:keys [auth callback params]}]
+ [id & {:keys [auth params shop-name]}]
  {:pre [(spec/valid? :degree9.shopify.inventory.location/id id)]}
- (let [endpoint (str "/admin/locations/" id "/inventory_levels.json")]
+ (let [endpoint (str "locations/" id "/inventory_levels.json")]
   (degree9.shopify.core/api!
    :endpoint endpoint
    :auth auth
