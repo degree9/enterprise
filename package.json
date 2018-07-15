@@ -22,9 +22,11 @@
     "esm": "^3.0.61",
     "node-fetch": "^2.1.2",
     "request": "^2.87.0",
+    "ws": "^5.2.2",
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
-    "shadow-cljs": "^2.4.13"
+    "shadow-cljs": "^2.4.20",
+    "source-map-support": "^0.5.6"
   }
 }
