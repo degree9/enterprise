@@ -46,7 +46,7 @@
   (let [config  (kube-config)
         cluster (.getCurrentCluster config)
         server  (obj/get cluster "server")
-        k8s-api (api. server)]
+        k8s-api (new api server)]
     (.setDefaultAuthentication k8s-api config)
     k8s-api))
 
