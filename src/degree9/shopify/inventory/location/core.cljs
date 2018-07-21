@@ -29,23 +29,22 @@
 
 ; Fetch a single location
 ; @see https://help.shopify.com/en/api/reference/inventory/location#show
-(defn location!
- [id & {:keys [auth callback params]}]
- {:pre [(spec/valid? :degree9.shopify.inventory.location/id id)]
-  :post [(location? (:location %))]}
- (let [endpoint (str "/admin/locations/" id ".json")]
-  (degree9.shopify.core/api!
-   :endpoint endpoint
-   :auth auth
-   :callback callback
-   :params params)))
+(def location!
+ (partial
+  degree9.shopify.core/api!
+  :endpoint "location.get"))
 
 ; Fetch the total locations count
 ; @see https://help.shopify.com/en/api/reference/inventory/location#count
-(def count!
- (partial
-  degree9.shopify.core/api!
-  :endpoint "location.count"))
+; @see https://help.shopify.com/en/api/reference/inventory/location#count
+;
+; @TODO missing in upstream lib
+; @see https://github.com/degree9/enterprise/issues/14
+;
+; (def count!
+;  (partial
+;   degree9.shopify.core/api!
+;   :endpoint "location.count"))
 
 ; Fetch the inventory levels for a location
 ; Note: Requires `read_inventory` scope
@@ -54,15 +53,14 @@
 ;       only be read/write through the API.
 ;       @see https://help.shopify.com/en/api/guides/inventory-migration-guide
 ; @see https://help.shopify.com/en/api/reference/inventory/location#inventory_levels
-(defn inventory-levels!
- [id & {:keys [auth params shop-name]}]
- {:pre [(spec/valid? :degree9.shopify.inventory.location/id id)]}
- (let [endpoint (str "locations/" id "/inventory_levels.json")]
-  (degree9.shopify.core/api!
-   :endpoint endpoint
-   :auth auth
-   :callback callback
-   :params params)))
+;
+; @TODO missing in upstream lib
+; @see https://github.com/degree9/enterprise/issues/15
+;
+; (def inventory-levels!
+;  (partial
+;   degree9.shopify.core/api!
+;   :endpoint "location.inventory-levels"))
 
 ; TESTS
 

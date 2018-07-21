@@ -29,11 +29,12 @@
 (defn api!
  [& {:keys [endpoint auth params shop-name]}]
  (let [endpoint (str endpoint)
+       params (if (coll? params) (vec params) [params])
        promise
-       (oops.core/ocall+
+       (oops.core/oapply+
         (lib shop-name auth)
         endpoint
-        (clj->js params))]
+        (map clj->js params))]
   (-> promise
    (.then #(prn (js->clj % :keywordize-keys true)))
    (.catch #(taoensso.timbre/error %)))
