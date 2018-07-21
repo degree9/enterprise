@@ -20,12 +20,17 @@
   [camel-snake-kebab "0.4.0"]
   [com.taoensso/timbre "4.10.0"]
   [binaryage/oops "0.6.2"]
+  [funcool/cuerdas "2.0.5"]
 
   ; testing
-  [thheller/shadow-cljs "2.4.13" :scope "test"]
+  [thheller/shadow-cljs "2.4.20" :scope "test"]
   [degree9/boot-semver "1.7.0" :scope "test"]
   [crisptrutski/boot-cljs-test "0.3.5-SNAPSHOT" :scope "test"]]
 
+ ; http server
+ :http {:host "127.0.0.1"}
+
+ ; build configurations
  :builds
  {:app {
         :target :node-script

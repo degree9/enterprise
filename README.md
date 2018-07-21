@@ -33,7 +33,7 @@ copied into place and updated with real secrets.
   (degree9.env/get :home) ; "/Users/foo"`
   (degree9.env/get "HOME") ; "/Users/foo"`
   ```
-- `degree9.env/dir`: Returns the set of all available env keywords.
+- `degree9.env/keys`: Returns the list of all available env map keywords.
 
 ## CLJS REPL
 
