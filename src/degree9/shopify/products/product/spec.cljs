@@ -25,8 +25,6 @@
 ; @TODO what does an image look like?
 (spec/def :degree9.shopify.products.product/image (spec/nilable any?))
 
-(spec/def :degree9.shopify.products.product/vendor string?)
-(spec/def :degree9.shopify.products.product/tags string?)
 (spec/def :degree9.shopify.products.product/images
  (spec/coll-of :degree9.shopify.products.product/image))
 (spec/def :degree9.shopify.products.product/product_type string?)
@@ -45,11 +43,11 @@
    :degree9.shopify/updated_at
    :degree9.shopify/published_at
    :degree9.shopify/id
+   :degree9.shopify/tags
+   :degree9.shopify/vendor
 
    :degree9.shopify.products.variant/variants
 
-   :degree9.shopify.products.product/vendor
-   :degree9.shopify.products.product/tags
    :degree9.shopify.products.product/images
    :degree9.shopify.products.product/image
    :degree9.shopify.products.product/handle

@@ -3,6 +3,7 @@
   degree9.shopify.spec
   [cljs.spec.alpha :as spec]))
 
+(spec/def :degree9.shopify.products.variant/id :degree9.shopify/id)
 (spec/def :degree9.shopify.products.variant/inventory_management (spec/nilable string?))
 (spec/def :degree9.shopify.products.variant/barcode (spec/nilable string?))
 (spec/def :degree9.shopify.products.variant/product_id :degree9.shopify/id)
@@ -12,10 +13,8 @@
 (spec/def :degree9.shopify.products.variant/weight_unit string?)
 (spec/def :degree9.shopify.products.variant/title string?)
 (spec/def :degree9.shopify.products.variant/grams number?)
-(spec/def :degree9.shopify.products.variant/sku string?)
-(spec/def :degree9.shopify.products.variant/fulfillment_service string?)
-(spec/def :degree9.shopify.products.variant/compare_at_price (spec/nilable :degree9.shopify/price))
-(spec/def :degree9.shopify.products.variant/weight number?)
+(spec/def :degree9.shopify.products.variant/sku :degree9.shopify/sku)
+(spec/def :degree9.shopify.products.variant/compare_at_price (spec/nilable :degree9.shopify/monetary_amount))
 (spec/def :degree9.shopify.products.variant/inventory_item_id :degree9.shopify/id)
 (spec/def :degree9.shopify.products.variant/position int)
 (spec/def :degree9.shopify.products.variant/option1 (spec/nilable string?))
@@ -32,9 +31,12 @@
   [:degree9.shopify/admin_graphql_api_id
    :degree9.shopify/created_at
    :degree9.shopify/updated_at
-   :degree9.shopify/price
+   :degree9.shopify/monetary_amount
    :degree9.shopify/title
+   :degree9.shopify/weight
+   :degree9.shopify/fulfillment_service
 
+   :degree9.shopify.products.variant/id
    :degree9.shopify.products.variant/product_id
    :degree9.shopify.products.variant/inventory_management
    :degree9.shopify.products.variant/barcode
@@ -44,9 +46,7 @@
    :degree9.shopify.products.variant/weight_unit
    :degree9.shopify.products.variant/grams
    :degree9.shopify.products.variant/sku
-   :degree9.shopify.products.variant/fulfillment_service
    :degree9.shopify.products.variant/compare_at_price
-   :degree9.shopify.products.variant/weight
    :degree9.shopify.products.variant/inventory_item_id
    :degree9.shopify.products.variant/position
    :degree9.shopify.products.variant/option1
