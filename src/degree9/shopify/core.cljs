@@ -42,19 +42,24 @@
 (defn api!
  [& {:keys [endpoint auth params shop-name spec input-spec]}]
  (let [endpoint (str endpoint)
-       params (if (coll? params) (vec params) [params])
+       ; wrap or coerce non-nil values into a vector
+       vectorize (fn [v] (when v (if (coll? v) (vec v) [v])))
+       params (vectorize params)
+       input-spec (vectorize input-spec)
        promise
        (oops.core/oapply+
         (lib shop-name auth)
         endpoint
         (map clj->js params))]
   (when input-spec
-   ; the input spec is only valid for write endpoints, so we only need to check
-   ; the first of the params.
-   (let [input (first params)]
-    (when-not
-     (spec/valid? input-spec input)
-     (taoensso.timbre/error "input failed spec:" (spec/explain-str input-spec input)))))
+   (doall
+    (map
+     (fn [spec input]
+      (when-not
+       (spec/valid? spec input)
+       (taoensso.timbre/error "input failed spec:" (spec/explain-str spec input))))
+     input-spec
+     params)))
   (taoensso.timbre/debug "hitting endpoint:" endpoint)
   (-> promise
    (.then

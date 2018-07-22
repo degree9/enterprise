@@ -22,6 +22,8 @@
 
 ; system state values
 (spec/def :degree9.shopify/position int?)
+(spec/def :degree9.shopify/empty-api-response
+ (spec/and map? empty?))
 
 ; counts are ints
 (spec/def :degree9.shopify/count nat-int?)
