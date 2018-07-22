@@ -1,14 +1,12 @@
 (ns degree9.mongodb
   (:require [cljs.nodejs :as node]
             [goog.object :as obj]
-            [meta.server :as server]))
+            [meta.server :as server]
+            ["mongoose" :as mongoose]
+            ["feathers-mongoose" :as mongodb]))
 
 ;; MongoDB ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(def mongoose (node/require "mongoose"))
-
 (def schema (obj/get mongoose "Schema"))
-
-(def mongodb (node/require "feathers-mongoose"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; MongoDB Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -5,15 +5,12 @@
     [clojure.string :as s]
     [goog.object :as obj]
     [feathers.errors :as error]
-    degree9.env))
+    degree9.env
+    ["@kubernetes/client-node" :as k8s]
+    ["fs" :as fs]
+    ["path" :as path]))
 
 ;; Kubernetes API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(def k8s (node/require "@kubernetes/client-node"))
-
-(def fs (node/require "fs"))
-
-(def path (node/require "path"))
-
 (def ^:private k8s-svc (str "/var/run/secrets/kubernetes.io/serviceaccount"))
 
 (def ^:private k8s-crt (str k8s-svc "/ca.crt"))
@@ -34,7 +31,7 @@
   (.readFileSync fs path))
 
 (defn kube-config []
-  (let [config (k8s.KubeConfig.)]
+  (let [config (k8s/KubeConfig.)]
     (when (exists k8s-config)
       (.loadFromFile config k8s-config))
     config))
@@ -64,7 +61,7 @@
   ([path callback reconnect-callback]
    (watcher path #js{} callback reconnect-callback))
   ([path opts callback reconnect-callback]
-   (.watch (k8s.Watch. (kube-config))
+   (.watch (k8s/Watch. (kube-config))
      path
      opts
      callback
@@ -85,13 +82,13 @@
         (default type obj)))))
 
 
-;(def Config k8s.Config)
+;(def Config k8s/Config)
 
-(def core-api (config k8s.Core_v1Api))
+(def core-api (config k8s/Core_v1Api))
 
-(def apps-api (config k8s.Apps_v1Api))
+(def apps-api (config k8s/Apps_v1Api))
 
-(def custom-objects (config k8s.Custom_objectsApi))
+(def custom-objects (config k8s/Custom_objectsApi))
 
 ;(def co-test (.createClusterCustomObject custom-objects "kate.degree9.io" "v1" "tenants" (clj->js {:kind "Tenant" :apiVersion "kate.degree9.io/v1" :metadata {:name "some-tenant"}})))
 

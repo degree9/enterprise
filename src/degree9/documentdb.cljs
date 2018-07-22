@@ -4,11 +4,10 @@
             [goog.object :as obj]
             [meta.promise :as p]
             [feathers.services :as svc]
-            degree9.env))
+            degree9.env
+            ["documentdb" :as documentdb]))
 
 ;; DB Definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(def documentdb (node/require "documentdb"))
-
 (def dbclient   (obj/get documentdb "DocumentClient"))
 (def urifactory (obj/get documentdb "UriFactory"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
