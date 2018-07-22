@@ -23,7 +23,7 @@
  (partial
   degree9.shopify.core/api!
   :endpoint "productVariant.list"
-  :input-spec :degree9.shopify/id
+  :input-spec :degree9.shopify.products.variant/product_id
   :spec :degree9.shopify.products.variant/variants))
 
 ; Count all variants for a single product ID
@@ -42,7 +42,7 @@
  (partial
   degree9.shopify.core/api!
   :endpoint "productVariant.count"
-  :input-spec :degree9.shopify/id
+  :input-spec :degree9.shopify.products.variant/product_id
   :spec :degree9.shopify/count))
 
 ; Get a single variant by variant ID
@@ -97,6 +97,7 @@
 ; Update a variant by variant ID
 ;
 ; Accepts a variant ID and valid :degree9.shopify.products.variant/variant.
+; Only modifies provided values.
 ;
 ; # Examples
 ;
@@ -112,5 +113,25 @@
  (partial
   degree9.shopify.core/api!
   :endpoint "productVariant.update"
-  :input-spec [:degree9.shopify.products.variant/product_id :degree9.shopify.products.variant/variant]
+  :input-spec [:degree9.shopify/id :degree9.shopify.products.variant/variant]
   :spec :degree9.shopify.products.variant/variant))
+
+; Delete a variant by product ID and variant ID
+;
+; # Examples
+;
+; ```
+; ; deletes variant 13053395730475 from product 1370204536875 and returns `{}`
+; (delete! :params [1370204536875 13053395730475])
+; ```
+;
+; # References
+;
+; - https://help.shopify.com/en/api/reference/products/product_variant#destroy
+;
+(def delete!
+ (partial
+  degree9.shopify.core/api!
+  :endpoint "productVariant.delete"
+  :input-spec [:degree9.shopify.products.variant/product_id :degree9.shopify/id]
+  :spec :degree9.shopify/empty-api-response))
