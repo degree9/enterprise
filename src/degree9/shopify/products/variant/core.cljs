@@ -25,3 +25,22 @@
   :endpoint "productVariant.list"
   :input-spec :degree9.shopify/id
   :spec :degree9.shopify.products.variant/variants))
+
+; Count all variants for a single product ID
+;
+; # Examples
+;
+; ```
+; (count! :params [1370204536875]) ; count of variants for product 1370204536875
+; ```
+;
+; # References
+;
+; - https://help.shopify.com/en/api/reference/products/product_variant#count
+;
+(def count!
+ (partial
+  degree9.shopify.core/api!
+  :endpoint "productVariant.count"
+  :input-spec :degree9.shopify/id
+  :spec :degree9.shopify/count))
