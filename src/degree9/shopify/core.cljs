@@ -7,6 +7,7 @@
   oops.core
   degree9.env
   taoensso.timbre
+  degree9.shopify.products.product.spec
   [cljs.spec.alpha :as spec]))
 
 (defn -lib

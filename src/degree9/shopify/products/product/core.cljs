@@ -24,25 +24,44 @@
   :degree9.shopify.products.product/products
   maybe-products))
 
-; Fetch all products
-; @see https://help.shopify.com/en/api/reference/products/product#index
+; List all products
+;
+; Accepts many parameters for filtering, see Shopify docs
+;
+; # Examples
+;
+; ```
+; (list!
+;
+; # References
+;
+; - https://help.shopify.com/en/api/reference/products/product#index
+;
 (def list!
  (partial
   degree9.shopify.core/api!
-  :endpoint "/admin/products.json"))
+  :endpoint "product.list"))
 
-; Fetch a single product
-; @see https://help.shopify.com/en/api/reference/products/product#show
-(defn get!
- [id & {:keys [auth callback params]}]
- {:pre [(spec/valid? :degree9.shopify.products.product/id id)]
-  :post [(product? (:product %))]}
- (let [endpoint (str "/admin/products/" id ".json")]
-  (degree9.shopify.core/api!
-   :endpoint endpoint
-   :auth auth
-   :callback callback
-   :params params)))
+; Get a single product by ID
+;
+; Accepts a single optional parameter `fields` to filter returned fields.
+;
+; # Examples
+;
+; ```
+; (get! :params [1370204536875]) ; returns entire product object
+; (get! :params [1370204536875 {:fields [:title]}]) ; {:title "Test product A"}
+; ```
+;
+; # References
+;
+; - https://help.shopify.com/en/api/reference/products/product#show
+;
+(def get!
+ (partial
+  degree9.shopify.core/api!
+  :endpoint "product.get"
+  :spec :degree9.shopify.products.product/product))
 
 ; Create a product
 ; @see https://help.shopify.com/en/api/reference/products/product#create
