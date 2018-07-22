@@ -6,7 +6,8 @@
   degree9.shopify.url.core
   oops.core
   degree9.env
-  taoensso.timbre))
+  taoensso.timbre
+  [cljs.spec.alpha :as spec]))
 
 (defn -lib
  [shop-name auth]
@@ -26,8 +27,19 @@
 
 (def lib (memoize -lib))
 
+(defn parse-response
+ [response]
+ (js->clj response :keywordize-keys true))
+
+(defn assert-response-spec
+ [response spec]
+ (let [parsed (parse-response response)]
+  (when-not
+   (spec/valid? spec parsed)
+   (taoensso.timbre/error "response failed spec:" (spec/explain-str spec parsed)))))
+
 (defn api!
- [& {:keys [endpoint auth params shop-name]}]
+ [& {:keys [endpoint auth params shop-name spec]}]
  (let [endpoint (str endpoint)
        params (if (coll? params) (vec params) [params])
        promise
@@ -35,7 +47,17 @@
         (lib shop-name auth)
         endpoint
         (map clj->js params))]
+  (taoensso.timbre/debug "hitting endpoint:" endpoint)
   (-> promise
-   (.then #(prn (js->clj % :keywordize-keys true)))
-   (.catch #(taoensso.timbre/error %)))
+   (.then
+    (fn [response]
+     (taoensso.timbre/debug "response:" (parse-response response))
+     response))
+   ; if a spec is provided, validate the result
+   (.then
+    (fn [response]
+     (when spec
+      (assert-response-spec response spec))
+     response))
+   (.catch #(prn %)))
   promise))

@@ -3,7 +3,8 @@
 (ns degree9.shopify.products.product.core
  (:require
   degree9.shopify.core
-  taoensso.timbre))
+  taoensso.timbre
+  degree9.shopify.products.product.spec))
 
 (defn product?
  [maybe-product]
@@ -25,14 +26,14 @@
 
 ; Fetch all products
 ; @see https://help.shopify.com/en/api/reference/products/product#index
-(def products!
+(def list!
  (partial
   degree9.shopify.core/api!
   :endpoint "/admin/products.json"))
 
 ; Fetch a single product
 ; @see https://help.shopify.com/en/api/reference/products/product#show
-(defn product!
+(defn get!
  [id & {:keys [auth callback params]}]
  {:pre [(spec/valid? :degree9.shopify.products.product/id id)]
   :post [(product? (:product %))]}
@@ -62,8 +63,19 @@
  (taoensso.timbre/error "delete! endpoint not implemented, see issue #11"))
 
 ; Fetch the total products count
-; @see https://help.shopify.com/en/api/reference/products/product#count
+;
+; # Examples
+;
+; ```
+; (count!) ; promise resolves to int
+; ```
+;
+; # References
+;
+; - https://help.shopify.com/en/api/reference/products/product#count
+;
 (def count!
  (partial
   degree9.shopify.core/api!
-  :endpoint "/admin/products/count.json"))
+  :endpoint "product.count"
+  :spec :degree9.shopify.products.product/count))

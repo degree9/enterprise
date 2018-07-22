@@ -20,7 +20,7 @@
 ;
 ; - https://help.shopify.com/en/api/reference/inventory/inventoryitem#index
 ;
-(def items!
+(def list!
  (partial
   degree9.shopify.core/api!
   :endpoint "inventoryItem.list"))
@@ -37,7 +37,7 @@
 ;
 ; - https://help.shopify.com/en/api/reference/inventory/inventoryitem#show
 ;
-(def item!
+(def get!
  (partial
   degree9.shopify.core/api!
   :endpoint "inventoryItem.get"))

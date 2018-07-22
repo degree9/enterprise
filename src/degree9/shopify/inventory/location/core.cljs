@@ -32,7 +32,7 @@
 ;
 ; - https://help.shopify.com/en/api/reference/inventory/location#index
 ;
-(def locations!
+(def list!
  (partial
   degree9.shopify.core/api!
   :endpoint "location.list"))
@@ -49,7 +49,7 @@
 ;
 ; - https://help.shopify.com/en/api/reference/inventory/location#show
 ;
-(def location!
+(def get!
  (partial
   degree9.shopify.core/api!
   :endpoint "location.get"))
