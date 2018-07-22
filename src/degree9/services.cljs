@@ -1,9 +1,8 @@
 (ns degree9.services
   (:require [cljs.nodejs :as node]
-            [meta.server :as svr]))
-
-(def fs (node/require "fs"))
-(def path (node/require "path"))
+            [meta.server :as svr]
+            ["fs" :as fs]
+            ["path" :as path]))
 
 (defn entrypoint [app & [opts]]
   (svr/using app "/:entrypoint"
