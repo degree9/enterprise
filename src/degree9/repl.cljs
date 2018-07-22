@@ -1,5 +1,5 @@
 ; https://github.com/shadow-cljs/quickstart-browser/blob/master/src/starter/browser.cljs
-(ns repl.start
+(ns degree9.repl
  (:require
   degree9.shopify.core))
 

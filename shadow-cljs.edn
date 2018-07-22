@@ -32,7 +32,7 @@
  {:app {
         :target :node-script
         ; :target :browser
-        :main repl.start/init
+        :main degree9.repl/init
         :output-dir "repl-public/js"
         :output-to "repl-node/main.js"
         :asset-path "/js"
@@ -41,7 +41,7 @@
 
         :modules
         {:main
-         {:entries [repl.start]}}
+         {:entries [degree9.repl]}}
 
         :devtools
         {:http-root "repl-public"

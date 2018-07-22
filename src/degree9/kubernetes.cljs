@@ -54,7 +54,7 @@
   (cond
     (and k8s-host k8s-port) (cluster-config api)
     (exists k8s-config) (file-config api)
-    :else (api "http://localhost:8080")))
+    :else (new api "http://localhost:8080")))
 
 (defn watcher
   "A watcher for Kubernetes, implements reconnecting by calling watcher again once stream closes."
