@@ -94,9 +94,9 @@ To reload an already-loaded namespace, use `:reload` or `:reload-all`.
 
 For example:
 
-`(require 'repl.start :reload)`
+`(require 'degree9.repl :reload)`
 
-Would allow edits to `repl.start/foo` to appear in the REPL client without
+Would allow edits to `degree9.repl/foo` to appear in the REPL client without
 needing to stop and start the REPL server.
 
 ### Shadow CLJS + Browser + REPL
