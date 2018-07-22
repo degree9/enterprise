@@ -3,8 +3,6 @@
   degree9.shopify.spec
   [cljs.spec.alpha :as spec]))
 
-(spec/def :degree9.shopify.products.product/count int?)
-
 (spec/def :degree9.shopify.products.product.variant/inventory_management string?)
 (spec/def :degree9.shopify.products.product.variant/barcode string?)
 (spec/def :degree9.shopify.products.product.variant/product_id :degree9.shopify/id)

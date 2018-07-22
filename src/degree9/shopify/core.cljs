@@ -40,7 +40,7 @@
    (taoensso.timbre/error "response failed spec:" (spec/explain-str spec parsed)))))
 
 (defn api!
- [& {:keys [endpoint auth params shop-name spec]}]
+ [& {:keys [endpoint auth params shop-name spec input-spec]}]
  (let [endpoint (str endpoint)
        params (if (coll? params) (vec params) [params])
        promise
@@ -48,6 +48,13 @@
         (lib shop-name auth)
         endpoint
         (map clj->js params))]
+  (when input-spec
+   ; the input spec is only valid for write endpoints, so we only need to check
+   ; the first of the params.
+   (let [input (first params)]
+    (when-not
+     (spec/valid? input-spec input)
+     (taoensso.timbre/error "input failed spec:" (spec/explain-str input-spec input)))))
   (taoensso.timbre/debug "hitting endpoint:" endpoint)
   (-> promise
    (.then

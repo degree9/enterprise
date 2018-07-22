@@ -8,18 +8,6 @@
   [cljs.spec.alpha :as spec]
   [cljs.test :refer-macros [deftest is]]))
 
-(defn location?
- [maybe-location]
- (spec/valid?
-  :degree9.shopify.inventory.location/location
-  maybe-location))
-
-(defn locations?
- [maybe-locations]
- (spec/valid?
-  :degree9.shopify.inventory.location/locations
-  maybe-locations))
-
 ; Fetch all locations
 ;
 ; # Examples
@@ -35,7 +23,8 @@
 (def list!
  (partial
   degree9.shopify.core/api!
-  :endpoint "location.list"))
+  :endpoint "location.list"
+  :spec :degree9.shopify.inventory.location/locations))
 
 ; Fetch a single location by ID
 ;
@@ -52,7 +41,8 @@
 (def get!
  (partial
   degree9.shopify.core/api!
-  :endpoint "location.get"))
+  :endpoint "location.get"
+  :spec :degree9.shopify.inventory.location/location))
 
 ; Fetch the total locations count
 ;
@@ -68,6 +58,7 @@
 ;  (partial
 ;   degree9.shopify.core/api!
 ;   :endpoint "location.count"))
+;   :spec :degree9.shopify/count
 
 ; Fetch the inventory levels for a location
 ;

@@ -6,24 +6,6 @@
   taoensso.timbre
   degree9.shopify.products.product.spec))
 
-(defn product?
- [maybe-product]
- (spec/valid?
-  :degree9.shopify.products.product/product
-  maybe-product))
-
-(defn image?
- [maybe-image]
- (spec/valid?
-  :degree9.shopify.products.product/image
-  maybe-image))
-
-(defn products?
- [maybe-products]
- (spec/valid?
-  :degree9.shopify.products.product/products
-  maybe-products))
-
 ; List all products
 ;
 ; Accepts many parameters for filtering, see Shopify docs
@@ -40,7 +22,8 @@
 (def list!
  (partial
   degree9.shopify.core/api!
-  :endpoint "product.list"))
+  :endpoint "product.list"
+  :spec :degree9.shopify.products.product/products))
 
 ; Get a single product by ID
 ;
@@ -50,7 +33,7 @@
 ;
 ; ```
 ; (get! :params [1370204536875]) ; returns entire product object
-; (get! :params [1370204536875 {:fields [:title]}]) ; {:title "Test product A"}
+; (get! :params [1370204536875 {:fields [:title]}]) ; returns {:title "Test product A"}
 ; ```
 ;
 ; # References
@@ -64,10 +47,25 @@
   :spec :degree9.shopify.products.product/product))
 
 ; Create a product
-; @see https://help.shopify.com/en/api/reference/products/product#create
-(defn create!
- [product-data]
- (taoensso.timbre/error "create! endpoint not implemented, see issue #11"))
+;
+; Accepts a valid :degree9.shopify.products.product/product object.
+;
+; Requires additional app permissions to be set.
+;
+; # Examples
+;
+; ```
+; (create! :params [{:title "foo"}]) ; creates and returns new product with title "foo"
+; ```
+;
+; # References
+;
+; -  https://help.shopify.com/en/api/reference/products/product#create
+;
+(def create!
+ (partial
+  degree9.shopify.core/api!
+  :endpoint "product.create"))
 
 ; Update a product
 ; @see https://help.shopify.com/en/api/reference/products/product#update
@@ -83,10 +81,13 @@
 
 ; Fetch the total products count
 ;
+; Accepts several parameters for filtering what is counted, see Shopify docs
+;
 ; # Examples
 ;
 ; ```
-; (count!) ; promise resolves to int
+; (count!) ; count all products
+; (count! :params [{:vendor :cannabit-dev}]) ; count all products for vendor
 ; ```
 ;
 ; # References
@@ -97,4 +98,4 @@
  (partial
   degree9.shopify.core/api!
   :endpoint "product.count"
-  :spec :degree9.shopify.products.product/count))
+  :spec :degree9.shopify/count))

@@ -22,3 +22,6 @@
 
 ; system state values
 (spec/def :degree9.shopify/position int?)
+
+; counts are ints
+(spec/def :degree9.shopify/count nat-int?)
