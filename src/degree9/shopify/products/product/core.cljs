@@ -1,9 +1,8 @@
 ; implements the REST API for the Product resource
-; @see https://help.shopify.com/en/api/reference/products/product
+; https://help.shopify.com/en/api/reference/products/product
 (ns degree9.shopify.products.product.core
  (:require
   degree9.shopify.core
-  taoensso.timbre
   degree9.shopify.products.product.spec))
 
 ; List all products
@@ -13,7 +12,9 @@
 ; # Examples
 ;
 ; ```
-; (list!
+; (list!) ; lists all products
+; (list! :params [{:fields [:id]}]) ; lists all product IDs
+; ```
 ;
 ; # References
 ;
