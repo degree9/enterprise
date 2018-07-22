@@ -80,7 +80,8 @@
 
 ; Update a product by ID
 ;
-; Accepts an ID and valid :degree9.shopify.products.product/product object.
+; Accepts an ID and valid :degree9.shopify.products.product/product.
+; Only modifies provided values.
 ;
 ; # Examples
 ;

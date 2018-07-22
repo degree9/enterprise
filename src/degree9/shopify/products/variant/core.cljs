@@ -93,3 +93,24 @@
   :endpoint "productVariant.create"
   :input-spec [:degree9.shopify.products.variant/product_id :degree9.shopify.products.variant/variant]
   :spec :degree9.shopify.products.variant/variant))
+
+; Update a variant by variant ID
+;
+; Accepts a variant ID and valid :degree9.shopify.products.variant/variant.
+;
+; # Examples
+;
+; ```
+; (update! :params [13053346775083 {:option1 "flowers"}]) ; updates and returns variant 13053346775083
+; ```
+;
+; # References
+;
+; - https://help.shopify.com/en/api/reference/products/product_variant#update
+;
+(def update!
+ (partial
+  degree9.shopify.core/api!
+  :endpoint "productVariant.update"
+  :input-spec [:degree9.shopify.products.variant/product_id :degree9.shopify.products.variant/variant]
+  :spec :degree9.shopify.products.variant/variant))

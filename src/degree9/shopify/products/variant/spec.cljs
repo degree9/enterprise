@@ -4,7 +4,7 @@
   [cljs.spec.alpha :as spec]))
 
 (spec/def :degree9.shopify.products.variant/inventory_management (spec/nilable string?))
-(spec/def :degree9.shopify.products.variant/barcode string?)
+(spec/def :degree9.shopify.products.variant/barcode (spec/nilable string?))
 (spec/def :degree9.shopify.products.variant/product_id :degree9.shopify/id)
 (spec/def :degree9.shopify.products.variant/inventory_policy string?)
 (spec/def :degree9.shopify.products.variant/inventory_quantity int?)
