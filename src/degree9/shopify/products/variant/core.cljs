@@ -44,3 +44,25 @@
   :endpoint "productVariant.count"
   :input-spec :degree9.shopify/id
   :spec :degree9.shopify/count))
+
+; Get a single variant by variant ID
+;
+; Accepts a single `fields` param to filter the values returned.
+;
+; # Examples
+;
+; ```
+; (get! :params [12891968536619]) ; returns variant 12891968536619
+; (get! :params [12891968536619 {:fields [:id]}]) ; returns {:id 12891968536619}
+; ```
+;
+; # References
+;
+; - https://help.shopify.com/en/api/reference/products/product_variant#show
+;
+(def get!
+ (partial
+  degree9.shopify.core/api!
+  :endpoint "productVariant.get"
+  :input-spec :degree9.shopify/id
+  :spec :degree9.shopify.products.variant/variant))
