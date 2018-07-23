@@ -37,7 +37,16 @@
     config))
 
 (defn cluster-config [api]
-  (.log js/console api k8s-crt k8s-token))
+  (let [cert (read-file k8s-crt)
+        token (read-file k8s-token)
+        k8s-api (new api (str "https://" k8s-host ":" k8s-port))]
+    (doto k8s-api
+      (.setDefaultAuthentication
+        #js {:applyToRequest
+             #(-> %
+                (js->clj :keywordize-keys true)
+                (assoc :ca cert)
+                (assoc-in [:headers :Authorization] (str "Bearer " token)))}))))
 
 (defn file-config [api]
   (let [config  (kube-config)
