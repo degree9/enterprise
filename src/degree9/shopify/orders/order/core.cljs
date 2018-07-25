@@ -2,6 +2,7 @@
 ; https://help.shopify.com/en/api/reference/orders/order
 (ns degree9.shopify.orders.order.core
  (:require
+  degree9.shopify.spec
   degree9.shopify.core
   degree9.shopify.orders.order.spec))
 
@@ -176,3 +177,46 @@
   :endpoint "order.create"
   :input-spec :degree9.shopify.orders.order/order
   :spec :degree9.shopify.orders.order/order))
+
+; Updates an order by order ID
+;
+; Needs order write permissions.
+;
+; # Examples
+;
+; ```
+; ; updates 639784583211 and returns the order with a note
+; (update! :params [639784583211 {:note "Hi!"}])
+; ```
+;
+; # References
+;
+; - https://help.shopify.com/en/api/reference/orders/order#update
+;
+(def update!
+ (partial
+  degree9.shopify.core/api!
+  :endpoint "order.update"
+  :input-spec [:degree9.shopify/id :degree9.shopify.orders.order/order]
+  :spec :degree9.shopify.orders.order/order))
+
+; Deletes an order by order ID
+;
+; Needs order write permissions.
+;
+; # Examples
+;
+; ```
+; (delete! :params [639784583211]) ; deletes order 639784583211, no return
+; ```
+;
+; # References
+;
+; - https://help.shopify.com/en/api/reference/orders/order#destroy
+;
+(def delete!
+ (partial
+  degree9.shopify.core/api!
+  :endpoint "order.delete"
+  :input-spec :degree9.shopify/id
+  :spec :degree9.shopify/empty-api-response))

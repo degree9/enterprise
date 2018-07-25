@@ -55,8 +55,8 @@
 (spec/def :degree9.shopify.orders.order/total_price_usd :degree9.shopify/monetary_amount)
 (spec/def :degree9.shopify.orders.order/checkout_token (spec/nilable :degree9.shopify/token))
 (spec/def :degree9.shopify.orders.order/reference (spec/nilable string?))
-(spec/def :degree9.shopify.orders.order/user_id :degree9.shopify/id)
-(spec/def :degree9.shopify.orders.order/location_id :degree9.shopify/id)
+(spec/def :degree9.shopify.orders.order/user_id (spec/nilable :degree9.shopify/id))
+(spec/def :degree9.shopify.orders.order/location_id (spec/nilable :degree9.shopify/id))
 (spec/def :degree9.shopify.orders.order/source_identifier (spec/nilable string?))
 (spec/def :degree9.shopify.orders.order/source_url (spec/nilable :degree9.shopify/url))
 (spec/def :degree9.shopify.orders.order/processed_at (spec/nilable :degree9.shopify/time))
@@ -189,7 +189,6 @@
 (spec/def :degree9.shopify.orders.order/service string?)
 (spec/def :degree9.shopify.orders.order/tracking_company (spec/nilable string?))
 (spec/def :degree9.shopify.orders.order/shipment_status (spec/nilable string?))
-(spec/def :degree9.shopify.orders.order/location_id :degree9.shopify/id)
 (spec/def :degree9.shopify.orders.order/tracking_number string?)
 (spec/def :degree9.shopify.orders.order/tracking_numbers
  (spec/coll-of
