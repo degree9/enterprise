@@ -181,6 +181,58 @@
  (spec/coll-of
   :degree9.shopify.orders.order/shipping_line))
 
+(spec/def :degree9.shopify.orders.order/billing_address :degree9.shopify.address/address)
+(spec/def :degree9.shopify.orders.order/shipping_address :degree9.shopify.address/address)
+
+(spec/def :degree9.shopify.orders.order/order_id :degree9.shopify/id)
+(spec/def :degree9.shopify.orders.order/status string?)
+(spec/def :degree9.shopify.orders.order/service string?)
+(spec/def :degree9.shopify.orders.order/tracking_company (spec/nilable string?))
+(spec/def :degree9.shopify.orders.order/shipment_status (spec/nilable string?))
+(spec/def :degree9.shopify.orders.order/location_id :degree9.shopify/id)
+(spec/def :degree9.shopify.orders.order/tracking_number string?)
+(spec/def :degree9.shopify.orders.order/tracking_numbers
+ (spec/coll-of
+  :degree9.shopify.orders.order/tracking_number))
+(spec/def :degree9.shopify.orders.order/tracking_url :degree9.shopify/url)
+(spec/def :degree9.shopify.orders.order/tracking_urls
+ (spec/coll-of
+  :degree9.shopify.orders.order/tracking_url))
+
+(spec/def :degree9.shopify.order.order.fulfilment.receipt/testcase boolean?)
+(spec/def :degree9.shopify.order.order.fulfilment.receipt/authorization string?)
+(spec/def :degree9.shopify.order.order.fulfilment.receipt/receipt
+ (spec/keys
+  :req-un
+  [:degree9.shopify.order.order.receipt/testcase
+   :degree9.shopify.order.order.receipt/authorization]))
+
+(spec/def :degree9.shopify.orders.order/fulfillment
+ (spec/keys
+  :req-un
+  [:degree9.shopify/id
+   :degree9.shopify/admin_graphql_api_id
+   :degree9.shopify/created_at
+   :degree9.shopify/updated_at
+   :degree9.shopify/client_details
+   :degree9.shopify.orders.order/order_id
+   :degree9.shopify.orders.order/line_items
+   :degree9.shopify.orders.order.fulfilment/status
+   :degree9.shopify.orders.order.fulfilment/service
+   :degree9.shopify.orders.order.fulfilment/tracking_company
+   :degree9.shopify.orders.order.fulfilment/shipment_status
+   :degree9.shopify.orders.order.fulfilment/location_id
+   :degree9.shopify.orders.order.fulfilment/tracking_number
+   :degree9.shopify.orders.order.fulfilment/tracking_numbers
+   :degree9.shopify.orders.order.fulfilment/tracking_url
+   :degree9.shopify.orders.order.fulfilment/tracking_urls
+   :degree9.shopify.order.order.fulfilment.receipt/receipt
+   :degree9.shopify.orders.order.fulfilment/name]))
+
+(spec/def :degree9.shopify.orders.order/fulfillments
+ (spec/coll-of
+  :degree9.shopify.orders.order/fulfillment))
+
 (spec/def :degree9.shopify.orders.order/order
  (spec/keys
   ; optional keys to support `fields` filtering
@@ -249,7 +301,12 @@
    :degree9.shopify.orders.order/order_status_url
 
    :degree9.shopify.orders.order/line_items
-   :degree9.shopify.orders.order/shipping_lines]))
+   :degree9.shopify.orders.order/shipping_lines
+
+   :degree9.shopify.orders.order/billing_address
+   :degree9.shopify.orders.order/shipping_address
+
+   :degree9.shopify.orders.order/fulfillments]))
 
 (spec/def :degree9.shopify.orders.order/orders
  (spec/coll-of
