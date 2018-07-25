@@ -41,7 +41,7 @@
 (spec/def :degree9.shopify.orders.order/total_weight :degree9.shopify/weight)
 (spec/def :degree9.shopify.orders.order/total_tax :degree9.shopify/monetary_amount)
 (spec/def :degree9.shopify.orders.order/taxes_included boolean?)
-(spec/def :degree9.shopify.orders.order/financial_status string?)
+(spec/def :degree9.shopify.orders.order/financial_status #{"authorized" "pending" "paid" "refunded" "voided"})
 (spec/def :degree9.shopify.orders.order/confirmed boolean?)
 (spec/def :degree9.shopify.orders.order/total_discounts :degree9.shopify/monetary_amount)
 (spec/def :degree9.shopify.orders.order/total_line_items_price :degree9.shopify/monetary_amount)
@@ -79,7 +79,7 @@
 (spec/def :degree9.shopify.orders.order/processing_method string?)
 (spec/def :degree9.shopify.orders.order/checkout_id (spec/nilable :degree9.shopify/id))
 (spec/def :degree9.shopify.orders.order/source_name string?)
-(spec/def :degree9.shopify.orders.order/fulfillment_status (spec/nilable string?))
+(spec/def :degree9.shopify.orders.order/fulfillment_status (spec/nilable #{"shipped" "partial" "unshipped"}))
 
 ; tax lines
 
@@ -185,7 +185,7 @@
 (spec/def :degree9.shopify.orders.order/shipping_address :degree9.shopify.address/address)
 
 (spec/def :degree9.shopify.orders.order/order_id :degree9.shopify/id)
-(spec/def :degree9.shopify.orders.order/status string?)
+(spec/def :degree9.shopify.orders.order/status #{"open" "closed"})
 (spec/def :degree9.shopify.orders.order/service string?)
 (spec/def :degree9.shopify.orders.order/tracking_company (spec/nilable string?))
 (spec/def :degree9.shopify.orders.order/shipment_status (spec/nilable string?))

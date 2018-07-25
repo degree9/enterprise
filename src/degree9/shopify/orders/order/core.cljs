@@ -46,3 +46,24 @@
   :endpoint "order.get"
   :input-spec :degree9.shopify/id
   :spec :degree9.shopify.orders.order/order))
+
+; Fetch the total orders count
+;
+; Accepts several parameters for filtering what is counted, see Shopify docs
+;
+; # Examples
+;
+; ```
+; (count!) ; count all orders
+; (count! :params [{:status "open"}]) ; count all open orders
+; ```
+;
+; # References
+;
+; - https://help.shopify.com/en/api/reference/orders/order#count
+;
+(def count!
+ (partial
+  degree9.shopify.core/api!
+  :endpoint "order.count"
+  :spec :degree9.shopify/count))
