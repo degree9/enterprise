@@ -17,6 +17,9 @@
   [degree9/meta "0.3.0-SNAPSHOT"]
   [com.cemerick/url "0.1.1"]
   [cljs-http "0.1.45"]
+  [camel-snake-kebab "0.4.0"]
+  [com.taoensso/timbre "4.10.0"]
+  [binaryage/oops "0.6.2"]
   [funcool/cuerdas "2.0.5"]
 
   ; testing

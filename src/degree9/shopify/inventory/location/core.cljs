@@ -8,61 +8,77 @@
   [cljs.spec.alpha :as spec]
   [cljs.test :refer-macros [deftest is]]))
 
-(defn location?
- [maybe-location]
- (spec/valid?
-  :degree9.shopify.inventory.location/location
-  maybe-location))
-
-(defn locations?
- [maybe-locations]
- (spec/valid?
-  :degree9.shopify.inventory.location/locations
-  maybe-locations))
-
 ; Fetch all locations
-; @see https://help.shopify.com/en/api/reference/inventory/location#index
-(def locations!
+;
+; # Examples
+;
+; ```
+; (locations!) ; fetches all locations
+; ```
+;
+; # References
+;
+; - https://help.shopify.com/en/api/reference/inventory/location#index
+;
+(def list!
  (partial
   degree9.shopify.core/api!
-  :endpoint "/admin/locations.json"))
+  :endpoint "location.list"
+  :spec :degree9.shopify.inventory.location/locations))
 
-; Fetch a single location
-; @see https://help.shopify.com/en/api/reference/inventory/location#show
-(defn location!
- [id & {:keys [auth callback params]}]
- {:pre [(spec/valid? :degree9.shopify.inventory.location/id id)]
-  :post [(location? (:location %))]}
- (let [endpoint (str "/admin/locations/" id ".json")]
-  (degree9.shopify.core/api!
-   :endpoint endpoint
-   :auth auth
-   :callback callback
-   :params params)))
+; Fetch a single location by ID
+;
+; # Examples
+;
+; ```
+; (location! :params [1234]) ; fetches location with ID 1234
+; ```
+;
+; # References
+;
+; - https://help.shopify.com/en/api/reference/inventory/location#show
+;
+(def get!
+ (partial
+  degree9.shopify.core/api!
+  :endpoint "location.get"
+  :spec :degree9.shopify.inventory.location/location))
 
 ; Fetch the total locations count
-; @see https://help.shopify.com/en/api/reference/inventory/location#count
-(def count!
- (partial
-  degree9.shopify.core/api!
-  :endpoint "/admin/locations/count.json"))
+;
+; # References
+;
+; - https://help.shopify.com/en/api/reference/inventory/location#count
+; - https://help.shopify.com/en/api/reference/inventory/location#count
+;
+; @TODO missing in upstream lib
+; @see https://github.com/degree9/enterprise/issues/14
+;
+; (def count!
+;  (partial
+;   degree9.shopify.core/api!
+;   :endpoint "location.count"))
+;   :spec :degree9.shopify/count
 
 ; Fetch the inventory levels for a location
+;
 ; Note: Requires `read_inventory` scope
 ; Note: API only!
 ;       looks like location inventories are NOT available in the web UI and can
 ;       only be read/write through the API.
 ;       @see https://help.shopify.com/en/api/guides/inventory-migration-guide
-; @see https://help.shopify.com/en/api/reference/inventory/location#inventory_levels
-(defn inventory-levels!
- [id & {:keys [auth callback params]}]
- {:pre [(spec/valid? :degree9.shopify.inventory.location/id id)]}
- (let [endpoint (str "/admin/locations/" id "/inventory_levels.json")]
-  (degree9.shopify.core/api!
-   :endpoint endpoint
-   :auth auth
-   :callback callback
-   :params params)))
+;
+; # References
+;
+; - https://help.shopify.com/en/api/reference/inventory/location#inventory_levels)
+;
+; @TODO missing in upstream lib
+; @see https://github.com/degree9/enterprise/issues/15
+;
+; (def inventory-levels!
+;  (partial
+;   degree9.shopify.core/api!
+;   :endpoint "location.inventory-levels"))
 
 ; TESTS
 
