@@ -86,7 +86,8 @@
  (partial
   degree9.shopify.core/api!
   :endpoint "order.close"
-  :input-spec :degree9.shopify/id))
+  :input-spec :degree9.shopify/id
+  :spec :degree9.shopify.orders.order/order))
 
 ; Open an order by ID
 ;
@@ -106,4 +107,37 @@
  (partial
   degree9.shopify.core/api!
   :endpoint "order.open"
-  :input-spec :degree9.shopify/id))
+  :input-spec :degree9.shopify/id
+  :spec :degree9.shopify.orders.order/order))
+
+; Cancel an order by ID
+;
+; Orders that have a fulfillment object can't be canceled.
+; Needs order write permissions.
+; Has several params important params, duplicated from docs here.
+;
+; - `amount`: The amount to refund. If set, Shopify attempts to void or refund
+;             the payment, depending on its status.
+; - `restock`: Whether to restock refunded items back to your store's inventory.
+; - `reason`: The reason for the order cancellation. Valid values: customer,
+;             inventory, fraud, declined, and other.
+; - `email`: Whether to send an email to the customer notifying them of the
+;            cancellation.
+; - `refund`: The refund transactions to perform. Required for some more complex
+;             refund situations. For more information, see the Refund API.
+;
+; # Examples
+; ```
+; (cancel! :params [639742640171 {:amount 50}]) ; returns the canceled order
+; ```
+;
+; # References
+;
+; - https://help.shopify.com/en/api/reference/orders/order#cancel
+;
+(def cancel!
+ (partial
+  degree9.shopify.core/api!
+  :endpoint "order.cancel"
+  :input-spec :degree9.shopify/id
+  :spec :degree9.shopify.orders.order/order))
