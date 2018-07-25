@@ -24,3 +24,25 @@
   degree9.shopify.core/api!
   :endpoint "order.list"
   :spec :degree9.shopify.orders.order/orders))
+
+; Get an order by order ID
+;
+; Accepts a single optional parameter `fields` to filter returned fields.
+;
+; # Examples
+;
+; ```
+; (get! :params [639742640171]) ; returns entire order object
+; (get! :params [639742640171 {:fields [:created_at]}]) ; returns {:created_at "2018-07-25T04:03:36-04:00"}
+; ```
+;
+; # References
+;
+; - https://help.shopify.com/en/api/reference/orders/order#show
+;
+(def get!
+ (partial
+  degree9.shopify.core/api!
+  :endpoint "order.get"
+  :input-spec :degree9.shopify/id
+  :spec :degree9.shopify.orders.order/order))
