@@ -127,6 +127,7 @@
 ;             refund situations. For more information, see the Refund API.
 ;
 ; # Examples
+;
 ; ```
 ; (cancel! :params [639742640171 {:amount 50}]) ; returns the canceled order
 ; ```
@@ -140,4 +141,38 @@
   degree9.shopify.core/api!
   :endpoint "order.cancel"
   :input-spec :degree9.shopify/id
+  :spec :degree9.shopify.orders.order/order))
+
+; Create an order
+;
+; Needs order write permissions.
+; At least one line item is required.
+; Takes additional params to the order fields.
+;
+; - `send_receipt`: Whether to send an order confirmation to the customer.
+; - `send_fulfillment_receipt`: Whether to send a shipping confirmation to the
+;                               customer.
+; - `inventory_behaviour`: The behaviour to use when updating inventory.
+;                          (default: bypass)
+;   - `bypass`: Do not claim inventory.
+;   - `decrement_ignoring_policy`: Ignore the product's inventory policy and
+;                                  claim amounts no matter what.
+;   - `decrement_obeying_policy`: Obey the product's inventory policy.
+;
+; # Examples
+;
+; ```
+; ; creates and returns an order
+; (create! :params [{:line_items [{:variant_id 12891968536619 :quantity 1}]}])
+; ```
+;
+; # References
+;
+; - https://help.shopify.com/en/api/reference/orders/order#create
+;
+(def create!
+ (partial
+  degree9.shopify.core/api!
+  :endpoint "order.create"
+  :input-spec :degree9.shopify.orders.order/order
   :spec :degree9.shopify.orders.order/order))
