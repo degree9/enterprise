@@ -33,7 +33,7 @@
 ; # Examples
 ;
 ; ```
-; (get! :params [1370204536875]) ; returns entire product object
+; (get! :params [1370204536875]) ; returns entire product
 ; (get! :params [1370204536875 {:fields [:title]}]) ; returns {:title "Test product A"}
 ; ```
 ;

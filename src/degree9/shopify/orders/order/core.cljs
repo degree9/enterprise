@@ -32,7 +32,7 @@
 ; # Examples
 ;
 ; ```
-; (get! :params [639742640171]) ; returns entire order object
+; (get! :params [639742640171]) ; returns entire order
 ; (get! :params [639742640171 {:fields [:created_at]}]) ; returns {:created_at "2018-07-25T04:03:36-04:00"}
 ; ```
 ;
@@ -67,3 +67,43 @@
   degree9.shopify.core/api!
   :endpoint "order.count"
   :spec :degree9.shopify/count))
+
+; Close an order by ID
+;
+; Needs order write permissions.
+;
+; # Examples
+;
+; ```
+; (close! :params [639742640171]) ; returns the closed order
+; ```
+;
+; # References
+;
+; - https://help.shopify.com/en/api/reference/orders/order#close
+;
+(def close!
+ (partial
+  degree9.shopify.core/api!
+  :endpoint "order.close"
+  :input-spec :degree9.shopify/id))
+
+; Open an order by ID
+;
+; Needs order write permissions.
+;
+; # Examples
+;
+; ```
+; (open! :params [639742640171]) ; returns the opened order
+; ```
+;
+; # References
+;
+; - https://help.shopify.com/en/api/reference/orders/order#open
+;
+(def open!
+ (partial
+  degree9.shopify.core/api!
+  :endpoint "order.open"
+  :input-spec :degree9.shopify/id))
