@@ -45,26 +45,26 @@
 (spec/def :degree9.shopify.orders.order/confirmed boolean?)
 (spec/def :degree9.shopify.orders.order/total_discounts :degree9.shopify/monetary_amount)
 (spec/def :degree9.shopify.orders.order/total_line_items_price :degree9.shopify/monetary_amount)
-(spec/def :degree9.shopify.orders.order/cart_token :degree9.shopify/token)
+(spec/def :degree9.shopify.orders.order/cart_token (spec/nilable :degree9.shopify/token))
 (spec/def :degree9.shopify.orders.order/buyer_accepts_marketing boolean?)
 (spec/def :degree9.shopify.orders.order/name string?)
-(spec/def :degree9.shopify.orders.order/referring_site :degree9.shopify/url)
-(spec/def :degree9.shopify.orders.order/landing_site :degree9.shopify/url)
+(spec/def :degree9.shopify.orders.order/referring_site (spec/nilable :degree9.shopify/url))
+(spec/def :degree9.shopify.orders.order/landing_site (spec/nilable :degree9.shopify/url))
 (spec/def :degree9.shopify.orders.order/cancelled_at (spec/nilable :degree9.shopify/time))
 (spec/def :degree9.shopify.orders.order/cancel_reason (spec/nilable string?))
 (spec/def :degree9.shopify.orders.order/total_price_usd :degree9.shopify/monetary_amount)
-(spec/def :degree9.shopify.orders.order/checkout_token :degree9.shopify/token)
-(spec/def :degree9.shopify.orders.order/reference string?)
+(spec/def :degree9.shopify.orders.order/checkout_token (spec/nilable :degree9.shopify/token))
+(spec/def :degree9.shopify.orders.order/reference (spec/nilable string?))
 (spec/def :degree9.shopify.orders.order/user_id :degree9.shopify/id)
 (spec/def :degree9.shopify.orders.order/location_id :degree9.shopify/id)
-(spec/def :degree9.shopify.orders.order/source_identifier string?)
+(spec/def :degree9.shopify.orders.order/source_identifier (spec/nilable string?))
 (spec/def :degree9.shopify.orders.order/source_url (spec/nilable :degree9.shopify/url))
 (spec/def :degree9.shopify.orders.order/processed_at (spec/nilable :degree9.shopify/time))
 (spec/def :degree9.shopify.orders.order/device_id (spec/nilable :degree9.shopify/id))
 (spec/def :degree9.shopify.orders.order/customer_locale (spec/nilable :degree9.shopify/locale))
 (spec/def :degree9.shopify.orders.order/app_id (spec/nilable :degree9.shopify/id))
 (spec/def :degree9.shopify.orders.order/browser_ip (spec/nilable :degree9.shopify/ip))
-(spec/def :degree9.shopify.orders.order/landing_site_ref string?)
+(spec/def :degree9.shopify.orders.order/landing_site_ref (spec/nilable string?))
 (spec/def :degree9.shopify.orders.order/order_number :degree9.shopify/id)
 
 (spec/def :degree9.shopify.orders.order/note_attributes
@@ -77,7 +77,7 @@
   :degree9.shopify.orders.order/payment_gateway_name))
 
 (spec/def :degree9.shopify.orders.order/processing_method string?)
-(spec/def :degree9.shopify.orders.order/checkout_id :degree9.shopify/id)
+(spec/def :degree9.shopify.orders.order/checkout_id (spec/nilable :degree9.shopify/id))
 (spec/def :degree9.shopify.orders.order/source_name string?)
 (spec/def :degree9.shopify.orders.order/fulfillment_status (spec/nilable string?))
 
@@ -96,13 +96,13 @@
  (spec/coll-of
   :degree9.shopify.orders.order/tax_line))
 
-(spec/def :degree9.shopify.orders.order/contact_email :degree9.shopify/email)
+(spec/def :degree9.shopify.orders.order/contact_email (spec/nilable :degree9.shopify/email))
 (spec/def :degree9.shopify.orders.order/order_status_url :degree9.shopify/url)
 
 ; line items
 
 (spec/def :degree9.shopify.orders.order/variant_id :degree9.shopify.products.variant/id)
-(spec/def :degree9.shopify.orders.order/variant_title :degree9.shopify.products.variant/title)
+(spec/def :degree9.shopify.orders.order/variant_title (spec/nilable :degree9.shopify.products.variant/title))
 (spec/def :degree9.shopify.orders.order/product_id :degree9.shopify/id)
 (spec/def :degree9.shopify.orders.order/taxable boolean?)
 (spec/def :degree9.shopify.orders.order/gift_card boolean?)
@@ -233,6 +233,22 @@
  (spec/coll-of
   :degree9.shopify.orders.order/fulfillment))
 
+(spec/def :degree9.shopify.orders.order/refund
+ (spec/keys
+  :req-un
+  [:degree9.shopfy/id
+   :degree9.shopify/created_at
+   :degree9.shopify/created_at
+   :degree9.shopify/admin_graphql_api_id
+   :degree9.shopify.orders.order/order_id
+   :degree9.shopify.orders.order/user_id
+   :degree9.shopify.orders.order/processed_at
+   :degree9.shopify.orders.order.refund/note
+   :degree9.shopify.orders.order.refund/restock
+   :degree9.shopify.orders.order.refund/refund_line_items
+   :degree9.shopify.orders.order.refund/transactions
+   :degree9.shopify.orders.order.refund/order_adjustments]))
+
 (spec/def :degree9.shopify.orders.order/order
  (spec/keys
   ; optional keys to support `fields` filtering
@@ -242,10 +258,10 @@
    :degree9.shopify/created_at
    :degree9.shopify/updated_at
    :degree9.shopify/currency
-   :degree9.shopify/phone
    :degree9.shopify/tags
    :degree9.shopify/admin_graphql_api_id
 
+   :degree9.shopify.orders.order/phone
    :degree9.shopify.orders.order/closed_at
    :degree9.shopify.orders.order/number
    :degree9.shopify.orders.order/note
@@ -306,7 +322,11 @@
    :degree9.shopify.orders.order/billing_address
    :degree9.shopify.orders.order/shipping_address
 
-   :degree9.shopify.orders.order/fulfillments]))
+   :degree9.shopify.orders.order/fulfillments
+   :degree9.shopify.orders.order/refunds
+
+   :degree9.shopify.orders.order/payment_details
+   :degree9.shopify.orders.order/customer]))
 
 (spec/def :degree9.shopify.orders.order/orders
  (spec/coll-of
