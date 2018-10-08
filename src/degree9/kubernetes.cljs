@@ -36,8 +36,20 @@
       (.loadFromFile config k8s-config))
     config))
 
+(defn- apply-request [cert token]
+  (fn [opts]
+    (-> opts
+      (js->clj :keywordize-keys true)
+      (assoc :ca cert)
+      (assoc-in [:headers :Authorization] (str "Bearer " token))
+      (clj->js))))
+
 (defn cluster-config [api]
-  (.log js/console api k8s-crt k8s-token))
+  (let [cert (read-file k8s-crt)
+        token (read-file k8s-token)
+        k8s-api (new api (str "https://" k8s-host ":" k8s-port))]
+    (.setDefaultAuthentication k8s-api #js{:applyToRequest (apply-request cert token)})
+    k8s-api))
 
 (defn file-config [api]
   (let [config  (kube-config)
@@ -109,6 +121,7 @@
 
 (defn k8s-error [err]
   (let [{:keys [message data code]} (k8s->clj (k8s-response err))]
+    (.log js/console err)
     (case code
       404 (error/not-found message data)
       409 (error/conflict message data)
