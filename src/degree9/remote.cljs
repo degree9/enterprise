@@ -9,7 +9,7 @@
   [uri]
   (-> (client/app)
     (client/with-socketio uri)
-    (client/with-authentication)))
+    (client/with-authentication nil)))
 
 (defn api
   "Mount a remote service to a local endpoint."
