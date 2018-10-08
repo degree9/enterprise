@@ -1,11 +1,10 @@
 (ns degree9.services
   (:require [cljs.nodejs :as node]
-            [meta.server :as svr]
             ["fs" :as fs]
             ["path" :as path]))
 
 (defn entrypoint [app & [opts]]
-  (svr/using app "/:entrypoint"
+  (.use app "/:entrypoint"
     (fn [req res next]
       (let [entry (.-entrypoint (.-params req))
             fpath (.resolve path (str "./" entry ".html"))]

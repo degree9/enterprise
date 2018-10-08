@@ -28,20 +28,3 @@
   "Return the process.env object value for `key` or `default`."
   ([key] (get key nil))
   ([key default] (obj/get (env-obj) (-> key name str/snake str/upper) default)))
-
-; TESTS
-
-(deftest ??dir
- (doseq [e [:pwd :home :user]]
-  (is
-   (contains?
-    (keys)
-    e))))
-
-(deftest ??get
- (is (clojure.string/includes? (get :pwd) "enterprise"))
- (is (clojure.string/includes? (get "PWD") "enterprise"))
- ; no fallback yields nil for no match
- (is (= nil (get :no-match)))
- ; should fallback to foo with no match
- (is (= "foo" (get :no-match "foo"))))
