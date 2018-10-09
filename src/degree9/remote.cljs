@@ -13,5 +13,5 @@
 
 (defn api
   "Mount a remote service to a local endpoint."
-  [app path conn service hooks]
-  (server/api app path (client/service conn service) hooks))
+  [app path uri service hooks]
+  (server/api app path (client/service (connection uri) service) hooks))
