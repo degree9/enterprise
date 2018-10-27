@@ -1,20 +1,20 @@
 (ns degree9.server
  (:require
-  [meta.server :as server]
-  [degree9.env :as env]
-  [degree9.security :as sec]))
+   ["debug" :as dbg]
+   [meta.server :as server]
+   [degree9.env :as env]))
 
-(def app server/app)
+(def ^:private debug (dbg "degree9:enterprise:server"))
 
-(-> app
-    server/with-defaults
-    server/with-rest
-    server/with-socketio
-    server/with-authentication
-    sec/with-security)
+(defn app []
+ (debug "Starting enterprise server")
+ (-> (server/app)
+     (server/with-defaults)
+     (server/with-rest)
+     (server/with-socketio)
+     (server/with-authentication)))
 
-(defn- main []
- (server/listen app (env/get "APP_PORT")))
-
-(defn start! []
-  (server/init! main))
+(defn start! [app]
+  (let [port (env/get "APP_PORT")]
+    (debug "Server listening on port %s" port)
+    (server/listen app port)))
