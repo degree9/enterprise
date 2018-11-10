@@ -138,3 +138,15 @@ This only runs once though. The `watch` tool can help, install on Mac OS with
 `brew install watch` and wrap shadow CLJS with it.
 
 `$ watch shadow-cljs compile test`
+
+---
+
+<p align="center">
+  <a href="https://www.patreon.com/degree9" align="center">
+    <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160" alt="Patreon">
+  </a>
+  <br>
+  <b>Support this and other open-source projects on Patreon!</b>
+</p>
+
+---
