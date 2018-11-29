@@ -1,6 +1,4 @@
-<p align="center"><img src="/.github/D9 Enterprise.png" alt="d9enterprise" height="200px"></p>
-
-# D9 Enterprise
+<p align="center"><img src="/.github/D9 Enterprise.png" alt="d9enterprise" width="445px"></p>
 
 [![Clojars Project](https://img.shields.io/clojars/v/degree9/enterprise.svg)](https://clojars.org/degree9/enterprise) <!-- [![Dependencies Status](https://versions.deps.co/degree9/enterprise/status.svg)](https://versions.deps.co/degree9/enterprise)--> [![Downloads](https://versions.deps.co/degree9/enterprise/downloads.svg)](https://versions.deps.co/degree9/enterprise)
 
