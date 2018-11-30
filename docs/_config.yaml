@@ -1,6 +1,6 @@
 # Site settings
 title: degree9 / ENTERPRISE
-description: A commercially supported ClokjureScript framework, shipped as code.
+description: A commercially supported enterprise app framework, shipped as code.
 credit: Degree9 Solutions Inc.
 # baseurl: "/particle" # the subpath of your site, e.g. /blog
 # url: "localhost:3000" # the base hostname & protocol for your site e.g. http://willianjusten.com.br
