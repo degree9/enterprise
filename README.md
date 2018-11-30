@@ -1,6 +1,6 @@
 <p align="center"><img src="/.github/D9 Enterprise.png" alt="d9enterprise" width="445px"></p>
 
-[![Clojars Project](https://img.shields.io/clojars/v/degree9/enterprise.svg)](https://clojars.org/degree9/enterprise) <!-- [![Dependencies Status](https://versions.deps.co/degree9/enterprise/status.svg)](https://versions.deps.co/degree9/enterprise)--> [![Downloads](https://versions.deps.co/degree9/enterprise/downloads.svg)](https://versions.deps.co/degree9/enterprise)
+[![Clojars Project](https://img.shields.io/clojars/v/degree9/enterprise.svg)](https://clojars.org/degree9/enterprise) <!-- [![Dependencies Status](https://versions.deps.co/degree9/enterprise/status.svg)](https://versions.deps.co/degree9/enterprise)--> [![Downloads](https://versions.deps.co/degree9/enterprise/downloads.svg)](https://versions.deps.co/degree9/enterprise) [![Slack][slack]][d9-slack]
 
 A commercially supported ClojureScript platform by Degree9.
 
@@ -150,3 +150,6 @@ This only runs once though. The `watch` tool can help, install on Mac OS with
 </p>
 
 ---
+
+[slack]: https://img.shields.io/badge/clojurians-degree9-%23e01563.svg?logo=slack
+[d9-slack]: https://clojurians.slack.com/channels/degree9/
