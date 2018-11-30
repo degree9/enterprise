@@ -77,12 +77,10 @@ document.addEventListener("DOMContentLoaded", function () {
       "detect_on": "window",
       "events": {
         "onhover": {
-          "enable": false,
-          "mode": "grab"
+          "enable": false
         },
         "onclick": {
-          "enable": true,
-          "mode": "push"
+          "enable": false
         },
         "resize": true
       },
