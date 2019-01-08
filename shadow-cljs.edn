@@ -10,11 +10,11 @@
   [com.taoensso/encore "2.96.0"]
   [doo "0.1.10" :scope "test"]
 
-  [cljs-ajax "0.7.3"]
+  ;[cljs-ajax "0.7.3"]
   [com.taoensso/tufte "2.0.1"]
   [degree9/featherscript "0.4.0-SNAPSHOT"]
   [com.cemerick/url "0.1.1"]
-  [cljs-http "0.1.45"]
+  ;[cljs-http "0.1.45"]
   [camel-snake-kebab "0.4.0"]
   [com.taoensso/timbre "4.10.0"]
   [binaryage/oops "0.6.2"]
