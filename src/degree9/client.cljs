@@ -16,17 +16,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Client Service API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(def find   client/find)
+(def service client/service)
 
-(def get    client/get)
+(def find    client/find)
 
-(def create client/create)
+(def get     client/get)
 
-(def update client/update)
+(def create  client/create)
 
-(def patch  client/patch)
+(def update  client/update)
 
-(def remove client/remove)
+(def patch   client/patch)
+
+(def remove  client/remove)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Client Event API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
