@@ -1,4 +1,4 @@
-(ns degree9.shopify.discounts.code
+(ns degree9.shopify.discounts.code.spec
  (:require
   [cljs.spec.alpha :as spec]))
 

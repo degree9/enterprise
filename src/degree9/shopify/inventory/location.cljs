@@ -1,6 +1,6 @@
 ; implements the REST API for the Locations resource
 ; @see https://help.shopify.com/en/api/reference/inventory/location
-(ns degree9.shopify.inventory.location.core
+(ns degree9.shopify.inventory.location
  (:require
   degree9.shopify.core
   degree9.shopify.inventory.location.spec

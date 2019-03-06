@@ -1,6 +1,6 @@
 ; implements REST API for products Variant resource
 ; https://help.shopify.com/en/api/reference/products/product_variant
-(ns degree9.shopify.products.variant.core
+(ns degree9.shopify.products.variant
  (:require
   degree9.shopify.core))
 

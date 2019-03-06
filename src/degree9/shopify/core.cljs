@@ -2,8 +2,8 @@
  (:require
   ["shopify-api-node" :as shopify]
   ["request" :as request]
-  degree9.shopify.auth.core
-  degree9.shopify.url.core
+  degree9.shopify.auth
+  degree9.shopify.url
   oops.core
   degree9.env
   taoensso.timbre

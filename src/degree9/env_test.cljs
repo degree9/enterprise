@@ -1,5 +1,6 @@
 (ns degree9.env-test
-  (:require [degree9.env :as env]))
+  (:require [degree9.env :as env]
+            [clojure.test :refer [deftest is]]))
 
 
 ;; TESTS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

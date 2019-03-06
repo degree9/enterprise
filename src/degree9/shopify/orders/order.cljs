@@ -1,6 +1,6 @@
 ; implements the REST API for the Order resource
 ; https://help.shopify.com/en/api/reference/orders/order
-(ns degree9.shopify.orders.order.core
+(ns degree9.shopify.orders.order
  (:require
   degree9.shopify.spec
   degree9.shopify.core
