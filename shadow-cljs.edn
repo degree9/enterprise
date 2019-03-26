@@ -47,5 +47,5 @@
   :test {
          :target :node-test
          :output-to "test/main.js"
-         :ns-regexp "degree9\\.(shopify.*|env)"
+         :ns-regexp "degree9\\.(pathway)"
          :autorun true}}}

@@ -16,7 +16,7 @@
           (callback nil (clj->js data))))
       (get [this id params]
         (prom/with-callback callback
-          (callback nil (clj->js data))))
+          (callback nil (get (clj->js data) id))))
       (create [this data params]
         (prom/with-callback callback
           (callback nil (clj->js data))))
