@@ -1,8 +1,8 @@
-(ns degree9.shopify.auth.core
+(ns degree9.shopify.auth
  (:require
   degree9.shopify.auth.spec
   degree9.shopify.auth.data
-  degree9.shopify.url.core
+  degree9.shopify.url
   [cljs.spec.alpha :as spec]
   [cljs.test :refer-macros [deftest is]]))
 

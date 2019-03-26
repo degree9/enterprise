@@ -1,6 +1,6 @@
 ; implements the REST API for the Product resource
 ; https://help.shopify.com/en/api/reference/products/product
-(ns degree9.shopify.products.product.core
+(ns degree9.shopify.products.product
  (:require
   degree9.shopify.core
   degree9.shopify.products.product.spec))

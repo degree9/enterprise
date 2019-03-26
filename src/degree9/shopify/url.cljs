@@ -1,4 +1,4 @@
-(ns degree9.shopify.url.core
+(ns degree9.shopify.url
  (:require
   cemerick.url
   degree9.shopify.url.data
