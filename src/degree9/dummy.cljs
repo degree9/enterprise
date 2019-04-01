@@ -11,12 +11,14 @@
   (let []
     (reify
       Object
+      (id [this] "id")
       (find [this params]
         (prom/with-callback callback
           (callback nil (clj->js data))))
       (get [this id params]
         (prom/with-callback callback
-          (callback nil (get (clj->js data) id))))
+          (let [data (get (zipmap (map :id data) data) id)]
+            (callback nil (clj->js data)))))
       (create [this data params]
         (prom/with-callback callback
           (callback nil (clj->js data))))
