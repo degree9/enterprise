@@ -60,8 +60,8 @@
 (defn auth! [app users]
  (handle-auth app users (client/auth! app)))
 
-(defn login! [app users strategy email password & [opts]]
- (handle-auth app users (client/login! app strategy email password opts)))
+(defn login! [app users strategy & [opts]]
+ (handle-auth app users (client/login! app strategy opts)))
 
 (defn logout!
  ([app] (logout! user app))

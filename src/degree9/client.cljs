@@ -12,7 +12,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Client Services ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(def users   (client/service app "/users"))
+(defn users [] (client/service app "/users"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Client Service API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -45,13 +45,10 @@
 
 ;; Client Auth API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn auth! []
-  (auth/auth! app users))
+  (auth/auth! app (users)))
 
-(defn login!
-  ([email password]
-   (login! "local" email password))
-  ([strategy userid password]
-   (auth/login! app users strategy userid password)))
+(defn login! [strategy & [opts]]
+  (auth/login! app (users) strategy opts))
 
 (defn logout! []
   (auth/logout! app))

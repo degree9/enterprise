@@ -30,8 +30,8 @@
 
 (defn api
   "Create a feathers service backed by MongoDB."
-  ([app path db-model hooks]
-   (server/api app path (mongodb #js{:Model db-model}) hooks))
+  ([app path opts hooks]
+   (server/api app path (mongodb opts) hooks))
   ([app path db-model db-schema hooks]
-   (api app path (model db-model (schema db-schema)) hooks)))
+   (api app path #js{:Model (model db-model (schema db-schema))} hooks)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
