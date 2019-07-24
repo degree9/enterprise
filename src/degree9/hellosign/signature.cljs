@@ -8,3 +8,6 @@
 
 (defn get-embedded-request [id]
   (.get signature id))
+
+(defn get-files [id & [opts]]
+  (.download signature id opts))
