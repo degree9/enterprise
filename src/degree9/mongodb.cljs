@@ -17,9 +17,9 @@
 
 (defn schema
   "Create a Mongoose Schema. Converts clj->js internally."
-  [data]
+  [data & [opts]]
   (let [schema (obj/get mongoose "Schema")]
-    (schema. (clj->js data))))
+    (schema. (clj->js data) (clj->js opts))))
 
 (defn model
   "Create a Mongoose Model."
@@ -33,5 +33,7 @@
   ([app path opts hooks]
    (server/api app path (mongodb opts) hooks))
   ([app path db-model db-schema hooks]
-   (api app path #js{:Model (model db-model (schema db-schema))} hooks)))
+   (api app path #js{:Model (model db-model (schema db-schema))} hooks))
+  ([app path db-model db-schema schema-opts hooks]
+   (api app path #js{:Model (model db-model (schema db-schema schema-opts))} hooks)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
