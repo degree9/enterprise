@@ -13,7 +13,7 @@
 (defn mkconnection
   "Create a connection instance to MongoDB."
   [conn & [opts]]
-  (.createConnection mongoose conn opts))
+  (.createConnection mongoose conn (clj->js opts)))
 
 (defn schema
   "Create a Mongoose Schema. Converts clj->js internally."

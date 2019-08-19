@@ -8,3 +8,6 @@
 
 (defn list-templates []
   (.list template))
+
+(defn get-template [id]
+  (.get template id))

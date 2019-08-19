@@ -10,4 +10,7 @@
   (.get signature id))
 
 (defn get-files [id & [opts]]
-  (.download signature id opts))
+  (.download signature id (clj->js opts)))
+
+(defn create-request [opts]
+  (.sendWithTemplate signature (clj->js opts)))
