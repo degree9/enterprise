@@ -34,8 +34,7 @@
         :output-dir "repl-public/js"
         :output-to "repl-node/main.js"
         :asset-path "/js"
-        :compiler-options
-        {:reader-features #{:browser}}
+        :compiler-options {:reader-features #{:browser}}
 
         :modules
         {:main

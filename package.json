@@ -26,6 +26,7 @@
     "request": "^2.87.0",
     "shopify-api-node": "^2.14.1",
     "swagger-client": "^3.8.25",
+    "twilio": "^3.33.3",
     "ws": "^5.2.2",
     "xmlhttprequest": "^1.8.0",
     "xregexp": "^4.2.0"
