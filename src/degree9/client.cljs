@@ -55,4 +55,7 @@
 
 (defn register! [username password]
   (auth/register! users username password))
+
+(defn reauthenticate! [callback]
+  (auth/reauthenticate! app callback))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -73,6 +73,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Authentication Events ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defn reauthenticate! [app callback]
+  (let []
+    (.on app "reauthentication-error"
+      (fn []
+        (prn "REAUTHENTICATION-ERROR")
+        (reset! user-cell nil)
+        (callback)))))
+
 ;(defn- when-auth [app callback]
 ;  (client/on app "authenticated" callback)
 ;  (client/on app "logout" callback))

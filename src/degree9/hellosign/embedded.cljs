@@ -1,5 +1,7 @@
 (ns degree9.hellosign.embedded
-  (:require ["hellosign-embedded" :as hello]))
+  (:require [degree9.hellosign.core :as hello]))
 
-(defn hellosign [opts]
-  (hello. (clj->js opts)))
+(def embedded hello/embedded)
+
+(defn edit-url [id]
+  (.getEditUrl embedded id))
