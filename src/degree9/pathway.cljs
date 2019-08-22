@@ -5,15 +5,12 @@
 
 (defprotocol IPathway
   "A protocol for pathway matching."
-  (-match-pathway [_ pattern] "Returns a handler if pattern matches router.")
-  (-match-handler [_ pattern] "Returns a handler if pattern matches router."))
+  (-match-pathway [router pattern] "Returns a handler if pattern matches router."))
 
 (extend-protocol IPathway
   PersistentVector
-  (-match-pathway [router pattern]
-    (let [[route handler] router]
-      (prn route handler pattern)
-      router)))
+  (-match-pathway [[route handler] pattern]
+    (when (-match-pathway route pattern) (reduced handler))))
 
 (defn match-route
   ([router pattern] (match-route router pattern #"/"))
