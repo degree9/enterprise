@@ -26,22 +26,22 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Internal Idle State ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(def ^:private *active* (j/cell true))
+(def ^:private *activity* (j/cell true))
 
 (def ^:private *last-activity* (j/cell (time-now)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Public Idle State ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(def idle? (j/cell= (not *active*)))
+(def idle? (j/cell= (not *activity*)))
 
-(def active? (j/cell= *active*))
+(def active? (j/cell= *activity*))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Public Idle Methods ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn idle! [& opts]
   (let [timeout   (:timeout   opts 30000)
         events    (:events    opts (active-events))
-        activity  (:activity  opts *active*)
+        activity  (:activity  opts *activity*)
         timestamp (:timestamp opts *last-activity*)]
     (doseq [e events]
       (.addEventListener js/window e #(activity! timestamp activity)))
