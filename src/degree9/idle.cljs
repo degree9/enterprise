@@ -11,15 +11,15 @@
 (defn- time-now []
   (.getTime (js/Date.)))
 
-(defn- time-diff [initial diff]
+(defn- time-diff [initial timeout]
   (let [now (time-now)]
-    (> diff (- now initial))))
+    (> timeout (- now initial))))
 
-(defn- activity! [timestamp status]
+(defn- activity! [timestamp activity]
   (fn [_]
     (let [now (time-now)]
       (reset! timestamp now)
-      (reset! status true))))
+      (reset! activity true))))
 
 (defn when-interval [ms func]
   (js/setInterval func ms))
@@ -41,10 +41,10 @@
 (defn idle! [& opts]
   (let [timeout   (:timeout   opts 30000)
         events    (:events    opts (active-events))
-        status    (:status    opts *active*)
+        activity  (:activity  opts *active*)
         timestamp (:timestamp opts *last-activity*)]
     (doseq [e events]
-      (.addEventListener js/window e #(activity! timestamp status)))
+      (.addEventListener js/window e #(activity! timestamp activity)))
     (when-interval timeout
-      #(when (time-diff @timestamp timeout) (reset! status false)))))
+      #(when (time-diff @timestamp timeout) (reset! activity false)))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
