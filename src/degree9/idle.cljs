@@ -44,7 +44,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Public Idle Methods ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defn idle! [& opts]
+(defn idle!
+  "Initialize idle activity tracking."
+  [& opts]
   (let [timeout   (:timeout   opts 30000)
         events    (:events    opts *default-events*)
         activity  (:activity  opts *activity*)
