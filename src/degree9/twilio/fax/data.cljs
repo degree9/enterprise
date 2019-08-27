@@ -8,7 +8,7 @@
 
 (def test-fax-number (partial degree9.env/get :twilio-test-fax-number))
 
-(defn test-fax
+(defn test-fax-request
  []
  {:from (test-fax-number)
   :to (test-fax-number)
