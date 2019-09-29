@@ -1,5 +1,6 @@
 (ns degree9.mongodb
   (:require [goog.object :as obj]
+            [degree9.env :as env]
             [meta.server :as server]
             ["mongoose" :as mongoose]
             ["feathers-mongoose" :as mongodb]))
@@ -36,4 +37,14 @@
    (api app path #js{:Model (model db-model (schema db-schema))} hooks))
   ([app path db-model db-schema schema-opts hooks]
    (api app path #js{:Model (model db-model (schema db-schema schema-opts))} hooks)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; D9 Public Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn connect! [& opts]
+  (let [user (:username   opts (env/get "MONGODB_USERNAME"))
+        pass (:password   opts (env/get "MONGODB_PASSWORD"))
+        conn (:connection opts (env/get "MONGODB_CONNECTION"))]
+    (mongodb/connect conn
+      {:auth {:user user :password pass}
+       :useNewUrlParser true})))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
