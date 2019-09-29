@@ -12,6 +12,8 @@ with nix-shell.pkgs;
  core-shell = stdenv.mkDerivation (nix-shell.shell // {
   name = "core-shell";
 
+  SUPPRESS_NO_CONFIG_WARNING = "true";
+
   shellHook = nix-shell.pkgs.lib.concatStrings [
   # extra shellHook commands here
   ''
