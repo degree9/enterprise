@@ -16,8 +16,8 @@
 (defn queue-receive
   ([sbus callback]
    (.receiveQueueMessage sbus callback))
-  ([sbus opts callback
-    (.receiveQueueMessage sbus (clj->js opts) callback)]))
+  ([sbus opts callback]
+   (.receiveQueueMessage sbus (clj->js opts) callback)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Azure Service Bus Topics Low API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

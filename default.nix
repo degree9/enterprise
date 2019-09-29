@@ -1,6 +1,6 @@
 let
- nix-shell-release-tag = "2e4602b63f058842230f0ab7693cca0af98facca";
- nix-shell-release-sha256 = "0r37nfml2qqqkgdvbc317z2cdkqdalywq7771w55lj5j7mznjjhv";
+ nix-shell-release-tag = "7ec672ca3aaeb6c4b8fbc416a94c778887bddfe7";
+ nix-shell-release-sha256 = "147xvybp8r85xiyzmaww4m21i6a17fdkz6ygvhqigjsbpwq9qg4v";
 
  nix-shell = import (fetchTarball {
   url = "https://github.com/thedavidmeister/nix-shadow-cljs/tarball/${nix-shell-release-tag}";

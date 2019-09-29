@@ -38,5 +38,8 @@
   (is (spec/valid? ::path/pathway [["/" ["sub" :sub]]])))
 
 (deftest ??match-paths
-  ;; single path
-  (is (= :root (pathway/match-route ["/" :root] "/"))))
+ ;; single path
+ (is
+  (=
+   ["/" :root] 
+   (pathway/match-route ["/" :root] "/"))))

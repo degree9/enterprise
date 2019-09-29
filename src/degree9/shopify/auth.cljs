@@ -27,7 +27,7 @@
 (defn with-url-auth
  "Given a URL and auth credentials, returns a URL with auth"
  [url auth]
- {:pre [(degree9.shopify.url.core/url? url)
+ {:pre [(degree9.shopify.url/url? url)
         (auth? auth)]}
  (-> url
   (assoc :username (:degree9.shopify.auth/username auth))
@@ -51,7 +51,7 @@
   (is (= expected (default-auth)))))
 
 (deftest ??with-url-auth
- (let [url (degree9.shopify.url.core/endpoint->url "foo.json")
+ (let [url (degree9.shopify.url/endpoint->url "foo.json")
        auth {:degree9.shopify.auth/username "bar"
              :degree9.shopify.auth/password "baz"}
        expected "https://bar:baz@cannabit-dev.myshopify.com/foo.json"]

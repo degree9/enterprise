@@ -16,6 +16,8 @@
   [com.taoensso/timbre "4.10.0"]
   [binaryage/oops "0.7.0"]
   [funcool/cuerdas "2.1.0"]
+  [degree9/meta "0.5.0-SNAPSHOT"]
+  [degree9/uikit-hl "3.0.0-SNAPSHOT"]
 
   ; testing
   ;[thheller/shadow-cljs "2.8.14" :scope "test"]
@@ -46,5 +48,5 @@
   :test {
          :target :node-test
          :output-to "test/main.js"
-         :ns-regexp "degree9\\.(pathway)"
+         :ns-regexp "degree9\\..*"
          :autorun true}}}

@@ -1,8 +1,9 @@
 (ns degree9.mongodb
-  (:require [goog.object :as obj]
-            [meta.server :as server]
-            ["mongoose" :as mongoose]
-            ["feathers-mongoose" :as mongodb]))
+ (:require
+  [goog.object :as obj]
+  [meta.server :as server]
+  ["mongoose" :as mongoose]
+  ["feathers-mongoose" :as mongodb]))
 
 ;; MongoDB Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn connect
