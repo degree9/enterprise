@@ -6,7 +6,7 @@
   degree9.twilio.fax.data
   degree9.twilio.fax.fixture
   [cljs.spec.alpha :as spec]
-  [cljs.test :refer [deftest is]]))
+  [cljs.test :refer [deftest async]]))
 
 (defn live-test!
  "
@@ -14,7 +14,7 @@
  don't do this too much as it costs money
  put the responses in fixture.cljs and mock out tests that way
  "
- []
+ [done]
  (let [fax-promise
        (degree9.twilio.fax.api/fax!
         (degree9.twilio.fax.fixture/simple-fax-request))]
@@ -27,7 +27,10 @@
    (fn [error]
     (prn
      "error"
-     error)))))
+     error)))
+  (.finally fax-promise done)))
 
-(deftest ??live-test!
- (live-test!))
+; uncomment to run the live test (costs money)
+; (deftest ??live-test!
+;  (async done
+;   (live-test! done)))

@@ -32,6 +32,19 @@ with nix-shell.pkgs;
    rm -rf ./repl-node
    rm ./package-lock.json
    '')
+
+   (nix-shell.pkgs.writeShellScriptBin "node-test"
+   ''
+   set -euxo pipefail
+   shadow-cljs compile node-test
+   '')
+
+   (nix-shell.pkgs.writeShellScriptBin "browser-test"
+   ''
+   set -euxo pipefail
+   shadow-cljs compile browser-test
+   karma start --single-run --browsers FirefoxHeadless
+   '')
   ]
   ++ nix-shell.shell.buildInputs
   ;

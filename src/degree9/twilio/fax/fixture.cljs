@@ -24,20 +24,20 @@
 (defn example-fax-instance
  []
  {:price-unit nil
-  :date-created #inst "2019-09-29T11:44:57.000-00:00"
-  :date-updated #inst "2019-09-29T11:44:57.000-00:00"
+  :date-created #inst "2019-09-29T15:53:52.000-00:00"
+  :date-updated #inst "2019-09-29T15:53:52.000-00:00"
   :duration nil
   :api-version "v1"
   :status "queued"
   :from "+16474923317"
-  :url "https://fax.twilio.com/v1/Faxes/FXce9ba8fc83455693ad08ba6d360335a1"
+  :url "https://fax.twilio.com/v1/Faxes/FXae574af690cc1b730af1f42c9ef57876"
   :media-sid nil
   :quality "fine"
   :account-sid "ACba205cc3f907673685d7c125680dd506"
   :media-url nil
   :price nil
   :direction "outbound"
-  :links {"media" "https://fax.twilio.com/v1/Faxes/FXce9ba8fc83455693ad08ba6d360335a1/Media"}
-  :sid "FXce9ba8fc83455693ad08ba6d360335a1"
+  :links {:media "https://fax.twilio.com/v1/Faxes/FXae574af690cc1b730af1f42c9ef57876/Media"}
+  :sid "FXae574af690cc1b730af1f42c9ef57876"
   :num-pages nil
   :to "+16474923317"})

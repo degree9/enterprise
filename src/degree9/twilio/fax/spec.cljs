@@ -10,11 +10,6 @@
 ; extended fax keys
 (spec/def ::url string?)
 (spec/def ::media ::url)
-(spec/def ::link
- (spec/keys
-  :opt-un
-  [
-   ::media]))
 (spec/def ::sid (spec/nilable string?))
 (spec/def ::account-sid (spec/nilable string?))
 (spec/def ::quality (spec/nilable string?))
@@ -28,7 +23,11 @@
 (spec/def ::price-unit (spec/nilable string?))
 (spec/def ::date-created inst?)
 (spec/def ::date-updated inst?)
-(spec/def ::links (spec/coll-of ::link))
+(spec/def ::links
+ (spec/keys
+  :opt-un
+  [
+   ::media]))
 
 (spec/def ::fax-sid string?)
 (spec/def ::content-type #{"application/pdf"})

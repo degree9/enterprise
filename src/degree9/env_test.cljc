@@ -8,7 +8,7 @@
 #?(:node
    (deftest ??dir
     (doseq [e [:pwd :home :user]]
-     (is (contains? (env/keys) e)))))
+     (is ((set (env/keys)) e)))))
 
 #?(:node
    (deftest ??get

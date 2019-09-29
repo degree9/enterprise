@@ -46,7 +46,15 @@
    {:http-root "repl-public"
     :http-port 8020}}
 
-  :ci
+  :node-test
+  {
+   :target :node-test
+   :output-to "test/node.js"
+   :autorun true
+   :compiler-options
+   {:reader-features #{:node}}}
+
+  :browser-test
   {
    :target :karma
-   :output-to "test/ci.js"}}}
+   :output-to "test/browser.js"}}}

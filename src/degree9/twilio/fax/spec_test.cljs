@@ -6,10 +6,10 @@
   [cljs.test :refer [deftest is]]))
 
 (deftest ??fax-instance
- (is
-  (spec/valid?
-   :degree9.twilio.fax.spec/fax-instance
-   (degree9.twilio.fax.fixture/example-fax-instance))
-  (spec/explain-str
-   :degree9.twilio.fax.spec/fax-instance
-   (degree9.twilio.fax.fixture/example-fax-instance))))
+ (doseq [[s i] [[:degree9.twilio.fax.spec/fax-request
+                 (degree9.twilio.fax.fixture/simple-fax-request)]
+                [:degree9.twilio.fax.spec/fax-instance
+                 (degree9.twilio.fax.fixture/example-fax-instance)]]]
+  (is
+   (spec/valid? s i)
+   (spec/explain-str s i))))
