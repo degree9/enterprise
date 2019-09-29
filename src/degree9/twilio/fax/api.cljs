@@ -1,6 +1,8 @@
-(ns degree9.twilio.fax.api)
+(ns degree9.twilio.fax.api
+ (:require
+  degree9.twilio))
 
-(defn -lib [] (.-fax (degree9.twilio.core/client!)))
+(defn -lib [] (.-fax (degree9.twilio/client!)))
 
 (defn -faxes
  "normalises the inconsistent interface to the faxes data"

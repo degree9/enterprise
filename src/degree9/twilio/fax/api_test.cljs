@@ -1,10 +1,12 @@
-(ns degree9.twilio.fax
+(ns degree9.twilio.fax.api-test
  (:require
-  degree9.twilio.core
+  degree9.twilio
   degree9.twilio.fax.spec
   degree9.twilio.fax.api
   degree9.twilio.fax.data
-  [cljs.spec.alpha :as spec]))
+  degree9.twilio.fax.fixture
+  [cljs.spec.alpha :as spec]
+  [cljs.test :refer [deftest is]]))
 
 (defn live-test!
  "
@@ -26,3 +28,6 @@
     (prn
      "error"
      error)))))
+
+(deftest ??live-test!
+ (live-test!))

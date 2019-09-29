@@ -5,9 +5,16 @@
 ; basic fax keys
 (spec/def ::from string?)
 (spec/def ::to string?)
-(spec/def ::media-url string?)
+(spec/def ::media-url (spec/nilable string?))
 
 ; extended fax keys
+(spec/def ::url string?)
+(spec/def ::media ::url)
+(spec/def ::link
+ (spec/keys
+  :opt-un
+  [
+   ::media]))
 (spec/def ::sid (spec/nilable string?))
 (spec/def ::account-sid (spec/nilable string?))
 (spec/def ::quality (spec/nilable string?))
@@ -19,10 +26,9 @@
 (spec/def ::api-version (spec/nilable string?))
 (spec/def ::price (spec/nilable string?))
 (spec/def ::price-unit (spec/nilable string?))
-(spec/def ::date-created (spec/nilable string?))
-(spec/def ::date-updated (spec/nilable string?))
-(spec/def ::links (spec/nilable string?))
-(spec/def ::url (spec/nilable string?))
+(spec/def ::date-created inst?)
+(spec/def ::date-updated inst?)
+(spec/def ::links (spec/coll-of ::link))
 
 (spec/def ::fax-sid string?)
 (spec/def ::content-type #{"application/pdf"})
@@ -57,12 +63,14 @@
   [
    ::from
    ::to
-   ::media-url]
+   ::sid
+   ::account-sid
+   ::date-created
+   ::date-updated]
 
   :opt-un
   [
-   ::sid
-   ::account-sid
+   ::media-url
    ::quality
    ::media-sid
    ::num-pages
@@ -72,7 +80,5 @@
    ::api-version
    ::price
    ::price-unit
-   ::date-created
-   ::date-updated
    ::links
    ::url]))

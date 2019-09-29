@@ -23,6 +23,15 @@ with nix-shell.pkgs;
 
 
   buildInputs = [
+   (nix-shell.pkgs.writeShellScriptBin "flush"
+   ''
+   rm -rf ./node_modules
+   rm -rf ./test
+   rm -rf ./.shadow-cljs
+   rm -rf ./repl-public
+   rm -rf ./repl-node
+   rm ./package-lock.json
+   '')
   ]
   ++ nix-shell.shell.buildInputs
   ;

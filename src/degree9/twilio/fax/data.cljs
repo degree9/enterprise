@@ -22,5 +22,5 @@
   :price-unit (.-priceUnit fax-instance)
   :date-created (.-dateCreated fax-instance)
   :date-updated (.-dateUpdated fax-instance)
-  :links (js->clj (.-links fax-instance))
+  :links (js->clj (.-links fax-instance) :keywordize-keys true)
   :url (.-url fax-instance)})

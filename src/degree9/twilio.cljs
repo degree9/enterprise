@@ -1,4 +1,4 @@
-(ns degree9.twilio.core
+(ns degree9.twilio
  (:require
   ["twilio" :as twilio]
   degree9.twilio.auth.data))

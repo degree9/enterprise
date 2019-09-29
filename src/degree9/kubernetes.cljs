@@ -1,14 +1,14 @@
 (ns degree9.kubernetes
   (:refer-clojure :exclude [namespace])
   (:require
-    [cljs.nodejs :as node]
-    [clojure.string :as s]
-    [goog.object :as obj]
-    [feathers.errors :as error]
-    degree9.env
-    ["@kubernetes/client-node" :as k8s]
-    ["fs" :as fs]
-    ["path" :as path]))
+    ; [cljs.nodejs :as node]
+   [clojure.string :as s]
+   [goog.object :as obj]
+   [feathers.errors :as error]
+   degree9.env
+   ["@kubernetes/client-node" :as k8s]
+   ["fs" :as fs]
+   ["path" :as path]))
 
 ;; Kubernetes API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (def ^:private k8s-svc (str "/var/run/secrets/kubernetes.io/serviceaccount"))

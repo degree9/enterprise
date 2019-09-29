@@ -3,7 +3,8 @@
  ["src"]
 
  :dependencies
- [; transitive deps
+ [
+  ; transitive deps
   [com.taoensso/encore "2.106.0"]
   [doo "0.1.11" :scope "test"]
 
@@ -20,7 +21,6 @@
   [degree9/uikit-hl "3.0.0-SNAPSHOT"]
 
   ; testing
-  ;[thheller/shadow-cljs "2.8.14" :scope "test"]
   [degree9/boot-semver "1.8.0" :scope "test"]
   [crisptrutski/boot-cljs-test "0.3.5-SNAPSHOT" :scope "test"]]
 
@@ -29,24 +29,24 @@
 
  ; build configurations
  :builds
- {:app {
-        ;:target :node-script
-         :target :browser
-        :main degree9.repl/init
-        :output-dir "repl-public/js"
-        :output-to "repl-node/main.js"
-        :asset-path "/js"
-        :compiler-options {:reader-features #{:browser}}
+ {:app
+  {
+   ;:target :node-script
+   :target :browser
+   :main degree9.repl/init
+   :output-dir "repl-public/js"
+   :output-to "repl-node/main.js"
+   :asset-path "/js"
 
-        :modules
-        {:main
-         {:entries [degree9.repl]}}
+   :modules
+   {:main
+    {:entries [degree9.repl]}}
 
-        :devtools
-        {:http-root "repl-public"
-         :http-port 8020}}
-  :test {
-         :target :node-test
-         :output-to "test/main.js"
-         :ns-regexp "degree9\\..*"
-         :autorun true}}}
+   :devtools
+   {:http-root "repl-public"
+    :http-port 8020}}
+
+  :ci
+  {
+   :target :karma
+   :output-to "test/ci.js"}}}
