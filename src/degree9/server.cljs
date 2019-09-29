@@ -2,7 +2,8 @@
  (:require
    ["debug" :as dbg]
    [meta.server :as server]
-   [degree9.env :as env]))
+   [degree9.env :as env]
+   [degree9.channels :as chan]))
 
 (def ^:private debug (dbg "degree9:enterprise:server"))
 
@@ -12,9 +13,11 @@
    (cond-> (server/app)
      (:default    opts) (server/with-defaults)
      (:rest       opts) (server/with-rest)
+     (:session    opts) (server/with-session)
      (:socket     opts) (server/with-socketio)
-     (:auth       opts) (server/with-authentication))))
-     ; (:local      opts) (server/with-authentication-local))))
+     (:channels   opts) (chan/with-channels)
+     (:auth       opts) (server/with-authentication)
+     (:local      opts) (server/with-authentication-local))))
 
 (defn start! [app]
   (let [port (env/get "APP_PORT")]
