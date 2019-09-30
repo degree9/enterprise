@@ -9,7 +9,12 @@
  "https://www.gutenberg.org/files/49965/49965-pdf.pdf")
 
 ; this needs to be a fax number that is fax enabled in twilio dashboard
-(def test-fax-number (partial degree9.env/get :twilio-test-fax-number))
+#?(:node
+   (def -test-fax-number
+    (degree9.env/get :twilio-test-fax-number))
+   :browser
+   (goog-define -test-fax-number ""))
+(defn test-fax-number [] -test-fax-number)
 
 ; sends
 ; the example pdf url

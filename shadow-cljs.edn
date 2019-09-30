@@ -37,6 +37,10 @@
    :output-dir "repl-public/js"
    :output-to "repl-node/main.js"
    :asset-path "/js"
+   :compiler-options
+   {:reader-features #{:browser}}
+   :closure-defines
+   {degree9.twilio.fax.fixture/-test-fax-number #shadow/env "TWILIO_TEST_FAX_NUMBER"}
 
    :modules
    {:main
@@ -57,4 +61,8 @@
   :browser-test
   {
    :target :karma
-   :output-to "test/browser.js"}}}
+   :output-to "test/browser.js"
+   :compiler-options
+   {:reader-features #{:browser}}
+   :closure-defines
+   {degree9.twilio.fax.fixture/-test-fax-number #shadow/env "TWILIO_TEST_FAX_NUMBER"}}}}
