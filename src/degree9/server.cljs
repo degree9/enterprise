@@ -13,11 +13,11 @@
    (cond-> (server/app)
      (:default    opts) (server/with-defaults)
      (:rest       opts) (server/with-rest)
-     ; (:session    opts) (server/with-session)
+     (:session    opts) (server/with-session)
      (:socket     opts) (server/with-socketio)
      (:channels   opts) (chan/with-channels)
-     (:auth       opts) (server/with-authentication))))
-     ; (:local      opts) (server/with-authentication-local))))
+     (:auth       opts) (server/with-authentication)
+     (:local      opts) (server/with-authentication-local))))
 
 (defn start! [app]
   (let [port (env/get "APP_PORT")]

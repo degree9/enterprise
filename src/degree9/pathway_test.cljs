@@ -39,5 +39,5 @@
 
 (deftest ??match-paths
   ;; single path
-  (is (= ["/" :root] (pathway/match-route ["/" :root] "/"))))
-  ; (is (= [#"/" :root] (pathway/match-route [#"/" :root] "/"))))
+  (is (= ["/" :root] (pathway/match-route ["/" :root] "/")))
+  (is (= [#"/" :root] (pathway/match-route [#"/" :root] "/"))))

@@ -1,6 +1,5 @@
 (ns degree9.documentdb
  (:require
-  ; [cljs.nodejs :as node]
   [clojure.string :as s]
   [goog.object :as obj]
   [meta.promise :as p]

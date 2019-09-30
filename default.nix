@@ -13,6 +13,7 @@ with nix-shell.pkgs;
   name = "core-shell";
 
   SUPPRESS_NO_CONFIG_WARNING = "true";
+  ENV_TEST_VAR = "foo";
 
   shellHook = nix-shell.pkgs.lib.concatStrings [
   # extra shellHook commands here

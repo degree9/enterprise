@@ -1,6 +1,5 @@
 (ns degree9.services
  (:require
-  ; [cljs.nodejs :as node
   ["fs" :as fs]
   ["path" :as path]))
 

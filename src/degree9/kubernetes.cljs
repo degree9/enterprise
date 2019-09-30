@@ -1,7 +1,6 @@
 (ns degree9.kubernetes
   (:refer-clojure :exclude [namespace])
   (:require
-    ; [cljs.nodejs :as node]
    [clojure.string :as s]
    [goog.object :as obj]
    [feathers.errors :as error]
