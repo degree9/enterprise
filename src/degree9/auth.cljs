@@ -50,6 +50,13 @@
    (prom/then (partial reset! user-cell))
    (prom/err))))
 
+(defn- auth-handler [auth]
+  (-> auth
+    (prom/then #(js->clj % :keywordize-keys true))
+    (prom/then #(get % :user))
+    (prom/then #(reset! user %))
+    (prom/err)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Authentication Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -58,10 +65,12 @@
     (prom/err)))
 
 (defn auth! [app users]
- (handle-auth app users (client/auth! app)))
+  (client/auth! app))
+ ;(handle-auth app users (client/auth! app)))
 
 (defn login! [app users strategy & [opts]]
- (handle-auth app users (client/login! app strategy opts)))
+  (auth-handler (client/login! app strategy opts)))
+ ;(handle-auth app users (client/login! app strategy opts)))
 
 (defn logout!
  ([app] (logout! user app))

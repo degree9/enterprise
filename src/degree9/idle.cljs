@@ -2,26 +2,32 @@
   (:require [javelin.core :as j]))
 
 ;; State Helpers ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defn- active-events []
+(def ^:dynamic *default-events*
   ["click" "keydown" "scroll"
    "mousemove" "mouseenter" "mousewheel"
-   "touchstart" "touchmove"
-   "visibilitychange" "msvisibilitychange" "webkitvisibilitychange"])
+   "touchstart" "touchmove"])
 
-(defn- time-now []
+(defn- time-now
+  "Returns the current time in milliseconds."
+  []
   (.getTime (js/Date.)))
 
-(defn- time-diff [initial timeout]
-  (let [now (time-now)]
-    (> timeout (- now initial))))
+(defn- time-diff
+  "Returns true if there is a time difference greater than `timeout` between
+   `timestamp` and the current time."
+  [timestamp timeout]
+  (> timeout (- (time-now) timestamp)))
 
-(defn- activity! [timestamp activity]
+(defn- activity!
+  "Returns an event handler that updates the users last activity."
+  [timestamp activity]
   (fn [_]
-    (let [now (time-now)]
-      (reset! timestamp now)
-      (reset! activity true))))
+    (reset! timestamp (time-now))
+    (reset! activity true)))
 
-(defn when-interval [ms func]
+(defn- when-interval
+  "See js/setInterval."
+  [ms func]
   (js/setInterval func ms))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -38,9 +44,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Public Idle Methods ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defn idle! [& opts]
+(defn idle!
+  "Initialize idle activity tracking."
+  [& opts]
   (let [timeout   (:timeout   opts 30000)
-        events    (:events    opts (active-events))
+        events    (:events    opts *default-events*)
         activity  (:activity  opts *activity*)
         timestamp (:timestamp opts *last-activity*)]
     (doseq [e events]
