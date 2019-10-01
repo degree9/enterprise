@@ -76,6 +76,8 @@ curl https://nixos.org/nix/install | sh
 
 Nix will run `npm install` and set environment variables etc. when entering the shell.
 
+This includes wrapping `shadow-cljs` so that it appears to be installed globally while in the shell (without installing it globally).
+
 A few nix specific commands are available:
 
 `flush`
