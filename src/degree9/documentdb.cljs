@@ -1,11 +1,11 @@
 (ns degree9.documentdb
-  (:require [cljs.nodejs :as node]
-            [clojure.string :as s]
-            [goog.object :as obj]
-            [meta.promise :as p]
-            [feathers.services :as svc]
-            degree9.env
-            ["documentdb" :as documentdb]))
+ (:require
+  [clojure.string :as s]
+  [goog.object :as obj]
+  [meta.promise :as p]
+  [feathers.services :as svc]
+  degree9.env
+  ["documentdb" :as documentdb]))
 
 ;; DB Definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (def dbclient   (obj/get documentdb "DocumentClient"))

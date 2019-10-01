@@ -1,10 +1,10 @@
 (ns degree9.env
-  (:refer-clojure :exclude [get keys])
-  (:require cljs.nodejs
-            [cuerdas.core :as str]
-            [goog.object :as obj]
-            [cljs.test :refer-macros [deftest is]]
-            ["dotenv" :as dotenv]))
+ (:refer-clojure :exclude [get keys])
+ (:require
+  [cuerdas.core :as str]
+  [goog.object :as obj]
+  [cljs.test :refer-macros [deftest is]]
+  ["dotenv" :as dotenv]))
 
 (def ^:dynamic *env* (atom nil))
 

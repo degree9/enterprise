@@ -60,6 +60,52 @@ https://shadow-cljs.github.io/docs/UsersGuide.html
 The default shadow cljs config is for `app` and targets `node-script`, but also
 can support the `browser` target too (the config covers both options).
 
+### Work with nix-shell
+
+Nix can provide all the tooling needed to run tests and the repl.
+
+This is how Circle CI is configured, using the official alpine based NixOS docker box.
+
+If you don't already have nix-shell then install it:
+
+https://nixos.org/nix/download.html
+
+```
+curl https://nixos.org/nix/install | sh
+```
+
+Nix will run `npm install` and set environment variables etc. when entering the shell.
+
+This includes wrapping `shadow-cljs` so that it appears to be installed globally while in the shell (without installing it globally).
+
+A few nix specific commands are available:
+
+`flush`
+
+Delete all built artifacts and dependencies that may become stale.
+
+```
+nix-shell --run flush
+```
+
+`node-test`
+
+Run all the node tests under the `:node-test` shadow-cljs target.
+
+```
+nix-shell --run node-test
+```
+
+`browser-test`
+
+Run all browser tests with `karma` against a headless firefox against the `:browser-test` shadow-cljs target.
+
+On linux a copy of firefox will be shipped by nix-shell, on Mac you may need to BYO firefox.
+
+```
+nix-shell --run browser-test
+```
+
 ### Install shadow CLJS
 
 Shadow CLJS is a dev dependency for npm in this repo.

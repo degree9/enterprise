@@ -1,0 +1,12 @@
+version: 2
+
+jobs:
+ build:
+  environment:
+   NIX_PATH: nixpkgs=channel:nixpkgs-unstable
+  docker:
+   - image: nixorg/nix:circleci
+  steps:
+   - checkout
+   - run: nix-shell --run node-test
+   - run: nix-shell --run browser-test

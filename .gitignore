@@ -13,7 +13,7 @@ pom.xml.asc
 .nrepl-port
 node_modules
 .shadow-cljs
-/repl-public/js
+repl-public
 repl-node
 test
 .env

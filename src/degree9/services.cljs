@@ -1,7 +1,7 @@
 (ns degree9.services
-  (:require [cljs.nodejs :as node]
-            ["fs" :as fs]
-            ["path" :as path]))
+ (:require
+  ["fs" :as fs]
+  ["path" :as path]))
 
 (defn entrypoint [app & [opts]]
   (.use app "/:entrypoint"

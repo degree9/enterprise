@@ -1,6 +1,7 @@
 ; https://github.com/shadow-cljs/quickstart-browser/blob/master/src/starter/browser.cljs
 (ns degree9.repl
- (:require ["swagger-client" :as swagger]))
+ (:require
+  ["swagger-client" :as swagger]))
 
 ;; start is called by init and after code reloading finishes
 (defn ^:dev/after-load start []
@@ -21,6 +22,5 @@
 (defn foo
  []
  "bazi")
-
 
 (defn k8s [] (swagger "https://raw.githubusercontent.com/kubernetes/kubernetes/master/api/openapi-spec/swagger.json"))

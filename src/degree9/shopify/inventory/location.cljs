@@ -80,6 +80,9 @@
 ;   degree9.shopify.core/api!
 ;   :endpoint "location.inventory-levels"))
 
+(def location? (partial spec/valid? :degree9.shopify.inventory.location/location))
+(def locations? (partial spec/valid? :degree9.shopify.inventory.location/locations))
+
 ; TESTS
 
 (deftest ??location?

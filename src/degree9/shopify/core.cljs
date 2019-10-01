@@ -13,7 +13,7 @@
 (defn -lib
  [shop-name auth]
  (let [shop-name (or shop-name (degree9.env/get :shopify-host))
-       auth (or auth (degree9.shopify.auth.core/default-auth))
+       auth (or auth (degree9.shopify.auth/default-auth))
        params
        (clj->js
         {:shopName shop-name

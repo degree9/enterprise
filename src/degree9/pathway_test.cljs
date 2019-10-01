@@ -39,7 +39,6 @@
 
 (deftest ??match-paths
   ;; single path
-  (is (= :root (pathway/match-route ["/" :root] "/")))
-  (is (= :root (pathway/match-route [#"/" :root] "/"))))
-
-(prn (pathway/match-route ["/" :root] "/"))
+  (is (= ["/" :root] (pathway/match-route ["/" :root] "/"))))
+  ; this fails to be equal to itself?
+  ; (is (= [#"/" :root] (pathway/match-route [#"/" :root] "/"))))

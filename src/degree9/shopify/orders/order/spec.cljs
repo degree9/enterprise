@@ -1,7 +1,8 @@
 (ns degree9.shopify.orders.order.spec
  (:require
   degree9.shopify.spec
-  degree9.shopify.discounts.code
+  degree9.shopify.discounts.code.spec
+  degree9.shopify.products.variant.spec
   [cljs.spec.alpha :as spec]))
 
 (spec/def :degree9.shopify.orders.order.discount/type string?)
