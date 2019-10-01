@@ -1,6 +1,5 @@
 (ns degree9.auth
   (:require
-   [hoplon.core :as h]
    [javelin.core :as j]
    [goog.object :as obj]
    [meta.client :as client]
