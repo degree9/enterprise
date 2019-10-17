@@ -21,10 +21,10 @@
 ; from the test fax number
 ; to the test fax number
 (defn simple-fax-request
- []
+ [media-url]
  {:from (test-fax-number)
   :to (test-fax-number)
-  :mediaUrl (example-pdf-url)})
+  :mediaUrl (or media-url (example-pdf-url))})
 
 (defn example-fax-instance
  []
