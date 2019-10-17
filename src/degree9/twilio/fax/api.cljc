@@ -1,34 +1,31 @@
-(ns degree9.twilio.fax.api
- (:require
-  degree9.twilio))
+(ns degree9.twilio.fax.api)
 
 #?(:node
-   (defn -lib [] (.-fax (degree9.twilio/client!))))
+   (defn -lib [client] (.-fax client)))
 
 #?(:node
    (defn -faxes
     "normalises the inconsistent interface to the faxes data"
-    ([] (.-faxes (-lib)))
-    ([fax-id] (.faxes (-lib) fax-id))))
+    ([client] (.-faxes (-lib client)))
+    ([client fax-id] (.faxes (-lib client) fax-id))))
 
 #?(:node
    (defn list!
     "list all faxes"
-    []
-    (.list (-faxes))))
+    [client]
+    (.list (-faxes client))))
 
 #?(:node
    (defn fetch!
     "get a fax by ID"
-    [id]
+    [client id]
     (.fetch
-     (-faxes id))))
+     (-faxes client id))))
 
 #?(:node
    (defn fax!
     "send a fax"
-    [fax]
-    ; {:pre (spec/valid? :degree9.twilio.fax.spec/fax-request fax)}
+    [client fax]
     (.create
-     (-faxes)
+     (-faxes client)
      (clj->js fax))))

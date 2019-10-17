@@ -8,5 +8,4 @@ jobs:
    - image: nixorg/nix:circleci
   steps:
    - checkout
-   - run: nix-shell --run node-test
-   - run: nix-shell --run browser-test
+   - run: nix-shell --run all-test

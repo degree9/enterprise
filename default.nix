@@ -46,6 +46,12 @@ with nix-shell.pkgs;
    shadow-cljs compile browser-test
    karma start --single-run --browsers FirefoxHeadless
    '')
+
+   (nix-shell.pkgs.writeShellScriptBin "all-test"
+   ''
+   node-test
+   browser-test
+   '')
   ]
   ++ nix-shell.shell.buildInputs
   ;

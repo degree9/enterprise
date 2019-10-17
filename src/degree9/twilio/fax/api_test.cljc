@@ -4,6 +4,7 @@
   degree9.twilio.fax.spec
   degree9.twilio.fax.api
   degree9.twilio.fax.data
+  degree9.twilio.client
   degree9.twilio.fax.fixture
   [cljs.spec.alpha :as spec]
   [cljs.test :refer [deftest async]]))
@@ -19,6 +20,7 @@
     ([done media-url]
      (let [fax-promise
            (degree9.twilio.fax.api/fax!
+            (degree9.twilio.client/client!)
             (degree9.twilio.fax.fixture/simple-fax-request media-url))]
       (.then fax-promise
        (fn [fax-instance]
