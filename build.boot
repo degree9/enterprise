@@ -9,7 +9,8 @@
  :resource-paths #{"src"})
 
 (require
- '[degree9.boot-semver :refer :all])
+ '[degree9.boot-semver :refer :all]
+ '[meta.boot :as m])
 
 (task-options!
  pom    {:project 'degree9/enterprise
@@ -33,3 +34,21 @@
              :pre-release 'snapshot)
     (watch)
     (build-jar)))
+
+(m/initialize)
+
+(deftask build
+  "Start production build."
+  []
+  (comp
+    (m/info)
+    (m/standup)
+    (m/client :develop true)
+    (m/server :develop true)
+    (m/teardown)
+    (m/package)))
+
+(deftask m-develop
+  "Start local development."
+  []
+  (m/develop))

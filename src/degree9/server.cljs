@@ -18,7 +18,17 @@
      (:channels   opts) (chan/with-channels)
      (:auth       opts) (server/with-authentication))))
 
-(defn start! [app]
+(defn start!
+ ([]
+  (start!
+   (app
+    :default
+    :rest
+    :socket
+    :channels)))
+    ; :auth
+
+ ([app]
   (let [port (env/get "APP_PORT")]
     (debug "Server listening on port %s" port)
-    (server/listen app port)))
+    (server/listen app port))))

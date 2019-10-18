@@ -19,6 +19,8 @@
   [funcool/cuerdas "2.1.0"]
   [degree9/meta "0.5.0-SNAPSHOT"]
   [degree9/uikit-hl "3.0.0-SNAPSHOT"]
+  [degree9/boot-shadow "2.8.14-0"]
+  [thheller/shadow-cljs "2.8.31"]
 
   ; testing
   [degree9/boot-semver "1.8.0" :scope "test"]
@@ -39,8 +41,8 @@
    :asset-path "/js"
    :compiler-options
    {:reader-features #{:node}}
-   :closure-defines
-   {degree9.twilio.fax.fixture/-test-fax-number #shadow/env "TWILIO_TEST_FAX_NUMBER"}
+   ; :closure-defines
+   ; {degree9.twilio.fax.fixture/-test-fax-number #shadow/env "TWILIO_TEST_FAX_NUMBER"}
 
    :modules
    {:main
@@ -49,6 +51,18 @@
    :devtools
    {:http-root "repl-public"
     :http-port 8020}}
+
+  :server
+  {
+   :target :node-script
+   :main degree9.server/start!
+   :output-dir "app"
+   :output-to "nodejs.js"
+   :compiler-options
+   {:reader-features #{:node}
+    :optimizations :simple}}
+   ; :closure-defines
+   ; {degree9.twilio.fax.fixtures/-test-fax-number #shadow/env "TWILIO_TEST_FAX_NUMBER"}}
 
   :node-test
   {
@@ -63,6 +77,6 @@
    :target :karma
    :output-to "test/browser.js"
    :compiler-options
-   {:reader-features #{:browser}}
-   :closure-defines
-   {degree9.twilio.fax.fixture/-test-fax-number #shadow/env "TWILIO_TEST_FAX_NUMBER"}}}}
+   {:reader-features #{:browser}}}}}
+   ; :closure-defines
+   ; {degree9.twilio.fax.fixture/-test-fax-number #shadow/env "TWILIO_TEST_FAX_NUMBER"}}}}
