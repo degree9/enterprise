@@ -1,5 +1,4 @@
 (ns degree9.hooks
-  (:refer-clojure :exclude [get set!])
   (:require [goog.object :as obj]))
 
 ;; Hook Logging ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -23,10 +22,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Basic Getters and Setters ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defn set! [hook index val]
+(defn hook-set! [hook index val]
   (obj/set hook index (clj->js val)))
 
-(defn get [hook index]
+(defn hook-get [hook index]
   (js->clj (obj/get hook index)))
 
 (defn params [hook]
