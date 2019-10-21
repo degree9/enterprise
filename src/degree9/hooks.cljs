@@ -1,5 +1,6 @@
 (ns degree9.hooks
- (:require [goog.object :as obj]))
+  (:refer-clojure :exclude [get set!])
+  (:require [goog.object :as obj]))
 
 ;; Hook Logging ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn- log-hook [hook]
@@ -19,4 +20,18 @@
 
 (defn block-internal []
   (block-transport "server"))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Basic Getters and Setters ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn set! [hook index val]
+  (obj/set hook index (clj->js val)))
+
+(defn get [hook index]
+  (js->clj (obj/get hook index)))
+
+(defn params [hook]
+  (hook-get hook "params"))
+
+(defn params! [hook data]
+  (hook-set! hook "params" data))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
