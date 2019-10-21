@@ -3,7 +3,8 @@
    ["debug" :as dbg]
    [meta.server :as server]
    [degree9.env :as env]
-   [degree9.channels :as chan]))
+   [degree9.channels :as chan]
+   degree9.hellosign.callback))
 
 (def ^:private debug (dbg "degree9:enterprise:server"))
 
@@ -21,11 +22,13 @@
 (defn start!
  ([]
   (start!
-   (app
-    :default
-    :rest
-    :socket
-    :channels)))
+   (->
+    (app
+     :default
+     :rest
+     :socket
+     :channels)
+    degree9.hellosign.callback/with-callback!)))
     ; :auth
 
  ([app]

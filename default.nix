@@ -57,6 +57,11 @@ with nix-shell.pkgs;
    node-test
    browser-test
    '')
+
+   (nix-shell.pkgs.writeShellScriptBin "expose-local"
+   ''
+   ngrok http $APP_PORT
+   '')
   ]
   ++ nix-shell.shell.buildInputs
   ;
