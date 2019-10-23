@@ -10,11 +10,19 @@
 
 ; this needs to be a fax number that is fax enabled in twilio dashboard
 #?(:node
-   (def -test-fax-number
-    (degree9.env/get :twilio-test-fax-number))
+   (def -test-fax-number-to
+    (degree9.env/get :twilio-test-fax-number-to))
    :browser
-   (goog-define -test-fax-number ""))
-(defn test-fax-number [] -test-fax-number)
+   (goog-define -test-fax-number-to ""))
+(defn test-fax-number-to [] -test-fax-number-to)
+
+; this needs to be a fax number that is fax enabled in twilio dashboard
+#?(:node
+   (def -test-fax-number-from
+    (degree9.env/get :twilio-test-fax-number-from))
+   :browser
+   (goog-define -test-fax-number-from ""))
+(defn test-fax-number-from [] -test-fax-number-from)
 
 ; sends
 ; the example pdf url
@@ -23,8 +31,8 @@
 (defn simple-fax-request
  ([] (simple-fax-request (example-pdf-url)))
  ([media-url]
-  {:from (test-fax-number)
-   :to (test-fax-number)
+  {:from (test-fax-number-from)
+   :to (test-fax-number-to)
    :mediaUrl media-url}))
 
 (defn example-fax-instance

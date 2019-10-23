@@ -3,7 +3,10 @@
             [degree9.env :as env]
             ["hellosign-sdk" :as hello]))
 
-(def hellosign (hello #js{:key (env/get "HELLOSIGN_API_KEY")}))
+(defn api-key []
+ #js{:key (env/get "HELLOSIGN_API_KEY")})
+
+(def hellosign (hello (api-key)))
 
 (def template (obj/get hellosign "template"))
 
