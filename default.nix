@@ -14,6 +14,8 @@ with nix-shell.pkgs;
 
   SUPPRESS_NO_CONFIG_WARNING = "true";
   ENV_TEST_VAR = "foo";
+  APP_PORT = "5678";
+  DEBUG = "degree9:*";
 
   shellHook = nix-shell.pkgs.lib.concatStrings [
   # extra shellHook commands here
@@ -24,6 +26,9 @@ with nix-shell.pkgs;
 
 
   buildInputs = [
+   nix-shell.pkgs.ngrok
+   nix-shell.pkgs.boot
+
    (nix-shell.pkgs.writeShellScriptBin "flush"
    ''
    rm -rf ./node_modules
@@ -51,6 +56,11 @@ with nix-shell.pkgs;
    ''
    node-test
    browser-test
+   '')
+
+   (nix-shell.pkgs.writeShellScriptBin "expose-local"
+   ''
+   ngrok http $APP_PORT
    '')
   ]
   ++ nix-shell.shell.buildInputs
