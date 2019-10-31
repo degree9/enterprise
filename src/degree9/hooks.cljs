@@ -28,9 +28,24 @@
 (defn hook-get [hook index]
   (js->clj (obj/get hook index)))
 
+(defn method [hook]
+  (hook-get hook "method"))
+
 (defn params [hook]
   (hook-get hook "params"))
 
 (defn params! [hook data]
   (hook-set! hook "params" data))
+
+(defn data [hook]
+  (hook-get hook "data"))
+
+(defn data! [hook data]
+  (hook-set! hook "data" data))
+
+(defn result [hook]
+  (hook-get hook "result"))
+
+(defn result! [hook data]
+  (hook-set! hook "result" data))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
