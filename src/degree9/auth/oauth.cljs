@@ -6,6 +6,4 @@
 
 (def ^:private debug (dbg/debug "degree9:enterprise:auth:azureb2c"))
 
-(defn oauth []
-  (let [strategy (obj/get auth "OAuthStrategy")]
-    (strategy.)))
+(def OAuthStrategy (obj/get auth "OAuthStrategy"))
