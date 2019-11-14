@@ -17,8 +17,7 @@
 (set! (.. oauth/OAuthStrategy -prototype -getEntityData)
   (fn [data & args]
     (debug "getEntityData raw data " data)
-    #js{:azureb2cId (obj/get data "sub")
-        :email (first (obj/get data "emails"))}))
+    #js{:email (first (obj/get data "emails"))}))
 
 (set! (.. oauth/OAuthStrategy -prototype -getEntityQuery)
   (fn [data & args]
