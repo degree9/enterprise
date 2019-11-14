@@ -30,3 +30,10 @@
     (.hooks (.service app "authentication")
       (clj->js {:after {:all [(authentication-roles roles)]}}))
     app))
+
+(defn merge-roles [roles]
+  (fn [hook]
+    (debug "Merge roles in to request data: " roles)
+    (let [data (hooks/data hook)]
+      (doto hook
+        (hooks/data! (merge-with into data {:roles roles}))))))

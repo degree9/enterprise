@@ -3,18 +3,27 @@
             [goog.object :as obj]
             [meta.server :as server]
             [degree9.env :as env]
-            [degree9.es6 :as es6]
             [degree9.auth.oauth :as oauth]))
-            ;["./azureb2c.js" :as AzureB2CStrategy]))
 
 (def ^:private debug (dbg/debug "degree9:enterprise:auth:azureb2c"))
 
 (set! (.. oauth/OAuthStrategy -prototype -getProfile)
   (fn [data & args]
-    (debug "raw profile data: " data)
+    (debug "getProfile raw data " data)
     (-> data
       (obj/get "id_token")
       (obj/get "payload"))))
+
+(set! (.. oauth/OAuthStrategy -prototype -getEntityData)
+  (fn [data & args]
+    (debug "getEntityData raw data " data)
+    #js{:azureb2cId (obj/get data "sub")
+        :email (first (obj/get data "emails"))}))
+
+(set! (.. oauth/OAuthStrategy -prototype -getEntityQuery)
+  (fn [data & args]
+    (debug "getEntityData raw data " data)
+    #js{:email (first (obj/get data "emails"))}))
 
 (defn with-azureb2c [app & opts]
   (let [auth (.service app "/authentication")

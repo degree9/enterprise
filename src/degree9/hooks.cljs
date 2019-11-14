@@ -49,3 +49,19 @@
 (defn result! [hook data]
   (hook-set! hook "result" data))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Common Request Hooks ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn merge-data
+  "Merges the `request.data` with a hashmap."
+  [data]
+  (fn [hook]
+    (doto hook
+      (data! (merge (hook-get hook "data") data)))))
+
+(defn merge-params
+  "Merges the `request.params` with a hashmap."
+  [data]
+  (fn [hook]
+    (doto hook
+      (params! (merge (params hook) data)))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
