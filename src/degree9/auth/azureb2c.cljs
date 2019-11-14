@@ -22,7 +22,7 @@
 
 (set! (.. oauth/OAuthStrategy -prototype -getEntityQuery)
   (fn [data & args]
-    (debug "getEntityData raw data " data)
+    (debug "getEntityQuery raw data " data)
     #js{:email (first (obj/get data "emails"))}))
 
 (defn with-azureb2c [app & opts]
