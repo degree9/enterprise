@@ -24,6 +24,7 @@
     "@feathersjs/client": "^4.3.3",
     "@feathersjs/configuration": "^4.3.3",
     "@feathersjs/socketio": "^4.3.3",
+    "@kubernetes/client-node": "^0.11.0",
     "applicationinsights": "^1.4.2",
     "debug": "^4.1.1",
     "dotenv": "^6.2.0",
