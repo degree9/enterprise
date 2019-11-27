@@ -31,8 +31,8 @@
  :builds
  {:app
   {
-   ;:target :node-script
-   :target :browser
+   :target :node-script
+   ; :target :browser
    :main degree9.repl/init
    :output-dir "repl-public/js"
    :output-to "repl-node/main.js"
@@ -41,7 +41,6 @@
    {:reader-features #{:browser}}
    ;:closure-defines
    ;{degree9.twilio.fax.fixture/-test-fax-number #shadow/env "TWILIO_TEST_FAX_NUMBER"}
-
    :modules
    {:main
     {:entries [degree9.repl]}}
