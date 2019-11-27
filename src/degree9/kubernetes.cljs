@@ -335,7 +335,7 @@
     (.then k8s-response)
     (.catch k8s-error)))
 
-(defn- delete-deployment
+(defn- delete-secret
   "Delete a Kubernetes secret."
   [api id namespace]
   (-> api
