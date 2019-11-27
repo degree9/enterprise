@@ -44,7 +44,7 @@
   (let [user (:username   opts (env/get "MONGODB_USERNAME"))
         pass (:password   opts (env/get "MONGODB_PASSWORD"))
         conn (:connection opts (env/get "MONGODB_CONNECTION"))]
-    (mongodb/connect conn
+    (connect conn
       {:auth {:user user :password pass}
        :useNewUrlParser true})))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
