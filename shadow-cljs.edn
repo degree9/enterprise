@@ -38,7 +38,7 @@
    :output-to "repl-node/main.js"
    :asset-path "/js"
    :compiler-options
-   {:reader-features #{:browser}}
+   {:reader-features #{:node}}
    ;:closure-defines
    ;{degree9.twilio.fax.fixture/-test-fax-number #shadow/env "TWILIO_TEST_FAX_NUMBER"}
    :modules
