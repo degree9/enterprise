@@ -64,7 +64,7 @@
     (prom/err)))
 
 (defn auth! [app users]
-  (client/auth! app))
+  (auth-handler (client/auth! app)))
  ;(handle-auth app users (client/auth! app)))
 
 (defn login! [app users strategy & [opts]]

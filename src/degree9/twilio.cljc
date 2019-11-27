@@ -1,14 +1,13 @@
 (ns degree9.twilio
  (:require
-  degree9.twilio.auth.data
-  degree9.twilio.client
+  #?(:node ["twilio" :as twilio])
   [degree9.twilio.fax.api :as efax]))
 
 #?(:node
    (defn efax [& [opts]]
-     (let [account-id (:account-id opts (degree9.twilio.auth.data/account-sid))
-           auth-token (:auth-token opts (degree9.twilio.auth.data/auth-token))
-           client (degree9.twilio.client/client! account-id auth-token)]
+     (let [account-id (:account-id opts (degree9.env/get :twilio-account-sid))
+           auth-token (:auth-token opts (degree9.env/get :twilio-auth-token))
+           client (client! account-id auth-token)]
        (reify
          Object
          (find [this params]

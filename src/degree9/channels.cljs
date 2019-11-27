@@ -10,10 +10,15 @@
   (chan/login app
     #(let [conn (obj/get %2 "connection")]
        (debug "Joining Channel: Authenticated" conn)
-       (when conn (chan/join (chan/channel app "authenticated") conn)))))
+       (when conn
+         (chan/leave (chan/channel app "anonymous") conn)
+         (chan/join (chan/channel app "authenticated") conn)))))
 
 (defn publish-events [app channel]
-  (.publish app (fn [data ctx] (chan/channel app channel))))
+  (debug "Registering event publishing channel:" channel)
+  (.publish app
+    (fn [data ctx]
+      (chan/channel app channel))))
 
 (defn publish-authenticated [app]
   (publish-events app "authenticated"))
