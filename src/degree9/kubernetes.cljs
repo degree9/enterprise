@@ -144,7 +144,7 @@
       (create [this data params]
         (create-clustercustomresource api group apiversion plural data))
       (update [this id data params]
-        (replace-customresource api group apiversion plural id data))
+        (replace-clustercustomresource api group apiversion plural id data))
       (patch [this id data params]
         (patch-clustercustomresource api group apiversion plural id data))
       (remove [this id params]
@@ -287,7 +287,7 @@
       (create [this data params]
         (create-namespace api data))
       (update [this id data params]
-        (update-namespace api id data))
+        (replace-namespace api id data))
       (patch [this id data params]
         (patch-namespace api id data))
       (remove [this id params]
@@ -313,7 +313,7 @@
 
 (defn- create-secret
   "Create a Kubernetes secret within a Kubernetes namespace."
-  [apidata namespace]
+  [api data namespace]
   (-> api
     (.createNamespacedSecret namespace data)
     (.then k8s-response)
@@ -358,7 +358,7 @@
           (create-secret api data namespace)))
       (update [this id data params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (update-secret api id namespace data)))
+          (replace-secret api id namespace data)))
       (patch [this id data params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
           (patch-secret api id namespace data)))
@@ -505,7 +505,7 @@
           (create-service api namespace data)))
       (update [this id data params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (update-service api id namespace data)))
+          (replace-service api id namespace data)))
       (patch [this id data params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
           (patch-service api id namespace data)))
@@ -578,7 +578,7 @@
           (create-ingress api namespace data)))
       (update [this id data params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (update-ingress api id namespace data)))
+          (replace-ingress api id namespace data)))
       (patch [this id data params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
           (patch-ingress api id namespace data)))
