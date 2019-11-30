@@ -285,7 +285,8 @@
       (get [this id params]
         (read-namespace api id))
       (create [this data params]
-        (create-namespace api data))
+        (let [name (obj/get data "name")]
+          (create-namespace api name)))
       (update [this id data params]
         (replace-namespace api id data))
       (patch [this id data params]
