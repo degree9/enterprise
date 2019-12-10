@@ -17,7 +17,7 @@
 (defn kubeconfig
   "Initializing the kubeconfig"
   []
-  (debug "Initializing kubeconfig" )
+  (debug "Initializing kubeconfig")
   (k8s/KubeConfig.))
 
 (defn load-default
@@ -99,7 +99,7 @@
 (defn- list-clustercustomresource
   "List a Kubernetes custom resource."
   [api group version plural]
-  (debug "List kubernetes custom resource" api group version plural)
+  (debug "Listing kubernetes custom resource" api group version plural)
   (-> api
     (.listClusterCustomObject group version plural)
     (.then k8s-response)
