@@ -1,7 +1,10 @@
 (ns degree9.state
   (:require [hoplon.core :as h]
-            [javelin.core :as j])
+            [javelin.core :as j]
+            [degree9.debug :as dbg])
   (:require-macros degree9.state))
+
+(def ^:private debug (dbg "degree9:enterprise:state"))
 
 ;; State Helpers ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn init-state

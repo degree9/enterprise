@@ -1,7 +1,10 @@
 (ns degree9.services
  (:require
   ["fs" :as fs]
-  ["path" :as path]))
+  ["path" :as path]
+  [degree9.debug :as dbg]))
+
+(def ^:private debug (dbg "degree9:enterprise:services"))
 
 (defn entrypoint [app & [opts]]
   (.use app "/:entrypoint"

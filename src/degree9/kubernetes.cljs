@@ -14,19 +14,32 @@
 (def ^:private debug (dbg "degree9:enterprise:kubernetes"))
 
 ;; Kubernetes API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defn kubeconfig []
+(defn kubeconfig
+  "Initializing the kubeconfig"
+  []
+  (debug "Initializing kubeconfig" conn)
   (k8s/KubeConfig.))
 
-(defn load-default [config]
+(defn load-default
+  "Loads the default configuration"
+  [config]
+  (debug "Loads default configuration" conn)
   (.loadFromDefault config))
 
-(defn mkclient [config api]
+(defn mkclient
+  "Configures the API client"
+  [config api]
+  (debug "Configures API client" conn)
   (.makeApiClient config api))
 
-(defn core-api [config]
+(defn core-api
+  ""
+  [config]
   (mkclient config k8s/CoreV1Api))
 
-(defn apps-api [config]
+(defn apps-api
+  ""
+  [config]
   (mkclient config k8s/appsV1Api))
 
 ; (defn watcher
@@ -63,12 +76,15 @@
 (defn- k8s->clj
   "Converts Kubernetes response to ClojureScript."
   [k8s]
+  (debug "Converts kubernetes response to cljs" k8s)
   (js->clj k8s :keywordize-keys true))
 
 (defn- k8s-response [res]
   (obj/get res "body"))
 
-(defn k8s-error [err]
+(defn k8s-error
+  ""
+  [err]
   (let [{:keys [message data code]} (k8s->clj (k8s-response err))]
     (.log js/console err)
     (case code
@@ -83,6 +99,7 @@
 (defn- list-clustercustomresource
   "List a Kubernetes custom resource."
   [api group version plural]
+  (debug "List kubernetes custom resource" api group version plural)
   (-> api
     (.listClusterCustomObject group version plural)
     (.then k8s-response)
@@ -91,6 +108,7 @@
 (defn- get-clustercustomresource
   "Get a Kubernetes custom resource."
   [api group version plural id]
+  (debug "Get kubernetes custom resource" api group version plural id)
   (-> api
     (.getClusterCustomObject group version plural id)
     (.then k8s-response)
@@ -99,6 +117,7 @@
 (defn- create-clustercustomresource
   "Create a Kubernetes custom resource."
   [api group version plural body]
+  (debug "Create kubernetes custom resource" api group version plural body)
   (-> api
     (.createClusterCustomObject group version plural (clj->js body))
     (.then k8s-response)
@@ -107,6 +126,7 @@
 (defn- replace-clustercustomresource
   "Replace a Kubernetes custom resource."
   [api group version plural id data]
+  (debug "Replace kubernetes custom resource" api group version plural id data)
   (-> api
     (.replaceClusterCustomObject group version plural id (clj->js data))
     (.then k8s-response)
@@ -115,6 +135,7 @@
 (defn- patch-clustercustomresource
   "Patch a Kubernetes custom resource."
   [api group version plural id data]
+  (debug "Patch kubernetes custom resource" api group version plural id data)
   (-> api
     (.patchClusterCustomObject group version plural id (clj->js data))
     (.then k8s-response)
@@ -123,6 +144,7 @@
 (defn- delete-clustercustomresource
   "Delete a Kubernetes custom resource."
   [api group version plural id opts]
+  (debug "Delete kubernetes custom resource" api group version plural id opts)
   (-> api
     (.deleteClusterCustomObject group version plural id opts)
     (.then k8s-response)
@@ -134,6 +156,7 @@
         group      (:group opts)
         apiversion (:apiVersion opts "v1")
         plural     (:plural opts (s/lower-case (str kind "s")))]
+    (debug "Initialize cluster custom resource:" api kind group apiversion plural)
     (reify
       Object
       (setup [this app]
@@ -159,6 +182,7 @@
 (defn- list-namespacedcustomresource
   "List a Kubernetes custom resource."
   [api group version plural]
+  (debug "List custom resource" api group version plural)
   (-> api
     (.listNamespacedCustomObject group version plural)
     (.then k8s-response)
@@ -167,6 +191,7 @@
 (defn- get-namespacedcustomresource
   "Get a Kubernetes custom resource."
   [api group version plural id]
+  (debug "Get kubernetes custom resource" api group version plural id)
   (-> api
     (.getNamespacedCustomObject group version plural id)
     (.then k8s-response)
@@ -175,6 +200,7 @@
 (defn- create-namespacedcustomresource
   "Create a Kubernetes custom resource."
   [api group version plural body]
+  (debug "create kubernetes custom resource" api group version plural body)
   (-> api
     (.createNamespacedCustomObject group version plural (clj->js body))
     (.then k8s-response)
@@ -183,6 +209,7 @@
 (defn- replace-namespacedcustomresource
   "Replace a Kubernetes custom resource."
   [api group version plural id data]
+  (debug "Replace kubernetes custom resource" api group version plural id data)
   (-> api
     (.replaceNamespacedCustomObject group version plural id (clj->js data))
     (.then k8s-response)
@@ -191,6 +218,7 @@
 (defn- patch-namespacedcustomresource
   "Patch a Kubernetes custom resource."
   [api group version plural id data]
+  (debug "create kubernetes namespace" api group version plural id data)
   (-> api
     (.patchNamespacedCustomObject group version plural id (clj->js data))
     (.then k8s-response)
@@ -199,6 +227,7 @@
 (defn- delete-namespacedcustomresource
   "Delete a Kubernetes custom resource."
   [api group version plural id opts]
+  (debug "Dekete kubernetes namespace" api group version plural id opts)
   (-> api
     (.deleteNamespacedCustomObject group version plural id opts)
     (.then k8s-response)
@@ -210,6 +239,7 @@
         group      (:group opts)
         apiversion (:apiVersion opts "v1")
         plural     (:plural opts (s/lower-case (str kind "s")))]
+    (debug "Initialize kubernetes custom resource" api kind group apiversion plural)
     (reify
       Object
       (setup [this app]
@@ -233,8 +263,9 @@
 
 ;; Kubernetes Namespace ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn- list-namespace
-  "Create a Kubernetes namespace."
+  "List a Kubernetes namespace."
   [api]
+  (debug "List kubernetes namespace" api)
   (-> api
     (.listNamespace)
     (.then k8s-response)
@@ -243,6 +274,7 @@
 (defn- create-namespace
   "Create a Kubernetes namespace."
   [api data]
+  (debug "create kubernetes namespace" api data)
   (-> api
     (.createNamespace data)
     (.then k8s-response)
@@ -251,37 +283,42 @@
 (defn- read-namespace
   "Read a Kubernetes namespace."
   [api name]
+  (debug "Read kubernetes namespace" api name)
   (-> api
     (.readNamespace name)
     (.then k8s-response)
     (.catch k8s-error)))
 
 (defn- delete-namespace
-  "Create a Kubernetes namespace."
+  "Delete a Kubernetes namespace."
   [api id]
+  (debug "Delete kubernetes namespace" api id)
   (-> api
     (.deleteNamespace id)
     (.then k8s-response)
     (.catch k8s-error)))
 
 (defn- replace-namespace
-  "Create a Kubernetes namespace."
+  "Replace a Kubernetes namespace."
   [api id data]
+  (debug "Replace kubernetes namespace" api id data)
   (-> api
     (.replaceNamespace id data)
     (.then k8s-response)
     (.catch k8s-error)))
 
 (defn- patch-namespace
-  "Create a Kubernetes namespace."
+  "Patch a Kubernetes namespace."
   [api id data]
+  (debug "Patch kubernetes namespace" api id data)
   (-> api
     (.patchNamespace id data)
     (.then k8s-response)
     (.catch k8s-error)))
 
 (defn namespace [& [opts]]
-  (let [api (:api opts)]
+  (let [api (:api opts)])
+  (debug "Initialize kubernetes namespace" api id)
     (reify
       Object
       (find [this params]
@@ -295,13 +332,14 @@
       (patch [this id data params]
         (patch-namespace api id data))
       (remove [this id params]
-        (delete-namespace api id)))))
+        (delete-namespace api id))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Kubernetes Secrets ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn- list-secret
   "List all Kubernetes secrets from a Kubernetes namespace ."
   [api namespace]
+  (debug "List kubernetes secret from namespace" api namespace)
   (-> api
     (.listNamespacedSecret namespace)
     (.then k8s-response)
@@ -310,6 +348,7 @@
 (defn- read-secret
   "Read a Secret from a Kubernetes namespace."
   [api name namespace]
+  (debug "Read kubernetes secret from namespace" api name namespace)
   (-> api
     (.readNamespacedSecret name namespace)
     (.then k8s-response)
@@ -318,6 +357,7 @@
 (defn- create-secret
   "Create a Kubernetes secret within a Kubernetes namespace."
   [api data namespace]
+  (debug "Create kubernetes secret from namespace" api data namespace)
   (-> api
     (.createNamespacedSecret namespace data)
     (.then k8s-response)
@@ -326,6 +366,7 @@
 (defn- replace-secret
   "Replace a Kubernetes secret."
   [api id namespace data]
+  (debug "Replace kubernetes secret from namespace" api id namespace data)
   (-> api
     (.replaceNamespacedSecret id namespace data)
     (.then k8s-response)
@@ -334,6 +375,7 @@
 (defn- patch-secret
   "Patch a Kubernetes secret."
   [api id namespace data]
+  (debug "Patch kubernetes secret from namespace" api id namespace data)
   (-> api
     (.patchNamespacedSecret id namespace data)
     (.then k8s-response)
@@ -342,13 +384,15 @@
 (defn- delete-secret
   "Delete a Kubernetes secret."
   [api id namespace]
+  (debug "Delete kubernetes secret namespace" api id namespace)
   (-> api
     (.deleteNamespacedSecret id namespace)
     (.then k8s-response)
     (.catch k8s-error)))
 
 (defn secret [& [opts]]
-  (let [api (:api opts)]
+  (let [api (:api opts)])
+  (debug "Initializing kubernetes secret from namespace" api)
     (reify
       Object
       (find [this params]
@@ -368,13 +412,14 @@
           (patch-secret api id namespace data)))
       (remove [this id params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (delete-secret api id namespace))))))
+          (delete-secret api id namespace)))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Kubernetes Deployment ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn- list-deployment
   "List all Kubernetes deployments from a Kubernetes namespace ."
   [api namespace]
+  (debug "List all Kubernetes deployments from namespace" api namespace)
   (-> api
     (.listNamespacedDeployment namespace)
     (.then k8s-response)
@@ -383,6 +428,7 @@
 (defn- read-deployment
   "Read a Deployment from a Kubernetes namespace."
   [api name namespace]
+  (debug "Read all Kubernetes deployments from namespace" api name namespace)
   (-> api
     (.readNamespacedDeployment name namespace)
     (.then k8s-response)
@@ -391,6 +437,7 @@
 (defn- create-deployment
   "Create a Kubernetes deployment within a Kubernetes namespace."
   [api data namespace]
+  (debug "Create all Kubernetes deployments from namespace" api data namespace)
   (-> api
     (.createNamespacedDeployment namespace data)
     (.then k8s-response)
@@ -399,6 +446,7 @@
 (defn- replace-deployment
   "Replace a Kubernetes deployment."
   [api id namespace data]
+  (debug "Replace all Kubernetes deployments from namespace" api id namespace data)
   (-> api
     (.replaceNamespacedDeployment id namespace data)
     (.then k8s-response)
@@ -407,6 +455,7 @@
 (defn- patch-deployment
   "Patch a Kubernetes deployment."
   [api id namespace data]
+  (debug "Patch all Kubernetes deployments from namespace" api id namespace data)
   (-> api
     (.patchNamespacedDeployment id namespace data)
     (.then k8s-response)
@@ -415,13 +464,15 @@
 (defn- delete-deployment
   "Delete a Kubernetes deployment."
   [api id namespace]
+  (debug "Delete all Kubernetes deployments from namespace" api id namespace)
   (-> api
     (.deleteNamespacedDeployment id namespace)
     (.then k8s-response)
     (.catch k8s-error)))
 
 (defn deployment [& [opts]]
-  (let [api (:api opts)]
+  (let [api (:api opts)])
+  (debug "Initialize all Kubernetes deployments from namespace" api)
     (reify
       Object
       (find [this params]
@@ -441,7 +492,7 @@
           (patch-deployment api id namespace data)))
       (remove [this id params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (delete-deployment api id namespace))))))
+          (delete-deployment api id namespace)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -449,6 +500,7 @@
 (defn- list-service
   "List all Kubernetes services from a Kubernetes namespace."
   [api namespace]
+  (debug "List all Kubernetes services from namespace" api namespace)
   (-> api
     (.listNamespacedService namespace)
     (.then k8s-response)
@@ -457,6 +509,7 @@
 (defn- create-service
   "Create a Kubernetes service."
   [api namespace data]
+  (debug "Create all Kubernetes services from a Kubernetes namespace" api namespace data)
   (-> api
     (.createNamespacedService namespace data)
     (.then k8s-response)
@@ -465,6 +518,7 @@
 (defn- read-service
   "Read a Kubernetes service."
   [api name namespace]
+  (debug "Read all Kubernetes services from a Kubernetes namespace" api name namespace)
   (-> api
     (.readNamespacedService name)
     (.then k8s-response)
@@ -473,6 +527,7 @@
 (defn- replace-service
   "Replace a Kubernetes service."
   [api id namespace data]
+  (debug "Replace all Kubernetes services from a Kubernetes namespace" api id namespace data)
   (-> api
     (.replaceNamespacedService id namespace data)
     (.then k8s-response)
@@ -481,6 +536,7 @@
 (defn- patch-service
   "Patch a Kubernetes service."
   [api id namespace data]
+  (debug "Patch all Kubernetes services from a Kubernetes namespace" api id namespace data)
   (-> api
     (.patchNamespacedService id namespace data)
     (.then k8s-response)
@@ -489,13 +545,15 @@
 (defn- delete-service
   "Delete a Kubernetes service."
   [api id namespace]
+  (debug "Delete all Kubernetes services from a Kubernetes namespace" api id namespace)
   (-> api
     (.deleteNamespacedService id namespace)
     (.then k8s-response)
     (.catch k8s-error)))
 
 (defn service [& [opts]]
-  (let [api (:api opts)]
+  (let [api (:api opts)])
+  (debug "Initialize all Kubernetes services from Kubernetes namespace" api
     (reify
       Object
       (find [this params]
@@ -522,6 +580,7 @@
 (defn- list-ingress
   "List all Kubernetes ingress from a Kubernetes namespace."
   [api namespace]
+  (debug "List all Kubernetes ingress from Kubernetes namespace" api namespace)
   (-> api
     (.listNamespacedIngress namespace)
     (.then k8s-response)
@@ -530,6 +589,7 @@
 (defn- create-ingress
   "Create a Kubernetes ingress."
   [api namespace data]
+  (debug "Create all Kubernetes ingress from Kubernetes namespace" api namespace data)
   (-> api
     (.createNamespacedIngress namespace data)
     (.then k8s-response)
@@ -538,6 +598,7 @@
 (defn- read-ingress
   "Read a Kubernetes ingress."
   [api name namespace]
+  (debug "Read all Kubernetes ingress from Kubernetes namespace" api name namespace)
   (-> api
     (.readNamespacedIngress name)
     (.then k8s-response)
@@ -546,6 +607,7 @@
 (defn- replace-ingress
   "Replace a Kubernetes ingress."
   [api id namespace data]
+  (debug "Replace all Kubernetes ingress from Kubernetes namespace" api id namespace data)
   (-> api
     (.replaceNamespacedIngress id namespace data)
     (.then k8s-response)
@@ -554,6 +616,7 @@
 (defn- patch-ingress
   "Patch a Kubernetes ingress."
   [api id namespace data]
+  (debug "Patch all Kubernetes ingress from Kubernetes namespace" api id namespace data)
   (-> api
     (.patchNamespacedIngress id namespace data)
     (.then k8s-response)
@@ -562,13 +625,15 @@
 (defn- delete-ingress
   "Delete a Kubernetes ingress."
   [api id namespace]
+  (debug "Delete all Kubernetes ingress from Kubernetes namespace" api id namespace)
   (-> api
     (.deleteNamespacedIngress id namespace)
     (.then k8s-response)
     (.catch k8s-error)))
 
 (defn ingress [& [opts]]
-  (let [api (:api opts)]
+  (let [api (:api opts)])
+  (debug "Initialize all Kubernetes ingress from Kubernetes namespace" api)
     (reify
       Object
       (find [this params]
@@ -588,5 +653,5 @@
           (patch-ingress api id namespace data)))
       (remove [this id params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (delete-ingress api id namespace))))))
+          (delete-ingress api id namespace)))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
