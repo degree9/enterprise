@@ -17,19 +17,19 @@
 (defn kubeconfig
   "Initializing the kubeconfig"
   []
-  (debug "Initializing kubeconfig" conn)
+  (debug "Initializing kubeconfig" )
   (k8s/KubeConfig.))
 
 (defn load-default
   "Loads the default configuration"
   [config]
-  (debug "Loads default configuration" conn)
+  (debug "Loads default configuration" config)
   (.loadFromDefault config))
 
 (defn mkclient
   "Configures the API client"
   [config api]
-  (debug "Configures API client" conn)
+  (debug "Configures API client" config api)
   (.makeApiClient config api))
 
 (defn core-api
