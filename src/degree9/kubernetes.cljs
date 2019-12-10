@@ -33,12 +33,12 @@
   (.makeApiClient config api))
 
 (defn core-api
-  ""
+  "Initializes Kubernetes CoreV1 API."
   [config]
   (mkclient config k8s/CoreV1Api))
 
 (defn apps-api
-  ""
+  "Initializes Kubernetes AppsV1 API."
   [config]
   (mkclient config k8s/appsV1Api))
 
@@ -83,10 +83,9 @@
   (obj/get res "body"))
 
 (defn k8s-error
-  ""
+  "Converts Kubernetes error response to FeathersJS error object."
   [err]
   (let [{:keys [message data code]} (k8s->clj (k8s-response err))]
-    (.log js/console err)
     (case code
       404 (error/not-found message data)
       409 (error/conflict message data)
