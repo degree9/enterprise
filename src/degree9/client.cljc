@@ -2,7 +2,10 @@
  (:refer-clojure :exclude [find get update remove])
  (:require
   #?(:browser [meta.client :as client])
-  [degree9.auth :as auth]))
+  [degree9.auth :as auth]
+  [degree9.debug :as dbg]))
+
+(def ^:private debug (dbg "degree9:enterprise:client"))
 
 #?(:browser
    (do

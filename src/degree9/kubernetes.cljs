@@ -5,9 +5,13 @@
    [goog.object :as obj]
    [feathers.errors :as error]
    [degree9.env :as env]
+   [degree9.debug :as dbg]
    ["@kubernetes/client-node" :as k8s]
    ["fs" :as fs]
    ["path" :as path]))
+
+
+(def ^:private debug (dbg "degree9:enterprise:kubernetes"))
 
 ;; Kubernetes API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn kubeconfig []

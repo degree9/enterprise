@@ -1,9 +1,11 @@
 (ns degree9.pathway-test
   (:require [degree9.pathway :as pathway]
             [degree9.pathway.spec :as path]
+            [degree9.debug :as dbg]
             [clojure.spec.alpha :as spec]
             [clojure.test :refer [deftest is]]))
 
+(def ^:private debug (dbg "degree9:enterprise:pathway-test"))
 
 ;; TESTS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

@@ -1,6 +1,6 @@
 (ns degree9.server
  (:require
-   ["debug" :as dbg]
+   [degree9.debug :as dbg]
    [meta.server :as server]
    [degree9.env :as env]
    [degree9.channels :as chan]

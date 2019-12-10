@@ -1,9 +1,13 @@
 (ns degree9.mongodb
   (:require [goog.object :as obj]
             [degree9.env :as env]
+            [degree9.debug :as dbg]
             [meta.server :as server]
             ["mongoose" :as mongoose]
             ["feathers-mongoose" :as mongodb]))
+
+(def ^:private debug (dbg "degree9:enterprise:mongodb"))
+
 
 ;; MongoDB Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn connect

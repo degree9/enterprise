@@ -1,5 +1,8 @@
 (ns degree9.hooks
-  (:require [goog.object :as obj]))
+  (:require [goog.object :as obj]
+            [degree9.debug :as dbg]))
+
+(def ^:private debug (dbg "degree9:enterprise:server"))
 
 ;; Hook Logging ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn- log-hook [hook]

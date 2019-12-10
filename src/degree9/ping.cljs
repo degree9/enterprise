@@ -1,5 +1,8 @@
 (ns degree9.ping
-  (:require ["socket.io-client" :as io]))
+  (:require ["socket.io-client" :as io]
+            [degree9.debug :as dbg]))
+
+(def ^:private debug (dbg "degree9:enterprise:server"))
 
 (defn ping [& [url opts]]
   (io url opts))

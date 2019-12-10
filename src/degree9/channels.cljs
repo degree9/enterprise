@@ -2,7 +2,7 @@
   (:require [goog.object :as obj]
             [meta.server :as server]
             [feathers.channels :as chan]
-            ["debug" :as dbg]))
+            [degree9.debug :as dbg]))
 
 (def ^:private debug (dbg "degree9:enterprise:channels"))
 

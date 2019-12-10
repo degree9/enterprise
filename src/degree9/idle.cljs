@@ -1,5 +1,8 @@
 (ns degree9.idle
-  (:require [javelin.core :as j]))
+  (:require [javelin.core :as j]
+            [degree9.debug :as dbg]))
+
+(def ^:private debug (dbg "degree9:enterprise:server"))
 
 ;; State Helpers ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (def ^:dynamic *default-events*

@@ -1,7 +1,10 @@
 (ns degree9.multipart-form
   (:require [goog.object :as obj]
             [meta.server :as svr]
+            [degree9.debug :as dbg]
             ["multer" :as multer]))
+
+(def ^:private debug (dbg "degree9:enterprise:multipart-form"))
 
 ;; HelloSign Multipart Forms ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

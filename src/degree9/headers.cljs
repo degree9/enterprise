@@ -1,5 +1,8 @@
 (ns degree9.headers
-  (:require [goog.object :as obj]))
+  (:require [goog.object :as obj]
+            [degree9.debug :as dbg]))
+
+(def ^:private debug (dbg "degree9:enterprise:headers"))
 
 ;; Feathers Headers ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
