@@ -2,7 +2,7 @@
   (:require [goog.object :as obj]
             [degree9.debug :as dbg]))
 
-(def ^:private debug (dbg "degree9:enterprise:server"))
+(def ^:private debug (dbg "degree9:enterprise:hooks"))
 
 ;; Hook Logging ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn- log-hook [hook]
