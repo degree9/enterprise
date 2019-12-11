@@ -1,7 +1,7 @@
 (ns degree9.security
  (:require
    ["debug" :as dbg]
-   [feathers.core :as feathers]
+   [feathers.application :as feathers]
    [feathers.authentication :as auth]))
 
 (def ^:private debug (dbg "degree9:enterprise:security"))

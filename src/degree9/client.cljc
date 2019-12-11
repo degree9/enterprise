@@ -2,7 +2,6 @@
  (:refer-clojure :exclude [find get update remove])
  (:require
   #?(:browser [meta.client :as client])
-  [degree9.auth :as auth]
   [degree9.debug :as dbg]))
 
 (def ^:private debug (dbg "degree9:enterprise:client"))
@@ -11,29 +10,31 @@
    (do
     ;; App Client ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     (def app
-     (-> (client/app)
-      (client/with-socketio)
-      (client/with-authentication)))
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-    ;; Client Services ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    (defn users [] (client/service app "/users"))
+      (-> (client/app)
+        (client/with-socketio)
+        (client/with-authentication)))
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     ;; Client Service API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     (def service client/service)
 
-    (def find    client/find)
+    (defn find [service & [params]]
+      (client/find service (clj->js params)))
 
-    (def get     client/get)
+    (defn get [service id & [params]]
+      (client/get service id (clj->js params)))
 
-    (def create  client/create)
+    (defn create [service data & [params]]
+      (client/create service (clj->js data) (clj->js params)))
 
-    (def update  client/update)
+    (defn update [service id data & [params]]
+      (client/update service id (clj->js data) (clj->js params)))
 
-    (def patch   client/patch)
+    (defn patch [service id data & [params]]
+      (client/patch service id (clj->js data) (clj->js params)))
 
-    (def remove  client/remove)
+    (defn remove [service id & [params]]
+      (client/remove service id (clj->js params)))
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     ;; Client Event API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -45,22 +46,5 @@
 
     (def patched client/patched)
 
-    (def removed client/removed)
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-    ;; Client Auth API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    (defn auth! []
-      (auth/auth! app (users)))
-
-    (defn login! [strategy & [opts]]
-      (auth/login! app (users) strategy opts))
-
-    (defn logout! []
-      (auth/logout! app))
-
-    (defn register! [username password]
-      (auth/register! users username password))
-
-    (defn reauthenticate! [callback]
-      (auth/reauthenticate! app callback))))
+    (def removed client/removed)))
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
