@@ -9,12 +9,11 @@
 (def ^:private debug (dbg "degree9:enterprise:server"))
 
 (defn app [& opts]
- (debug "Starting enterprise server")
+ (debug "Starting enterprise server with" opts)
  (let [opts (set opts)]
    (cond-> (server/app)
      (:default    opts) (server/with-defaults)
      (:rest       opts) (server/with-rest)
-     ;(:session    opts) (server/with-session)
      (:socket     opts) (server/with-socketio)
      (:channels   opts) (chan/with-channels)
      (:auth       opts) (server/with-authentication)
@@ -22,5 +21,5 @@
 
 (defn start! [app]
   (let [port (env/get "APP_PORT")]
-    (debug "Server listening on port %s" port)
+    (debug "Server listening on port" port)
     (server/listen app port)))
