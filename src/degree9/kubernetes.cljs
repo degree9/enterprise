@@ -25,7 +25,7 @@
 (defn load-default
   "Loads the default configuration"
   [config]
-  (debug "Loading default configuration" config)
+  (debug "Loading default configuration")
   (.loadFromDefault config))
 
 (defn mkclient

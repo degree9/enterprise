@@ -6,7 +6,7 @@
 (defn- list-ingress
   "List all Kubernetes ingress from a Kubernetes namespace."
   [api namespace]
-  (debug "List all Kubernetes ingress from Kubernetes namespace" api namespace)
+  (debug "Listing all Kubernetes ingress from Kubernetes namespace" api namespace)
   (-> api
     (.listNamespacedIngress namespace)
     (.then k8s-response)
@@ -15,7 +15,7 @@
 (defn- create-ingress
   "Create a Kubernetes ingress."
   [api namespace data]
-  (debug "Create all Kubernetes ingress from Kubernetes namespace" api namespace data)
+  (debug "Creating all Kubernetes ingress from Kubernetes namespace" api namespace data)
   (-> api
     (.createNamespacedIngress namespace data)
     (.then k8s-response)
@@ -24,7 +24,7 @@
 (defn- read-ingress
   "Read a Kubernetes ingress."
   [api name namespace]
-  (debug "Read all Kubernetes ingress from Kubernetes namespace" api name namespace)
+  (debug "Reading all Kubernetes ingress from Kubernetes namespace" api name namespace)
   (-> api
     (.readNamespacedIngress name)
     (.then k8s-response)
@@ -33,7 +33,7 @@
 (defn- replace-ingress
   "Replace a Kubernetes ingress."
   [api id namespace data]
-  (debug "Replace all Kubernetes ingress from Kubernetes namespace" api id namespace data)
+  (debug "Replacing all Kubernetes ingress from Kubernetes namespace" api id namespace data)
   (-> api
     (.replaceNamespacedIngress id namespace data)
     (.then k8s-response)
@@ -42,7 +42,7 @@
 (defn- patch-ingress
   "Patch a Kubernetes ingress."
   [api id namespace data]
-  (debug "Patch all Kubernetes ingress from Kubernetes namespace" api id namespace data)
+  (debug "Patching all Kubernetes ingress from Kubernetes namespace" api id namespace data)
   (-> api
     (.patchNamespacedIngress id namespace data)
     (.then k8s-response)
@@ -51,7 +51,7 @@
 (defn- delete-ingress
   "Delete a Kubernetes ingress."
   [api id namespace]
-  (debug "Delete all Kubernetes ingress from Kubernetes namespace" api id namespace)
+  (debug "Deleting all Kubernetes ingress from Kubernetes namespace" api id namespace)
   (-> api
     (.deleteNamespacedIngress id namespace)
     (.then k8s-response)
@@ -59,7 +59,7 @@
 
 (defn ingress [& [opts]]
   (let [api (:api opts)])
-  (debug "Initialize all Kubernetes ingress from Kubernetes namespace" api
+  (debug "Initializing all Kubernetes ingress from Kubernetes namespace" api
     (reify
       Object
       (find [this params]

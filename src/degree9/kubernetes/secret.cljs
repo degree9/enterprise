@@ -7,7 +7,7 @@
 (defn- list-secret
   "List all Kubernetes secrets from a Kubernetes namespace ."
   [api namespace]
-  (debug "List kubernetes secret from namespace" api namespace)
+  (debug "Listing kubernetes secrets from namespace" api namespace)
   (-> api
     (.listNamespacedSecret namespace)
     (.then k8s-response)
@@ -16,7 +16,7 @@
 (defn- read-secret
   "Read a Secret from a Kubernetes namespace."
   [api name namespace]
-  (debug "Read kubernetes secret from namespace" api name namespace)
+  (debug "Reading kubernetes secret from namespace" api name namespace)
   (-> api
     (.readNamespacedSecret name namespace)
     (.then k8s-response)
@@ -25,7 +25,7 @@
 (defn- create-secret
   "Create a Kubernetes secret within a Kubernetes namespace."
   [api data namespace]
-  (debug "Create kubernetes secret from namespace" api data namespace)
+  (debug "Creating kubernetes secret from namespace" api data namespace)
   (-> api
     (.createNamespacedSecret namespace data)
     (.then k8s-response)
@@ -34,7 +34,7 @@
 (defn- replace-secret
   "Replace a Kubernetes secret."
   [api id namespace data]
-  (debug "Replace kubernetes secret from namespace" api id namespace data)
+  (debug "Replacing kubernetes secret from namespace" api id namespace data)
   (-> api
     (.replaceNamespacedSecret id namespace data)
     (.then k8s-response)
@@ -43,7 +43,7 @@
 (defn- patch-secret
   "Patch a Kubernetes secret."
   [api id namespace data]
-  (debug "Patch kubernetes secret from namespace" api id namespace data)
+  (debug "Patching kubernetes secret from namespace" api id namespace data)
   (-> api
     (.patchNamespacedSecret id namespace data)
     (.then k8s-response)
@@ -52,7 +52,7 @@
 (defn- delete-secret
   "Delete a Kubernetes secret."
   [api id namespace]
-  (debug "Delete kubernetes secret namespace" api id namespace)
+  (debug "Deleting kubernetes secret namespace" api id namespace)
   (-> api
     (.deleteNamespacedSecret id namespace)
     (.then k8s-response)

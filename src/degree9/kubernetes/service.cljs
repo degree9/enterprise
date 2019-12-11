@@ -6,7 +6,7 @@
 (defn- list-service
   "List all Kubernetes services from a Kubernetes namespace."
   [api namespace]
-  (debug "List all Kubernetes services from namespace" api namespace)
+  (debug "Listing all Kubernetes services from namespace" api namespace)
   (-> api
     (.listNamespacedService namespace)
     (.then k8s-response)
@@ -15,7 +15,7 @@
 (defn- create-service
   "Create a Kubernetes service."
   [api namespace data]
-  (debug "Create all Kubernetes services from a Kubernetes namespace" api namespace data)
+  (debug "Creating all Kubernetes services from a Kubernetes namespace" api namespace data)
   (-> api
     (.createNamespacedService namespace data)
     (.then k8s-response)
@@ -24,7 +24,7 @@
 (defn- read-service
   "Read a Kubernetes service."
   [api name namespace]
-  (debug "Read all Kubernetes services from a Kubernetes namespace" api name namespace)
+  (debug "Reading all Kubernetes services from a Kubernetes namespace" api name namespace)
   (-> api
     (.readNamespacedService name)
     (.then k8s-response)
@@ -33,7 +33,7 @@
 (defn- replace-service
   "Replace a Kubernetes service."
   [api id namespace data]
-  (debug "Replace all Kubernetes services from a Kubernetes namespace" api id namespace data)
+  (debug "Replacing all Kubernetes services from a Kubernetes namespace" api id namespace data)
   (-> api
     (.replaceNamespacedService id namespace data)
     (.then k8s-response)
@@ -42,7 +42,7 @@
 (defn- patch-service
   "Patch a Kubernetes service."
   [api id namespace data]
-  (debug "Patch all Kubernetes services from a Kubernetes namespace" api id namespace data)
+  (debug "Patching all Kubernetes services from a Kubernetes namespace" api id namespace data)
   (-> api
     (.patchNamespacedService id namespace data)
     (.then k8s-response)
@@ -51,7 +51,7 @@
 (defn- delete-service
   "Delete a Kubernetes service."
   [api id namespace]
-  (debug "Delete all Kubernetes services from a Kubernetes namespace" api id namespace)
+  (debug "Deleting all Kubernetes services from a Kubernetes namespace" api id namespace)
   (-> api
     (.deleteNamespacedService id namespace)
     (.then k8s-response)
@@ -59,7 +59,7 @@
 
 (defn service [& [opts]]
   (let [api (:api opts)])
-  (debug "Initialize all Kubernetes services from Kubernetes namespace" api
+  (debug "Initializing all Kubernetes services from Kubernetes namespace" api
     (reify
       Object
       (find [this params]

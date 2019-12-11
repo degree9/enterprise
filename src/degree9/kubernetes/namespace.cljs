@@ -8,7 +8,7 @@
 (defn- list-namespace
   "List a Kubernetes namespace."
   [api]
-  (debug "List kubernetes namespace" api)
+  (debug "Listing kubernetes namespace" api)
   (-> api
     (.listNamespace)
     (.then k8s-response)
@@ -17,7 +17,7 @@
 (defn- create-namespace
   "Create a Kubernetes namespace."
   [api data]
-  (debug "create kubernetes namespace" api data)
+  (debug "Creating kubernetes namespace" api data)
   (-> api
     (.createNamespace data)
     (.then k8s-response)
@@ -26,7 +26,7 @@
 (defn- read-namespace
   "Read a Kubernetes namespace."
   [api name]
-  (debug "Read kubernetes namespace" api name)
+  (debug "Reading kubernetes namespace" api name)
   (-> api
     (.readNamespace name)
     (.then k8s-response)
@@ -35,7 +35,7 @@
 (defn- delete-namespace
   "Delete a Kubernetes namespace."
   [api id]
-  (debug "Delete kubernetes namespace" api id)
+  (debug "Deleting kubernetes namespace" api id)
   (-> api
     (.deleteNamespace id)
     (.then k8s-response)
@@ -44,7 +44,7 @@
 (defn- replace-namespace
   "Replace a Kubernetes namespace."
   [api id data]
-  (debug "Replace kubernetes namespace" api id data)
+  (debug "Replacing kubernetes namespace" api id data)
   (-> api
     (.replaceNamespace id data)
     (.then k8s-response)
@@ -53,7 +53,7 @@
 (defn- patch-namespace
   "Patch a Kubernetes namespace."
   [api id data]
-  (debug "Patch kubernetes namespace" api id data)
+  (debug "Patching kubernetes namespace" api id data)
   (-> api
     (.patchNamespace id data)
     (.then k8s-response)
@@ -61,7 +61,7 @@
 
 (defn namespace [& [opts]]
   (let [api (:api opts)])
-  (debug "Initialize kubernetes namespace" api id
+  (debug "Initializing kubernetes namespace" api id
     (reify
       Object
       (find [this params]
