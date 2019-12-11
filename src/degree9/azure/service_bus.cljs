@@ -1,73 +1,114 @@
 (ns degree9.azure.service-bus
-  (:require [meta.promise :as prom]
-            [degree9.azure :as azure]
-            [degree9.env :as env]))
+  (:require [goog.object :as obj]
+            [meta.promise :as prom]
+            [degree9.env :as env]
+            ["@azure/service-bus" :as sbus]))
 
-;; Azure Service Bus Queues Low API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defn create-queue
-  ([sbus queue callback]
-   (.createQueueIfNotExists sbus queue callback))
-  ([sbus queue opts callback]
-   (.createQueueIfNotExists sbus queue (clj->js opts) callback)))
+;; Service Bus Receive Mode ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(def receive-mode (obj/get sbus "ReceiveMode"))
 
-(defn queue-send [sbus message callback]
-  (.sendQueueMessage sbus (clj->js message) callback))
+(def peek-lock (.-peekLock receive-mode))
 
-(defn queue-receive
-  ([sbus callback]
-   (.receiveQueueMessage sbus callback))
-  ([sbus opts callback]
-   (.receiveQueueMessage sbus (clj->js opts) callback)))
+(def receive-delete (.-receiveAndDelete receive-mode))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Azure Service Bus Topics Low API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defn create-topic
-  ([sbus topic callback]
-   (.createTopicIfNotExists sbus topic callback))
-  ([sbus topic opts callback]
-   (.createTopicIfNotExists sbus topic (clj->js opts) callback)))
+;; Azure Service Bus ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(def service-bus (obj/get sbus "ServiceBusClient"))
 
-(defn create-subscription [sbus topic sub callback]
-   (.createSubscription sbus topic sub callback))
+(defn connection-string [conn & [opts]]
+  (.createFromConnectionString service-bus conn (clj->js opts)))
 
-(defn topic-send [sbus message callback]
-  (.sendTopicMessage sbus (clj->js message) callback))
+(defn queue-client [sbus queue]
+  (.createQueueClient sbus queue))
 
-(defn subscription-receive
-  ([sbus callback]
-   (.receiveSubscriptionMessage sbus callback))
-  ([sbus opts callback]
-   (.receiveSubscriptionMessage sbus (clj->js opts) callback)))
+(defn topic-client [sbus topic]
+  (.createTopicClient sbus topic))
+
+(defn subscription-client [sbus topic]
+  (.createSubscriptionClient sbus topic))
+
+(defn sender [client]
+  (.createSender client))
+
+(defn send! [sender message]
+  (.send sender message))
+
+(defn receiver [client mode]
+  (.createReceiver client mode))
+
+(defn register-message-handler [client msg err & [opts]]
+  (.registerMessageHandler client msg err opts))
+
+(defn- message-handler [service]
+  (fn [msg]
+    (let [{:keys [body]} (js->clj msg :keywordize-keys true)]
+      (.emit service (:type body) (dissoc body :type)))))
+
+(defn- error-handler [this]
+  (fn [err]
+    (throw (js/Error. err))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Azure Service Bus Queue Service ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defn QueuePublisher [queue & [opts]]
-  (let [id (:idField opts "id")
-        endpoint (:endpoint opts (env/get "AZURE_SERVICEBUS_CONNECTION_STRING"))
-        sbus (azure/service-bus endpoint)]
+(defn queue [queue & [opts]]
+  (let [endpoint (:endpoint opts (env/get "AZURE_SERVICEBUS_CONNECTION_STRING"))
+        mode (:receive-mode opts peek-lock)
+        sbus (queue-client (connection-string endpoint) queue)
+        opts (select-keys opts [:autoComplete :maxConcurrentCalls :maxMessageAutoRenewLockDurationInSeconds])
+        sender (sender sbus)
+        receiver (receiver sbus mode)]
     (reify
       Object
-      (id [this] id)
       (setup [this app path]
-        (prom/with-callback callback
-          (create-queue sbus queue callback)))
+        (obj/set this "sender" sender)
+        (obj/set this "receiver" receiver)
+        (register-message-handler receiver (message-handler this) (error-handler this) (clj->js opts)))
+      (find [this params]
+        (send! sender (clj->js {:body {:type "find"   :id nil :data nil}  :contentType "application/json"})))
+      (get [this id params]
+        (send! sender (clj->js {:body {:type "get"    :id id  :data nil}  :contentType "application/json"})))
       (create [this data params]
-        (prom/with-callback callback
-          (queue-send sbus {:body data :customProperties params} callback))))))
+        (send! sender (clj->js {:body {:type "create" :id nil :data data} :contentType "application/json"})))
+      (update [this id data params]
+        (send! sender (clj->js {:body {:type "update" :id id  :data data} :contentType "application/json"})))
+      (patch [this id data params]
+        (send! sender (clj->js {:body {:type "patch"  :id id  :data data} :contentType "application/json"})))
+      (remove [this id params]
+        (send! sender (clj->js {:body {:type "remove" :id id  :data nil}  :contentType "application/json"}))))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Azure Service Bus Topic Service ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defn TopicPublisher [topic & [opts]]
-  (let [id (:idField opts "id")
-        endpoint (:endpoint opts (env/get "AZURE_SERVICEBUS_CONNECTION_STRING"))
-        sbus (azure/service-bus endpoint)]
+(defn topic [topic & [opts]]
+  (let [endpoint (:endpoint opts (env/get "AZURE_SERVICEBUS_CONNECTION_STRING"))
+        sbus (topic-client (connection-string endpoint) topic)
+        sender (sender sbus)]
     (reify
       Object
-      (id [this] id)
       (setup [this app path]
-        (prom/with-callback callback
-          (create-topic sbus topic callback)))
+        (obj/set this "sender" sender))
+      (find [this params]
+        (send! sender (clj->js {:body {:type "find"   :id nil :data nil}  :contentType "application/json"})))
+      (get [this id params]
+        (send! sender (clj->js {:body {:type "get"    :id id  :data nil}  :contentType "application/json"})))
       (create [this data params]
-        (prom/with-callback callback
-          (topic-send sbus {:body data :customProperties params} callback))))))
+        (send! sender (clj->js {:body {:type "create" :id nil :data data} :contentType "application/json"})))
+      (update [this id data params]
+        (send! sender (clj->js {:body {:type "update" :id id  :data data} :contentType "application/json"})))
+      (patch [this id data params]
+        (send! sender (clj->js {:body {:type "patch"  :id id  :data data} :contentType "application/json"})))
+      (remove [this id params]
+        (send! sender (clj->js {:body {:type "remove" :id id  :data nil}  :contentType "application/json"}))))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Azure Service Bus Topic Service ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn subscription [topic & [opts]]
+  (let [endpoint (:endpoint opts (env/get "AZURE_SERVICEBUS_CONNECTION_STRING"))
+        mode (:receive-mode opts peek-lock)
+        sbus (subscription-client (connection-string endpoint) topic)
+        receiver (receiver sbus mode)]
+    (reify
+      Object
+      (setup [this app path]
+        (obj/set this "receiver" receiver)
+        (register-message-handler receiver (message-handler this) (error-handler this) (clj->js opts))))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
