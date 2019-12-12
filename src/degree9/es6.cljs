@@ -2,7 +2,7 @@
   (:require [degree9.debug :as dbg])
   (:require-macros degree9.es6))
 
-(def ^:private debug (dbg/debug "degree9:enterprise:es6"))
+(dbg/defdebug debug "degree9:enterprise:es6")
 
 ; (defn mk-constructor []
 ;   (fn [& args]

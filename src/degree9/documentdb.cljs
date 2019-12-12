@@ -4,8 +4,11 @@
   [goog.object :as obj]
   [meta.promise :as p]
   [feathers.services :as svc]
+  [degree9.debug :as dbg]
   degree9.env
   ["documentdb" :as documentdb]))
+
+(dbg/defdebug debug "degree9:enterprise:documentdb")
 
 ;; DB Definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (def dbclient   (obj/get documentdb "DocumentClient"))

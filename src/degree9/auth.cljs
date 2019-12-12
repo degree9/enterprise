@@ -1,10 +1,13 @@
 (ns degree9.auth
   (:require
    [javelin.core :as j]
+   [degree9.debug :as dbg]
    [goog.object :as obj]
    [meta.client :as client]
    [meta.promise :as prom])
   (:require-macros degree9.auth))
+
+(dbg/defdebug debug "degree9:enterprise:auth")
 
 ;; Authentication State ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (def authentication (j/cell nil))

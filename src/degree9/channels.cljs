@@ -2,11 +2,14 @@
   (:require [goog.object :as obj]
             [meta.server :as server]
             [feathers.channels :as chan]
-            ["debug" :as dbg]))
+            [degree9.debug :as dbg]))
 
-(def ^:private debug (dbg "degree9:enterprise:channels"))
+(dbg/defdebug debug "degree9:enterprise:channels")
 
-(defn join-authenticated [app]
+(defn join-authenticated
+  "Joins an authenticated connection to the `authenticated` channel, also leaves the
+   `anonymous` channel."
+  [app]
   (chan/login app
     #(let [conn (obj/get %2 "connection")]
        (debug "Joining Channel: Authenticated" conn)
@@ -14,19 +17,32 @@
          (chan/leave (chan/channel app "anonymous") conn)
          (chan/join (chan/channel app "authenticated") conn)))))
 
-(defn publish-events [app channel]
+(defn publish-events
+  "Publishes events to a channel."
+  [app channel]
   (debug "Registering event publishing channel:" channel)
   (.publish app
     (fn [data ctx]
       (chan/channel app channel))))
 
-(defn publish-authenticated [app]
+(defn publish-authenticated
+  "Publishes events to the `authenticated` channel."
+  [app]
+  (debug "Publish events to 'authenticated' channel")
   (publish-events app "authenticated"))
 
-(defn join-anonymous [app]
-  (chan/connection app #(chan/join (chan/channel app "anonymous") %)))
+(defn- anonymous-handler [app conn]
+  (debug "Joining connection to anonymous channel:" conn)
+  (chan/join (chan/channel app "anonymous") conn))
 
-(defn with-channels [app]
+(defn join-anonymous
+  "Joins an anonymous connection to the `anonymous` channel."
+  [app]
+  (chan/connection app (partial anonymous-handler app)))
+
+(defn with-channels
+  "Initializes channels api and provides basic anonymous/authenticated channels with publishing."
+  [app]
   (-> app
     (server/with-channels)
     (publish-authenticated)

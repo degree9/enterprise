@@ -1,7 +1,10 @@
 (ns degree9.client
  (:refer-clojure :exclude [find get update remove])
  (:require
-  #?(:browser [meta.client :as client])))
+  #?(:browser [meta.client :as client])
+  [degree9.debug :as dbg]))
+
+(dbg/defdebug debug "degree9:enterprise:client")
 
 #?(:browser
    (do

@@ -1,5 +1,8 @@
 (ns degree9.hooks
-  (:require [goog.object :as obj]))
+  (:require [goog.object :as obj]
+            [degree9.debug :as dbg]))
+
+(dbg/defdebug debug "degree9:enterprise:hooks")
 
 ;; Hook Logging ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn- log-hook [hook]

@@ -3,8 +3,11 @@
  (:require
   [cuerdas.core :as str]
   [goog.object :as obj]
+  [degree9.debug :as dbg]
   [cljs.test :refer-macros [deftest is]]
   ["dotenv" :as dotenv]))
+
+(dbg/defdebug debug "degree9:enterprise:env")
 
 (def ^:dynamic *env* (atom nil))
 
