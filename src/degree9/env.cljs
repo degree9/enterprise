@@ -14,6 +14,7 @@
 (defn env-obj
   "Initialize dotenv and return the process.env object."
   [& conf]
+  (debug "Initializing env object with config %s" conf)
   (when-not @*env*
    (reset! *env* (.config dotenv conf)))
   (obj/get js/process "env"))

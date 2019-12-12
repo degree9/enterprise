@@ -54,8 +54,8 @@
       loading  ::loading
       setup    ::setup
       finished ::finished
-      success  ::success
       error    ::error
+      success  ::success
       empty    ::empty
       data     ::data)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
