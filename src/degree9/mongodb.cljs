@@ -40,7 +40,7 @@
 (defn api
   "Create a feathers service backed by MongoDB."
   ([app path opts hooks]
-   (debug "Initialize MongoDB collection service" opts)
+   (debug "Initializing MongoDB collection service" opts)
    (server/api app path (mongodb opts) hooks))
   ([app path db-model db-schema hooks]
    (api app path #js{:Model (model db-model (schema db-schema))} hooks))

@@ -78,7 +78,7 @@
 (defn- k8s->clj
   "Converts Kubernetes response to ClojureScript."
   [k8s]
-  (debug "Converts kubernetes response to cljs" k8s)
+  (debug "Converting kubernetes response to cljs" k8s)
   (js->clj k8s :keywordize-keys true))
 
 (defn- k8s-response [res]
