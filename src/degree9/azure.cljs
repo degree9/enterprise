@@ -2,7 +2,7 @@
   (:require ["azure" :as azuresdk]
             [degree9.debug :as dbg]))
 
-(def ^:private debug (dbg "degree9:enterprise:azure"))
+(dbg/defdebug debug "degree9:enterprise:azure")
 
 (defn service-bus [& [conn]]
   (.createServiceBusService azuresdk conn))

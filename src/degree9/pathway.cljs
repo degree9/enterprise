@@ -4,7 +4,7 @@
             [degree9.debug :as dbg]
             [degree9.pathway.spec :as pspec]))
 
-(def ^:private debug (dbg "degree9:enterprise:pathway"))
+(dbg/defdebug debug "degree9:enterprise:pathway")
 
 
 (defprotocol IPathway

@@ -6,7 +6,7 @@
    [degree9.channels :as chan]
    [degree9.roles :as roles]))
 
-(def ^:private debug (dbg "degree9:enterprise:server"))
+(dbg/defdebug debug "degree9:enterprise:server")
 
 (defn app [& opts]
  (debug "Starting enterprise server with" opts)

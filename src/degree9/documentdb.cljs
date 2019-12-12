@@ -8,7 +8,7 @@
   degree9.env
   ["documentdb" :as documentdb]))
 
-(def ^:private debug (dbg "degree9:enterprise:documentdb"))
+(dbg/defdebug debug "degree9:enterprise:documentdb")
 
 ;; DB Definitions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (def dbclient   (obj/get documentdb "DocumentClient"))

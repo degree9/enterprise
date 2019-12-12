@@ -4,7 +4,7 @@
             [feathers.channels :as chan]
             [degree9.debug :as dbg]))
 
-(def ^:private debug (dbg "degree9:enterprise:channels"))
+(dbg/defdebug debug "degree9:enterprise:channels")
 
 (defn join-authenticated
   "Joins an authenticated connection to the `authenticated` channel, also leaves the

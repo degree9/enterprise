@@ -7,7 +7,7 @@
   [cljs.test :refer-macros [deftest is]]
   ["dotenv" :as dotenv]))
 
-(def ^:private debug (dbg "degree9:enterprise:env"))
+(dbg/defdebug debug "degree9:enterprise:env")
 
 (def ^:dynamic *env* (atom nil))
 

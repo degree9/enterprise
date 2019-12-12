@@ -4,7 +4,7 @@
   ["path" :as path]
   [degree9.debug :as dbg]))
 
-(def ^:private debug (dbg "degree9:enterprise:services"))
+(dbg/defdebug debug "degree9:enterprise:services")
 
 (defn entrypoint [app & [opts]]
   (.use app "/:entrypoint"

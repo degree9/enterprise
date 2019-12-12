@@ -1,11 +1,11 @@
 (ns degree9.roles
-  (:require ["debug" :as dbg]
+  (:require [degree9.debug :as dbg]
             [goog.object :as obj]
             [degree9.hooks :as hooks]
             [covenant.core :as cov]
             [covenant.rbac]))
 
-(def ^:private debug (dbg "degree9:enterprise:roles"))
+(dbg/defdebug debug "degree9:enterprise:roles")
 
 (defn- not-authorized []
   (throw (js/Error. "User does not have sufficient authorization.")))

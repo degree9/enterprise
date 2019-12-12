@@ -4,7 +4,7 @@
   #?(:browser [meta.client :as client])
   [degree9.debug :as dbg]))
 
-(def ^:private debug (dbg "degree9:enterprise:client"))
+(dbg/defdebug debug "degree9:enterprise:client")
 
 #?(:browser
    (do

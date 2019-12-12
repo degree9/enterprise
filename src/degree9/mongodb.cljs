@@ -6,33 +6,33 @@
             ["mongoose" :as mongoose]
             ["feathers-mongoose" :as mongodb]))
 
-(def ^:private debug (dbg "degree9:enterprise:mongodb"))
+(dbg/defdebug debug "degree9:enterprise:mongodb")
 
 
 ;; MongoDB Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn connect
   "Connect to MongoDB. Converts clj->js internally."
-  [conn & [opts]
-   (debug "Connecting to MongoDB and converting cljs->js internally" conn opts)]
+  [conn & [opts]]
+  (debug "Connecting to MongoDB and converting cljs->js internally" conn opts)
   (.connect mongoose conn (clj->js opts)))
 
 (defn mkconnection
   "Create a connection instance to MongoDB."
-  [conn & [opts]
-   (debug "Connecting connection instance to MongoDB" conn opts)]
+  [conn & [opts]]
+  (debug "Connecting connection instance to MongoDB" conn opts)
   (.createConnection mongoose conn (clj->js opts)))
 
 (defn schema
   "Create a Mongoose Schema. Converts clj->js internally."
-  [data & [opts]
-   (debug "Creating Mongoose Schema and converting cljs->js internally" conn opts)]
+  [data & [opts]]
+  (debug "Creating Mongoose Schema and converting cljs->js internally" data opts)
   (let [schema (obj/get mongoose "Schema")]
     (schema. (clj->js data) (clj->js opts))))
 
 (defn model
   "Create a Mongoose Model."
   ([conn name schema]
-   (debug "Creating Mongoose Model" conn opts)
+   (debug "Creating Mongoose Model" conn name schema)
    (.model conn name schema))
   ([name schema]
    (model mongoose name schema)))

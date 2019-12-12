@@ -4,7 +4,7 @@
             [degree9.debug :as dbg]
             ["multer" :as multer]))
 
-(def ^:private debug (dbg "degree9:enterprise:multipart-form"))
+(dbg/defdebug debug "degree9:enterprise:multipart-form")
 
 ;; HelloSign Multipart Forms ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

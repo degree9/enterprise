@@ -2,7 +2,7 @@
   (:require ["socket.io-client" :as io]
             [degree9.debug :as dbg]))
 
-(def ^:private debug (dbg "degree9:enterprise:ping"))
+(dbg/defdebug debug "degree9:enterprise:ping")
 
 (defn ping [& [url opts]]
   (io url opts))

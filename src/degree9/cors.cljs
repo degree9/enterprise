@@ -3,7 +3,7 @@
             [meta.server :as svr]
             [degree9.debug :as dbg]))
 
-(def ^:private debug (dbg "degree9:enterprise:cors"))
+(dbg/defdebug debug "degree9:enterprise:cors")
 
 (defn cors-service [app path cors service & [hooks]]
   (let [app (.use app path cors service)]

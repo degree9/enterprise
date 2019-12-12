@@ -4,7 +4,7 @@
             [degree9.env :as env]
             [degree9.hooks :as hooks]))
 
-(def ^:private debug (dbg/debug "degree9:enterprise:multi-tenant"))
+(dbg/defdebug debug "degree9:enterprise:multi-tenant")
 
 (defn current-tenant [field]
   (fn [hook]

@@ -7,7 +7,7 @@
    [meta.promise :as prom])
   (:require-macros degree9.auth))
 
-(def ^:private debug (dbg "degree9:enterprise:auth"))
+(dbg/defdebug debug "degree9:enterprise:auth")
 
 ;; Authentication State ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (def authentication (j/cell nil))

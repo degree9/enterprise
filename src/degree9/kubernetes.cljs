@@ -13,7 +13,7 @@
    [degree9.kubernetes.secret :as secret]
    [degree9.kubernetes.service :as service]))
 
-(def ^:private debug (dbg "degree9:enterprise:kubernetes"))
+(dbg/defdebug debug "degree9:enterprise:kubernetes")
 
 ;; Kubernetes API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn kubeconfig
