@@ -1,7 +1,7 @@
 (ns degree9.kubernetes.service
   (:require [degree9.debug :as dbg]))
 
-(def ^:private debug (dbg "degree9:enterprise:kubernetes:service"))
+(dbg/defdebug debug "degree9:enterprise:kubernetes:service")
 ;; Kubernetes Service ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn- list-service
   "List all Kubernetes services from a Kubernetes namespace."

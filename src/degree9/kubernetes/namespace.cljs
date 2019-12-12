@@ -2,7 +2,7 @@
   (:refer-clojure :exclude [namespace])
   (:require [degree9.debug :as dbg]))
 
-(def ^:private debug (dbg "degree9:enterprise:kubernetes:namespace"))
+(dbg/defdebug debug "degree9:enterprise:kubernetes:namespace")
 
 ;; Kubernetes Namespace ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn- list-namespace

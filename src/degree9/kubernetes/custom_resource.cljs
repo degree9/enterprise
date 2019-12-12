@@ -1,7 +1,7 @@
 (ns degree9.kubernetes.custom-resource
   (:require [degree9.debug :as dbg]))
 
-(def ^:private debug (dbg "degree9:enterprise:kubernetes:custom-resource"))
+(dbg/defdebug debug "degree9:enterprise:kubernetes:custom-resource")
 ;; Kubernetes Cluster Custom Resource ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn- list-clustercustomresource
   "List a Kubernetes custom resource."

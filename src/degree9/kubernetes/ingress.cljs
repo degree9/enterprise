@@ -1,7 +1,7 @@
 (ns degree9.kubernetes.ingress
   (:require [degree9.debug :as dbg]))
 
-(def ^:private debug (dbg "degree9:enterprise:kubernetes:ingress"))
+(dbg/defdebug debug "degree9:enterprise:kubernetes:ingress")
 ;; Kubernetes Ingress ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn- list-ingress
   "List all Kubernetes ingress from a Kubernetes namespace."

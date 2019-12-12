@@ -1,7 +1,7 @@
 (ns degree9.kubernetes.deployment
   (:require [degree9.debug :as dbg]))
 
-(def ^:private debug (dbg "degree9:enterprise:kubernetes:deployment"))
+(dbg/defdebug debug "degree9:enterprise:kubernetes:deployment")
 
 ;; Kubernetes Deployment ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn- list-deployment

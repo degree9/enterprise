@@ -1,7 +1,7 @@
 (ns degree9.kubernetes.secret
   (:require [degree9.debug :as dbg]))
 
-(def ^:private debug (dbg "degree9:enterprise:kubernetes:secret"))
+(dbg/defdebug debug "degree9:enterprise:kubernetes:secret")
 
 ;; Kubernetes Secrets ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn- list-secret
