@@ -1,35 +1,51 @@
 (ns degree9.routing
-  (:require [hoplon.history :as history]
+  (:require [goog.Uri :as uri]
+            [goog.Uri.QueryData :as qd]
             [javelin.core :as j]
-            [clojure.string :as string]
-            [clojure.spec.alpha :as spec])
+            [hoplon.history :as h]
+            [degree9.pathway :as pw])
   (:require-macros degree9.routing))
 
-(def route (history/history-cell))
+;; History State ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(def history (h/history-cell))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn- split-route [route]
-  (string/split route "/"))
+;; URI State ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(j/defc= uri (uri/parse history) #(reset! history (.toString %)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn- join-route [parent route]
-  (string/join "/" [parent route]))
+;; URI Path State ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(j/defc= path (.getPath uri) #(reset! uri (.setPath @uri %)))
 
-(defn local-route
-  ([] (local-route route))
-  ([route] (local-route route (j/cell nil)))
-  ([route local] (j/cell= (or local route) (partial reset! local))))
+(defn path! [p]
+  (reset! path p))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn spec-route
-  ([spec] (spec-route route spec))
-  ([route spec] (j/cell= (when (spec/valid? spec (split-route route)) route))))
+;; URI Query State ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(j/defc= query (.getQueryData uri) #(reset! uri (.setQueryData @uri (qd/createFromMap (clj->js %)))))
+
+(defn query-cell [key & [default]]
+  (j/cell= (.get query (name key) default) #(reset! query (.set @query (name key) %))))
+
+(defn query! [q]
+  (reset! query q))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; App Route State ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn- path->kw [path]
+  (mapv keyword (remove empty? (clojure.string/split path "/"))))
+
+(defn- kw->path [& korks]
+  (clojure.string/join "/" (mapv name (flatten korks))))
+
+(j/defc= route (path->kw path) #(reset! path (kw->path %)))
 
 (defn route=
-  ([r] (route= route r))
-  ([route r] (j/cell= (= route r))))
+  ([router] (route= router nil))
+  ([router default] (j/cell= (pw/match-route router path default))))
 
-(defn route!
-  ([path] (route! route path))
-  ([route path] (reset! route path)))
-
-(defn sub-route!
-  ([path] (sub-route! route path))
-  ([route path] (swap! route #(join-route % path))))
+(defn route! [path & [query]]
+  (j/dosync
+    (path! path)
+    (query! query)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
