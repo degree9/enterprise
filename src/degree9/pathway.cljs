@@ -27,14 +27,6 @@
   (-match-pathway [router pattern]
     (debug "RegExp" router pattern)
     (re-matches router pattern))
-  PersistentHashMap
-  (-match-pathway [router pattern]
-    (debug "PersistentHashMap" router pattern)
-    (reduce-kv (fn [_ r h] (when (-match-pathway r pattern) h)) nil router))
-  PersistentArrayMap
-  (-match-pathway [router pattern]
-    (debug "PersistentArrayMap" router pattern)
-    (reduce-kv (fn [_ r h] (when (-match-pathway r pattern) h)) nil router))
   PersistentHashSet
   (-match-pathway [router pattern]
     (debug "PersistentHashSet" router pattern)
@@ -42,7 +34,15 @@
   PersistentVector
   (-match-pathway [router pattern]
     (debug "PersistentVector" router pattern)
-    (reduce (fn [_ [r h]] (when (-match-pathway r pattern) h)) nil router)))
+    (reduce (fn [i [r h]] (if (-match-pathway r pattern) h i)) nil router))
+  PersistentHashMap
+  (-match-pathway [router pattern]
+    (debug "PersistentHashMap" router pattern)
+    (reduce-kv (fn [i r h] (if (-match-pathway r pattern) h i)) nil router))
+  PersistentArrayMap
+  (-match-pathway [router pattern]
+    (debug "PersistentArrayMap" router pattern)
+    (reduce-kv (fn [i r h] (if (-match-pathway r pattern) h i)) nil router)))
 
 (defn match-route
   ([router pattern] (match-route router pattern nil))
