@@ -20,6 +20,7 @@
   (next))
 
 (defn feathers-headers [app]
+  (debug "Initializing Headers API.")
   (doto app (.use fs-headers)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -1,5 +1,8 @@
 (ns degree9.state)
 
+(defmacro defstate [name default]
+  `(def ^:dynamic ~name (javelin.core/cell ~default)))
+
 ;; State Debug ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defmacro debug-state []
   `(javelin.core/cell=
