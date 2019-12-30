@@ -3,5 +3,8 @@
 
 (def embedded hello/embedded)
 
-(defn edit-url [id]
+(defn get-edit-url [id]
   (.getEditUrl embedded id))
+
+(defn get-sign-url [id]
+  (.getSignUrl embedded id))

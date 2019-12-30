@@ -44,8 +44,10 @@
   ([router] (route= router nil))
   ([router default] (j/cell= (pw/match-route router path default))))
 
-(defn route! [path & [query]]
-  (j/dosync
-    (path! path)
-    (query! query)))
+(defn route!
+  ([path] (route! path {}))
+  ([path query]
+   (j/dosync
+     (path! path)
+     (query! query))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
