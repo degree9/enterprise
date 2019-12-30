@@ -20,8 +20,7 @@
 (spec/def ::paths
   (spec/or
     :ordered   ::ordered
-    :unordered ::unordered
-    :path      ::path))
+    :unordered ::unordered))
 
 (spec/def ::handler
   (spec/or
