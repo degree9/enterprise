@@ -9,23 +9,23 @@
 (defn list-signature []
   (.list signature))
 
-(defn send-signature [opts]
-  (.send signature (clj->js opts)))
+(defn send-signature [id & [opts]]
+  (.send signature id (clj->js opts)))
 
-(defn send-template [opts]
-  (.sendWithTemplate signature id))
+(defn send-template [id & [opts]]
+  (.sendWithTemplate signature id (clj->js opts)))
 
 (defn send-reminder [id & [opts]]
   (.remind signature id (clj->js opts)))
 
 (defn update-signature [id & [opts]]
-  (.update signature id))
+  (.update signature id (clj->js opts)))
 
 (defn cancel-incomplete-signature [id & [opts]]
-  (.cancel signature id))
+  (.cancel signature id (clj->js opts)))
 
 (defn remove-signature-access [id & [opts]]
-  (.remove signature id))
+  (.remove signature id (clj->js opts)))
 
 (defn get-files [id]
   (.files signature id))
@@ -37,7 +37,7 @@
   (.createEmbeddedWithTemplate signature id (cljs->js opts)))
 
 (defn release-hold [id & [opts]]
-  (.releaseHold signature id))
+  (.releaseHold signature id (clj->js opts)))
 
 (defn download [id & [opts]]
   (.download signature id (clj->js opts)))
