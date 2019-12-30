@@ -6,7 +6,7 @@
 (defn create-embedded-draft [opts]
   (.createEmbeddedDraft template (clj->js opts)))
 
-(defn list-template []
+(defn list-templates []
   (.list template))
 
 (defn get-template [id]
