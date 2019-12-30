@@ -11,3 +11,12 @@
 
 (defn get-template [id]
   (.get template id))
+
+(defn delete-template [id]
+  (.delete template id))
+
+(defn get-template-files [id]
+  (.files template id))
+
+(defn update-template-files [id]
+  (.update template id))

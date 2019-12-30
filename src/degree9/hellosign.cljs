@@ -2,8 +2,21 @@
   (:require [goog.object :as obj]
             [degree9.multipart-form :as mp]))
 
+;; HelloSign Signature Request ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn hellosign-service [& opts]
+;; HelloSign Signature Request ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; HelloSign Signature Request ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn signature-request [& opts]
+  (reify Object
+    (get [this id params]
+      (sig/get-embedded-request id))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; HelloSign Callback ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn hellosign-callback [& opts]
   (reify Object
     (create [this data params]
       (js/Promise. (fn [resolve reject] (resolve "Hello API Event Received"))))))
@@ -17,5 +30,8 @@
           hook)
         hook))))
 
-(defn hellosign-callback [app]
-  (mp/multipart-none app "/hellosign/callback" (hellosign-service) {:before {:create [(hellosign-json)]}}))
+(defn callback [app]
+  (mp/multipart-none app "/hellosign/callback"
+    (hellosign-callback)
+    {:before {:create [(hellosign-json)]}}))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
