@@ -39,6 +39,9 @@
 (defn hook-get [hook index]
   (js->clj (obj/get hook index)))
 
+(defn app [hook]
+  (hook-get hook "app"))
+
 (defn method [hook]
   (hook-get hook "method"))
 
@@ -75,4 +78,18 @@
   (fn [hook]
     (doto hook
       (params! (merge (params hook) data)))))
+
+(defn default-data
+  "Merges the `default` hashmap with the `request.data`."
+  [default]
+  (fn [hook]
+    (doto hook
+      (data! (merge default (data hook))))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Common Request Hooks ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn populate
+  "Populates the entity properties with queries to other collections."
+  [props]
+  (merge-params {:query {"$populate" props}}))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
