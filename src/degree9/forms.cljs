@@ -45,7 +45,7 @@
     (grid/cell
       (form/label label)
       (form/controls
-        (form/select
+        (form/select data
           (map h/option options))))))
 
 (defmethod form! :checkbox [{:keys [label options] :as data}]
