@@ -1,23 +1,32 @@
 (ns degree9.hubspot
   (:require [goog.object :as obj]
             [degree9.env :as env]
-            [degree9.hubspot.companies]
-            [degree9.hubspot.contacts]))
+            ["@hubspot/api-client" :as hs]))
+
+;; Hubspot  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn hubspot [opts]
+  (let [client (obj/get hs "Client")]
+    (client. (clj->js opts))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Hubspot Companies ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn companies [& [opts]]
-  (let [conf (merge {:key (env/get "HUBSPOT_API_KEY")} opts)
-        hubspot nil]
+  (let [conf (merge {:apiKey (env/get "HUBSPOT_API_KEY")} opts)
+        client (hubspot conf)
+        api (.. client -crm -companies -basicApi)]
     (reify Object
+      (find [this & [params]]
+        (.getPage api))
       (get [this id & [params]])
         ;(tpl/get-template hello id))
-      (create [this data & [params]]))))
+      (create [this data & [params]]
+        (.create api data)))))
         ;(tpl/create-embedded-draft hello data)))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Hubspot Contacts ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn contacts [& [opts]]
-  (let [conf (merge {:key (env/get "HUBSPOT_API_KEY")} opts)
+  (let [conf (merge {:apiKey (env/get "HUBSPOT_API_KEY")} opts)
         hubspot nil]
     (reify Object
       (get [this id & [params]])
@@ -28,7 +37,7 @@
 
 ;; Hubspot Deals ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn deals [& [opts]]
-  (let [conf (merge {:key (env/get "HUBSPOT_API_KEY")} opts)
+  (let [conf (merge {:apiKey (env/get "HUBSPOT_API_KEY")} opts)
         hubspot nil]
     (reify Object
       (get [this id & [params]])
@@ -39,7 +48,7 @@
 
 ;; Hubspot Line Items ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn lineitem [& [opts]]
-  (let [conf (merge {:key (env/get "HUBSPOT_API_KEY")} opts)
+  (let [conf (merge {:apiKey (env/get "HUBSPOT_API_KEY")} opts)
         hubspot nil]
     (reify Object
       (get [this id & [params]])
@@ -50,7 +59,7 @@
 
 ;; Hubspot Products ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn products [& [opts]]
-  (let [conf (merge {:key (env/get "HUBSPOT_API_KEY")} opts)
+  (let [conf (merge {:apiKey (env/get "HUBSPOT_API_KEY")} opts)
         hubspot nil]
     (reify Object
       (get [this id & [params]])
@@ -61,7 +70,7 @@
 
 ;; Hubspot Tickets ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn tickets [& [opts]]
-  (let [conf (merge {:key (env/get "HUBSPOT_API_KEY")} opts)
+  (let [conf (merge {:apiKey (env/get "HUBSPOT_API_KEY")} opts)
         hubspot nil]
     (reify Object
       (get [this id & [params]])
@@ -72,7 +81,7 @@
 
 ;; Hubspot Quotes ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn quotes [& [opts]]
-  (let [conf (merge {:key (env/get "HUBSPOT_API_KEY")} opts)
+  (let [conf (merge {:apiKey (env/get "HUBSPOT_API_KEY")} opts)
         hubspot nil]
     (reify Object
       (get [this id & [params]])
