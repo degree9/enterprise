@@ -58,28 +58,4 @@
     (.then k8s-response)
     (.catch k8s-error)))
 
-(defn deployment [& [opts]]
-  (let [api (:api opts)])
-  (debug "Initializing all Kubernetes deployments from namespace" api
-    (reify
-      Object
-      (find [this params]
-        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (list-deployment api namespace)))
-      (get [this id params]
-        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (read-deployment api id namespace)))
-      (create [this data & [params]]
-        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (create-deployment api data namespace)))
-      (update [this id data params]
-        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (replace-deployment api id namespace data)))
-      (patch [this id data params]
-        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (patch-deployment api id namespace data)))
-      (remove [this id params]
-        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (delete-deployment api id namespace))))))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

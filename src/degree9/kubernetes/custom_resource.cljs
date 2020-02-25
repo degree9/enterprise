@@ -56,33 +56,6 @@
     (.deleteClusterCustomObject group version plural id opts)
     (.then k8s-response)
     (.catch k8s-error)))
-
-(defn cluster-custom-resource [& [opts]]
-  (let [api        (:api opts)
-        kind       (:kind opts)
-        group      (:group opts)
-        apiversion (:apiVersion opts "v1")
-        plural     (:plural opts (s/lower-case (str kind "s")))]
-    (debug "Initializing cluster custom resource:" api kind group apiversion plural)
-    (reify
-      Object
-      (setup [this app]
-        (obj/set this "kind" kind)
-        (obj/set this "group" group)
-        (obj/set this "apiVersion" apiversion)
-        (obj/set this "plural" plural))
-      (find [this params]
-        (list-clustercustomresource api group apiversion plural))
-      (get [this id params]
-        (get-clustercustomresource api group apiversion plural id))
-      (create [this data params]
-        (create-clustercustomresource api group apiversion plural data))
-      (update [this id data params]
-        (replace-clustercustomresource api group apiversion plural id data))
-      (patch [this id data params]
-        (patch-clustercustomresource api group apiversion plural id data))
-      (remove [this id params]
-        (delete-clustercustomresource api group apiversion plural id (obj/get params "query"))))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Kubernetes Namespaced Custom Resource ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -139,31 +112,4 @@
     (.deleteNamespacedCustomObject group version plural id opts)
     (.then k8s-response)
     (.catch k8s-error)))
-
-(defn namespaced-custom-resource [& [opts]]
-  (let [api        (:api opts)
-        kind       (:kind opts)
-        group      (:group opts)
-        apiversion (:apiVersion opts "v1")
-        plural     (:plural opts (s/lower-case (str kind "s")))]
-    (debug "Initializing kubernetes custom resource" api kind group api version plural)
-    (reify
-      Object
-      (setup [this app]
-        (obj/set this "kind" kind)
-        (obj/set this "group" group)
-        (obj/set this "apiVersion" apiversion)
-        (obj/set this "plural" plural))
-      (find [this params]
-        (list-namespacedcustomresource api group apiversion plural))
-      (get [this id params]
-        (get-namespacedcustomresource api group apiversion plural id))
-      (create [this data params]
-        (create-namespacedcustomresource api group apiversion plural data))
-      (update [this id data params]
-        (replace-namespacedcustomresource api group apiversion plural id data))
-      (patch [this id data params]
-        (patch-namespacedcustomresource api group apiversion plural id data))
-      (remove [this id params]
-        (delete-namespacedcustomresource api group apiversion plural id (obj/get params "query"))))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

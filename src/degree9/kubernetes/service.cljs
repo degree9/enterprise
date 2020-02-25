@@ -56,28 +56,4 @@
     (.deleteNamespacedService id namespace)
     (.then k8s-response)
     (.catch k8s-error)))
-
-(defn service [& [opts]]
-  (let [api (:api opts)])
-  (debug "Initializing all Kubernetes services from Kubernetes namespace" api
-    (reify
-      Object
-      (find [this params]
-        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (list-service api namespace)))
-      (get [this id & [params]]
-        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (read-service api id namespace)))
-      (create [this data & [params]]
-        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (create-service api namespace data)))
-      (update [this id data params]
-        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (replace-service api id namespace data)))
-      (patch [this id data params]
-        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (patch-service api id namespace data)))
-      (remove [this id params]
-        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (delete-service api id namespace))))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

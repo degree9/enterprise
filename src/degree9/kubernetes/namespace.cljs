@@ -58,22 +58,4 @@
     (.patchNamespace id data)
     (.then k8s-response)
     (.catch k8s-error)))
-
-(defn namespace [& [opts]]
-  (let [api (:api opts)])
-  (debug "Initializing kubernetes namespace" api id
-    (reify
-      Object
-      (find [this params]
-        (list-namespace api))
-      (get [this id params]
-        (read-namespace api id))
-      (create [this data params]
-        (create-namespace api data))
-      (update [this id data params]
-        (replace-namespace api id data))
-      (patch [this id data params]
-        (patch-namespace api id data))
-      (remove [this id params]
-        (delete-namespace api id)))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

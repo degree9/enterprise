@@ -57,28 +57,4 @@
     (.deleteNamespacedSecret id namespace)
     (.then k8s-response)
     (.catch k8s-error)))
-
-(defn secret [& [opts]]
-  (let [api (:api opts)])
-  (debug "Initializing kubernetes secret from namespace" api
-    (reify
-      Object
-      (find [this params]
-        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (list-secret api namespace)))
-      (get [this id params]
-        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (read-secret api id namespace)))
-      (create [this data & [params]]
-        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (create-secret api data namespace)))
-      (update [this id data params]
-        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (replace-secret api id namespace data)))
-      (patch [this id data params]
-        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (patch-secret api id namespace data)))
-      (remove [this id params]
-        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (delete-secret api id namespace))))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
