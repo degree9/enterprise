@@ -111,17 +111,29 @@
         (obj/set this "apiVersion" apiversion)
         (obj/set this "plural" plural))
       (find [this params]
-        (crd/list-clustercustomresource api group apiversion plural))
+        (-> (crd/list-clustercustomresource api group apiversion plural)
+          (.then k8s-response)
+          (.catch k8s-error)))
       (get [this id params]
-        (crd/get-clustercustomresource api group apiversion plural id))
+        (-> (crd/get-clustercustomresource api group apiversion plural id)
+          (.then k8s-response)
+          (.catch k8s-error)))
       (create [this data params]
-        (crd/create-clustercustomresource api group apiversion plural data))
+        (-> (crd/create-clustercustomresource api group apiversion plural data)
+          (.then k8s-response)
+          (.catch k8s-error)))
       (update [this id data params]
-        (crd/replace-clustercustomresource api group apiversion plural id data))
+        (-> (crd/replace-clustercustomresource api group apiversion plural id data)
+          (.then k8s-response)
+          (.catch k8s-error)))
       (patch [this id data params]
-        (crd/patch-clustercustomresource api group apiversion plural id data))
+        (-> (crd/patch-clustercustomresource api group apiversion plural id data)
+          (.then k8s-response)
+          (.catch k8s-error)))
       (remove [this id params]
-        (crd/delete-clustercustomresource api group apiversion plural id (obj/get params "query"))))))
+        (-> (crd/delete-clustercustomresource api group apiversion plural id (obj/get params "query"))
+          (.then k8s-response)
+          (.catch k8s-error))))))
 
 (defn namespaced-custom-resource [& [opts]]
   (let [api        (:api opts)

@@ -7,55 +7,37 @@
   "List a Kubernetes custom resource."
   [api group version plural]
   (debug "Listing kubernetes custom resource" api group version plural)
-  (-> api
-    (.listClusterCustomObject group version plural)
-    (.then k8s-response)
-    (.catch k8s-error)))
+  (.listClusterCustomObject api group version plural))
 
 (defn- get-clustercustomresource
   "Get a Kubernetes custom resource."
   [api group version plural id]
   (debug "Getting kubernetes custom resource" api group version plural id)
-  (-> api
-    (.getClusterCustomObject group version plural id)
-    (.then k8s-response)
-    (.catch k8s-error)))
+  (.getClusterCustomObject api group version plural id))
 
 (defn- create-clustercustomresource
   "Create a Kubernetes custom resource."
   [api group version plural body]
   (debug "Creating kubernetes custom resource" api group version plural body)
-  (-> api
-    (.createClusterCustomObject group version plural (clj->js body))
-    (.then k8s-response)
-    (.catch k8s-error)))
+  (.createClusterCustomObject api group version plural (clj->js body)))
 
 (defn- replace-clustercustomresource
   "Replace a Kubernetes custom resource."
   [api group version plural id data]
   (debug "Replacing kubernetes custom resource" api group version plural id data)
-  (-> api
-    (.replaceClusterCustomObject group version plural id (clj->js data))
-    (.then k8s-response)
-    (.catch k8s-error)))
+  (.replaceClusterCustomObject api group version plural id (clj->js data)))
 
 (defn- patch-clustercustomresource
   "Patch a Kubernetes custom resource."
   [api group version plural id data]
   (debug "Patching kubernetes custom resource" api group version plural id data)
-  (-> api
-    (.patchClusterCustomObject group version plural id (clj->js data))
-    (.then k8s-response)
-    (.catch k8s-error)))
+  (.patchClusterCustomObject api group version plural id (clj->js data)))
 
 (defn- delete-clustercustomresource
   "Delete a Kubernetes custom resource."
   [api group version plural id opts]
   (debug "Deleting kubernetes custom resource" api group version plural id opts)
-  (-> api
-    (.deleteClusterCustomObject group version plural id opts)
-    (.then k8s-response)
-    (.catch k8s-error)))
+  (.deleteClusterCustomObject api group version plural id opts))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Kubernetes Namespaced Custom Resource ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -63,53 +45,35 @@
   "List a Kubernetes custom resource."
   [api group version plural]
   (debug "Listing custom resource" api group version plural)
-  (-> api
-    (.listNamespacedCustomObject group version plural)
-    (.then k8s-response)
-    (.catch k8s-error)))
+  (.listNamespacedCustomObject api group version plural))
 
 (defn- get-namespacedcustomresource
   "Get a Kubernetes custom resource."
   [api group version plural id]
   (debug "Getting kubernetes custom resource" api group version plural id)
-  (-> api
-    (.getNamespacedCustomObject group version plural id)
-    (.then k8s-response)
-    (.catch k8s-error)))
+  (.getNamespacedCustomObject api group version plural id))
 
 (defn- create-namespacedcustomresource
   "Create a Kubernetes custom resource."
   [api group version plural body]
   (debug "Creating kubernetes custom resource" api group version plural body)
-  (-> api
-    (.createNamespacedCustomObject group version plural (clj->js body))
-    (.then k8s-response)
-    (.catch k8s-error)))
+  (.createNamespacedCustomObject api group version plural (clj->js body)))
 
 (defn- replace-namespacedcustomresource
   "Replace a Kubernetes custom resource."
   [api group version plural id data]
   (debug "Replacing kubernetes custom resource" api group version plural id data)
-  (-> api
-    (.replaceNamespacedCustomObject group version plural id (clj->js data))
-    (.then k8s-response)
-    (.catch k8s-error)))
+  (.replaceNamespacedCustomObject api group version plural id (clj->js data)))
 
 (defn- patch-namespacedcustomresource
   "Patch a Kubernetes custom resource."
   [api group version plural id data]
   (debug "Creating kubernetes namespace" api group version plural id data)
-  (-> api
-    (.patchNamespacedCustomObject group version plural id (clj->js data))
-    (.then k8s-response)
-    (.catch k8s-error)))
+  (.patchNamespacedCustomObject api group version plural id (clj->js data)))
 
 (defn- delete-namespacedcustomresource
   "Delete a Kubernetes custom resource."
   [api group version plural id opts]
   (debug "Deleting kubernetes namespace" api group version plural id opts)
-  (-> api
-    (.deleteNamespacedCustomObject group version plural id opts)
-    (.then k8s-response)
-    (.catch k8s-error)))
+  (.deleteNamespacedCustomObject api group version plural id opts))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
