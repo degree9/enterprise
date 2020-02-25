@@ -150,17 +150,29 @@
         (obj/set this "apiVersion" apiversion)
         (obj/set this "plural" plural))
       (find [this params]
-        (crd/list-namespacedcustomresource api group apiversion plural))
+        (-> (crd/list-namespacedcustomresource api group apiversion plural)
+          (.then k8s-response)
+          (.catch k8s-error)))
       (get [this id params]
-        (crd/get-namespacedcustomresource api group apiversion plural id))
+        (-> (crd/get-namespacedcustomresource api group apiversion plural id)
+          (.then k8s-response)
+          (.catch k8s-error)))
       (create [this data params]
-        (crd/create-namespacedcustomresource api group apiversion plural data))
+        (-> (crd/create-namespacedcustomresource api group apiversion plural data)
+          (.then k8s-response)
+          (.catch k8s-error)))
       (update [this id data params]
-        (crd/replace-namespacedcustomresource api group apiversion plural id data))
+        (-> (crd/replace-namespacedcustomresource api group apiversion plural id data)
+          (.then k8s-response)
+          (.catch k8s-error)))
       (patch [this id data params]
-        (crd/patch-namespacedcustomresource api group apiversion plural id data))
+        (-> (crd/patch-namespacedcustomresource api group apiversion plural id data)
+          (.then k8s-response)
+          (.catch k8s-error)))
       (remove [this id params]
-        (crd/delete-namespacedcustomresource api group apiversion plural id (obj/get params "query"))))))
+        (-> (crd/delete-namespacedcustomresource api group apiversion plural id (obj/get params "query"))
+          (.then k8s-response)
+          (.catch k8s-error))))))
 
 (defn deployment [& [opts]]
   (let [api (:api opts)])
@@ -169,22 +181,34 @@
       Object
       (find [this params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (deployment/list-deployment api namespace)))
+          (-> (deployment/list-deployment api namespace)
+            (.then k8s-response)
+            (.catch k8s-error))))
       (get [this id params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (deployment/read-deployment api id namespace)))
+          (-> (deployment/read-deployment api id namespace)
+            (.then k8s-response)
+            (.catch k8s-error))))
       (create [this data & [params]]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (deployment/create-deployment api data namespace)))
+          (-> (deployment/create-deployment api data namespace)
+            (.then k8s-response)
+            (.catch k8s-error))))
       (update [this id data params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (deployment/replace-deployment api id namespace data)))
+          (-> (deployment/replace-deployment api id namespace data)
+            (.then k8s-response)
+            (.catch k8s-error))))
       (patch [this id data params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (deployment/patch-deployment api id namespace data)))
+          (-> (deployment/patch-deployment api id namespace data)
+            (.then k8s-response)
+            (.catch k8s-error))))
       (remove [this id params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (deployment/delete-deployment api id namespace))))))
+          (-> (deployment/delete-deployment api id namespace)
+            (.then k8s-response)
+            (.catch k8s-error)))))))
 
 (defn ingress [& [opts]]
   (let [api (:api opts)])
@@ -193,22 +217,34 @@
       Object
       (find [this params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (ingress/list-ingress api namespace)))
+          (-> (ingress/list-ingress api namespace)
+            (.then k8s-response)
+            (.catch k8s-error))))
       (get [this id & [params]]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (ingress/read-ingress api id namespace)))
+          (-> (ingress/read-ingress api id namespace)
+            (.then k8s-response)
+            (.catch k8s-error))))
       (create [this data & [params]]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (ingress/create-ingress api namespace data)))
+          (-> (ingress/create-ingress api namespace data)
+            (.then k8s-response)
+            (.catch k8s-error))))
       (update [this id data params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (ingress/replace-ingress api id namespace data)))
+          (-> (ingress/replace-ingress api id namespace data)
+            (.then k8s-response)
+            (.catch k8s-error))))
       (patch [this id data params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (ingress/patch-ingress api id namespace data)))
+          (-> (ingress/patch-ingress api id namespace data)
+            (.then k8s-response)
+            (.catch k8s-error))))
       (remove [this id params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (ingress/delete-ingress api id namespace))))))
+          (-> (ingress/delete-ingress api id namespace)
+            (.then k8s-response)
+            (.catch k8s-error)))))))
 
 (defn namespace [& [opts]]
   (let [api (:api opts)])
@@ -216,17 +252,29 @@
     (reify
       Object
       (find [this params]
-        (namespace/list-namespace api))
+        (-> (namespace/list-namespace api)
+          (.then k8s-response)
+          (.catch k8s-error)))
       (get [this id params]
-        (namespace/read-namespace api id))
+        (-> (namespace/read-namespace api id)
+          (.then k8s-response)
+          (.catch k8s-error)))
       (create [this data params]
-        (namespace/create-namespace api data))
+        (-> (namespace/create-namespace api data)
+          (.then k8s-response)
+          (.catch k8s-error)))
       (update [this id data params]
-        (namespace/replace-namespace api id data))
+        (-> (namespace/replace-namespace api id data)
+          (.then k8s-response)
+          (.catch k8s-error)))
       (patch [this id data params]
-        (namespace/patch-namespace api id data))
+        (-> (namespace/patch-namespace api id data)
+          (.then k8s-response)
+          (.catch k8s-error)))
       (remove [this id params]
-        (namespace/delete-namespace api id)))))
+        (-> (namespace/delete-namespace api id)
+          (.then k8s-response)
+          (.catch k8s-error))))))
 
 (defn secret [& [opts]]
   (let [api (:api opts)])
@@ -235,22 +283,34 @@
       Object
       (find [this params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (secret/list-secret api namespace)))
+          (-> (secret/list-secret api namespace)
+            (.then k8s-response)
+            (.catch k8s-error))))
       (get [this id params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (secret/read-secret api id namespace)))
+          (-> (secret/read-secret api id namespace)
+            (.then k8s-response)
+            (.catch k8s-error))))
       (create [this data & [params]]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (secret/create-secret api data namespace)))
+          (-> (secret/create-secret api data namespace)
+            (.then k8s-response)
+            (.catch k8s-error))))
       (update [this id data params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (secret/replace-secret api id namespace data)))
+          (-> (secret/replace-secret api id namespace data)
+            (.then k8s-response)
+            (.catch k8s-error))))
       (patch [this id data params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (secret/patch-secret api id namespace data)))
+          (-> (secret/patch-secret api id namespace data)
+            (.then k8s-response)
+            (.catch k8s-error))))
       (remove [this id params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (secret/delete-secret api id namespace))))))
+          (-> (secret/delete-secret api id namespace)
+            (.then k8s-response)
+            (.catch k8s-error)))))))
 
 (defn service [& [opts]]
   (let [api (:api opts)])
@@ -259,19 +319,31 @@
       Object
       (find [this params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (service/list-service api namespace)))
+          (-> (service/list-service api namespace)
+            (.then k8s-response)
+            (.catch k8s-error))))
       (get [this id & [params]]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (service/read-service api id namespace)))
+          (-> (service/read-service api id namespace)
+            (.then k8s-response)
+            (.catch k8s-error))))
       (create [this data & [params]]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (service/create-service api namespace data)))
+          (-> (service/create-service api namespace data)
+            (.then k8s-response)
+            (.catch k8s-error))))
       (update [this id data params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (service/replace-service api id namespace data)))
+          (-> (service/replace-service api id namespace data)
+            (.then k8s-response)
+            (.catch k8s-error))))
       (patch [this id data params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (service/patch-service api id namespace data)))
+          (-> (service/patch-service api id namespace data)
+            (.then k8s-response)
+            (.catch k8s-error))))
       (remove [this id params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (service/delete-service api id namespace))))))
+          (-> (service/delete-service api id namespace)
+            (.then k8s-response)
+            (.catch k8s-error)))))))

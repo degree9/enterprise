@@ -9,53 +9,35 @@
   "List a Kubernetes namespace."
   [api]
   (debug "Listing kubernetes namespace" api)
-  (-> api
-    (.listNamespace)
-    (.then k8s-response)
-    (.catch k8s-error)))
+  (.listNamespace api))
 
 (defn- create-namespace
   "Create a Kubernetes namespace."
   [api data]
   (debug "Creating kubernetes namespace" api data)
-  (-> api
-    (.createNamespace data)
-    (.then k8s-response)
-    (.catch k8s-error)))
+  (.createNamespace api data))
 
 (defn- read-namespace
   "Read a Kubernetes namespace."
   [api name]
   (debug "Reading kubernetes namespace" api name)
-  (-> api
-    (.readNamespace name)
-    (.then k8s-response)
-    (.catch k8s-error)))
+  (.readNamespace api name))
 
 (defn- delete-namespace
   "Delete a Kubernetes namespace."
   [api id]
   (debug "Deleting kubernetes namespace" api id)
-  (-> api
-    (.deleteNamespace id)
-    (.then k8s-response)
-    (.catch k8s-error)))
+  (.deleteNamespace api id))
 
 (defn- replace-namespace
   "Replace a Kubernetes namespace."
   [api id data]
   (debug "Replacing kubernetes namespace" api id data)
-  (-> api
-    (.replaceNamespace id data)
-    (.then k8s-response)
-    (.catch k8s-error)))
+  (.replaceNamespace api id data))
 
 (defn- patch-namespace
   "Patch a Kubernetes namespace."
   [api id data]
   (debug "Patching kubernetes namespace" api id data)
-  (-> api
-    (.patchNamespace id data)
-    (.then k8s-response)
-    (.catch k8s-error)))
+  (.patchNamespace api id data))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
