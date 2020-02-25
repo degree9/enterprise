@@ -92,7 +92,7 @@
     (case code
       404 (error/not-found message data)
       409 (error/conflict message data)
-      500 (error/general message data)
+      500 (error/general-error message data)
       (error/general message data))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
