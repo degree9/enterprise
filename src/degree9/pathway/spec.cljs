@@ -5,7 +5,7 @@
   #(not (empty? %)))
 
 (spec/def ::path
-  (spec/tuple (spec/or :str string? :reg regexp? :key keyword? :set set? :bool boolean?) ::pathway))
+  (spec/tuple (spec/or :str string? :reg regexp? :key keyword? :set set?) ::pathway))
 
 (spec/def ::ordered
   (spec/and vector?
