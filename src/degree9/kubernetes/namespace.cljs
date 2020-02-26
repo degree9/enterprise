@@ -57,7 +57,7 @@
 
 (defn namespace [& [opts]]
   (let [api (:api opts)]
-    (debug "Initializing kubernetes namespace" api id)
+    (debug "Initializing kubernetes namespace" api)
     (reify
       Object
       (find [this params]
