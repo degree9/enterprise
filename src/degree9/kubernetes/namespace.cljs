@@ -56,8 +56,8 @@
     (.catch k8s/k8s-error)))
 
 (defn namespace [& [opts]]
-  (let [api (:api opts)])
-  (debug "Initializing kubernetes namespace" api id
+  (let [api (:api opts)]
+    (debug "Initializing kubernetes namespace" api id)
     (reify
       Object
       (find [this params]
