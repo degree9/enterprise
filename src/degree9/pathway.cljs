@@ -15,6 +15,10 @@
   (-match-pathway [router pattern]
     (debug "nil" router pattern)
     (reduced nil))
+  boolean
+  (-match-pathway [router pattern]
+    (debug "boolean" router pattern)
+    (identity router))
   string
   (-match-pathway [router pattern]
     (debug "string" router pattern)
