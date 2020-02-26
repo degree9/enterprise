@@ -138,7 +138,7 @@
         group      (:group opts)
         apiversion (:apiVersion opts "v1")
         plural     (:plural opts (s/lower-case (str kind "s")))]
-    (debug "Initializing kubernetes custom resource" api kind group api version plural)
+    (debug "Initializing kubernetes custom resource" api kind group api apiversion plural)
     (reify
       Object
       (setup [this app]
