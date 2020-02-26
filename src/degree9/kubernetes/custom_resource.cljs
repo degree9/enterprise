@@ -1,5 +1,7 @@
 (ns degree9.kubernetes.custom-resource
-  (:require [degree9.debug :as dbg]
+  (:require [goog.object :as obj]
+            [clojure.string :as s]
+            [degree9.debug :as dbg]
             [degree9.kubernetes.core :as k8s]))
 
 (dbg/defdebug debug "degree9:enterprise:kubernetes:custom-resource")
