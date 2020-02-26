@@ -37,7 +37,7 @@
 (defn apps-api
   "Initializes Kubernetes AppsV1 API."
   [config]
-  (mkclient config k8s/appsV1Api))
+  (mkclient config k8s/AppsV1Api))
 
 ; (defn watcher
 ;   "A watcher for Kubernetes, implements reconnecting by calling watcher again once stream closes."

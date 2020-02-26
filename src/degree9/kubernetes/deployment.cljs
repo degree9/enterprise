@@ -9,7 +9,9 @@
   "List all Kubernetes deployments from a Kubernetes namespace ."
   [api namespace]
   (debug "Listing all Kubernetes deployments from namespace" api namespace)
-  (-> (.listNamespacedDeployment api namespace)
+  (-> (if namespace
+        (.listNamespacedDeployment api namespace)
+        (.listDeploymentForAllNamespaces api))
     (.then k8s/k8s-response)
     (.catch k8s/k8s-error)))
 
