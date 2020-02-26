@@ -60,20 +60,20 @@
       Object
       (find [this params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (ingress/list-ingress api namespace)))
+          (list-ingress api namespace)))
       (get [this id & [params]]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (ingress/read-ingress api id namespace)))
+          (read-ingress api id namespace)))
       (create [this data & [params]]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (ingress/create-ingress api namespace data)))
+          (create-ingress api namespace data)))
       (update [this id data params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (ingress/replace-ingress api id namespace data)))
+          (replace-ingress api id namespace data)))
       (patch [this id data params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (ingress/patch-ingress api id namespace data)))
+          (patch-ingress api id namespace data)))
       (remove [this id params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (ingress/delete-ingress api id namespace))))))
+          (delete-ingress api id namespace))))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
