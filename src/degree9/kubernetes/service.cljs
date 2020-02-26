@@ -61,20 +61,20 @@
       Object
       (find [this params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (service/list-service api namespace)))
+          (list-service api namespace)))
       (get [this id & [params]]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (service/read-service api id namespace)))
+          (read-service api id namespace)))
       (create [this data & [params]]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (service/create-service api namespace data)))
+          (create-service api namespace data)))
       (update [this id data params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (service/replace-service api id namespace data)))
+          (replace-service api id namespace data)))
       (patch [this id data params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (service/patch-service api id namespace data)))
+          (patch-service api id namespace data)))
       (remove [this id params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (service/delete-service api id namespace))))))
+          (delete-service api id namespace))))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

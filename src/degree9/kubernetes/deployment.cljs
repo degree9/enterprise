@@ -60,20 +60,20 @@
       Object
       (find [this params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (deployment/list-deployment api namespace)))
+          (list-deployment api namespace)))
       (get [this id params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (deployment/read-deployment api id namespace)))
+          (read-deployment api id namespace)))
       (create [this data & [params]]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (deployment/create-deployment api data namespace)))
+          (create-deployment api data namespace)))
       (update [this id data params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (deployment/replace-deployment api id namespace data)))
+          (replace-deployment api id namespace data)))
       (patch [this id data params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (deployment/patch-deployment api id namespace data)))
+          (patch-deployment api id namespace data)))
       (remove [this id params]
         (let [namespace (get-in (js->clj params) ["query" "namespace"])]
-          (deployment/delete-deployment api id namespace))))))
+          (delete-deployment api id namespace))))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

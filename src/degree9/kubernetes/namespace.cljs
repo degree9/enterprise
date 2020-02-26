@@ -61,15 +61,15 @@
     (reify
       Object
       (find [this params]
-        (namespace/list-namespace api))
+        (list-namespace api))
       (get [this id params]
-        (namespace/read-namespace api id))
+        (read-namespace api id))
       (create [this data params]
-        (namespace/create-namespace api data))
+        (create-namespace api data))
       (update [this id data params]
-        (namespace/replace-namespace api id data))
+        (replace-namespace api id data))
       (patch [this id data params]
-        (namespace/patch-namespace api id data))
+        (patch-namespace api id data))
       (remove [this id params]
-        (namespace/delete-namespace api id)))))
+        (delete-namespace api id)))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
