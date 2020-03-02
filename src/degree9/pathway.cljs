@@ -14,7 +14,8 @@
   nil
   (-match-pathway [router pattern]
     (debug "nil" router pattern)
-    (reduced nil))
+    (if (= router pattern) true
+      (reduced nil)))
   string
   (-match-pathway [router pattern]
     (debug "string" router pattern)
@@ -53,4 +54,6 @@
      (debug "MATCH-ROUTE" router patterns)
      (if (empty? patterns) default
        (let [handler (reduce -match-pathway router patterns)]
-         (when (or (string? handler) (keyword? handler)) handler))))))
+         (if (or (string? handler) (keyword? handler)) handler
+           (when-let [default (get handler nil)]
+             default)))))))
