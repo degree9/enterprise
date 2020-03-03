@@ -29,6 +29,8 @@
   (let [conf (merge {:apiKey (env/get "HUBSPOT_API_KEY")} opts)
         hubspot nil]
     (reify Object
+      (find [this & [params]]
+        (.getPage api))
       (get [this id & [params]])
         ;(tpl/get-template hello id))
       (create [this data & [params]]))))
