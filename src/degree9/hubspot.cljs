@@ -27,7 +27,8 @@
 ;; Hubspot Contacts ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn contacts [& [opts]]
   (let [conf (merge {:apiKey (env/get "HUBSPOT_API_KEY")} opts)
-        hubspot nil]
+        client (hubspot conf)
+        api (.. client -crm -contacts -basicApi)]
     (reify Object
       (find [this & [params]]
         (.getPage api))
