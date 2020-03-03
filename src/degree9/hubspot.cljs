@@ -16,7 +16,8 @@
         api (.. client -crm -companies -basicApi)]
     (reify Object
       (find [this & [params]]
-        (.getPage api))
+        (let [{:strs [limit]} (js->clj (obj/get params "query"))]
+          (.getPage api limit)))
       (get [this id & [params]])
         ;(tpl/get-template hello id))
       (create [this data & [params]]
