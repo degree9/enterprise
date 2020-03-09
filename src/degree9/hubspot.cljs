@@ -32,8 +32,8 @@
     (reify Object
       (find [this & [params]]
         (.getPage api))
-      (get [this id & [params]])
-        ;(tpl/get-template hello id))
+      (get [this id & [params]]
+        (.getById api id))
       (create [this data & [params]]))))
         ;(tpl/create-embedded-draft hello data)))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
