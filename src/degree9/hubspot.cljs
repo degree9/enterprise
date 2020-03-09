@@ -16,7 +16,8 @@
         api (.. client -crm -companies -basicApi)]
     (reify Object
       (find [this & [params]]
-        (.getPage api))
+        (let [{:strs [limit]} (js->clj (obj/get params "query"))]
+          (.getPage api limit)))
       (get [this id & [params]]
         (.getById api id))
       (create [this data & [params]]
@@ -26,8 +27,11 @@
 ;; Hubspot Contacts ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn contacts [& [opts]]
   (let [conf (merge {:apiKey (env/get "HUBSPOT_API_KEY")} opts)
-        hubspot nil]
+        client (hubspot conf)
+        api (.. client -crm -contacts -basicApi)]
     (reify Object
+      (find [this & [params]]
+        (.getPage api))
       (get [this id & [params]])
         ;(tpl/get-template hello id))
       (create [this data & [params]]))))
