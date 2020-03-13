@@ -18,11 +18,10 @@
       (find [this & [params]]
         (let [{:strs [limit]} (js->clj (obj/get params "query"))]
           (.getPage api limit)))
-      (get [this id & [params]])
-        ;(tpl/get-template hello id))
+      (get [this id & [params]]
+        (.getById api id))
       (create [this data & [params]]
         (.create api data)))))
-        ;(tpl/create-embedded-draft hello data)))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Hubspot Contacts ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -33,8 +32,8 @@
     (reify Object
       (find [this & [params]]
         (.getPage api))
-      (get [this id & [params]])
-        ;(tpl/get-template hello id))
+      (get [this id & [params]]
+        (.getById api id))
       (create [this data & [params]]))))
         ;(tpl/create-embedded-draft hello data)))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
