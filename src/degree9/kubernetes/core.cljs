@@ -23,9 +23,10 @@
   "Converts Kubernetes error response to FeathersJS error object."
   [err]
   (let [{:keys [message data code]} (k8s->clj (k8s-response err))]
-    (case code
-      404 (error/not-found message data)
-      409 (error/conflict message data)
-      500 (error/general-error message data)
-      (error/general-error message data))))
+    (throw
+      (case code
+        404 (error/not-found message data)
+        409 (error/conflict message data)
+        500 (error/general-error message data)
+        (error/general-error message data)))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

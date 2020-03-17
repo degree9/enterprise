@@ -1,7 +1,8 @@
 (ns degree9.client
  (:refer-clojure :exclude [find get update remove])
  (:require
-  #?(:browser [meta.client :as client])
+  #?(:browser [meta.client :as client]
+              [hoplon.feathers :as fs])
   [degree9.debug :as dbg]))
 
 (dbg/defdebug debug "degree9:enterprise:client")
@@ -15,6 +16,10 @@
         (client/with-authentication)))
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+    ;; Client Service State ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    (def service-cell fs/feathers-cell)
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    
     ;; Client Service API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     (def service client/service)
 
