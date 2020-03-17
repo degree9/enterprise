@@ -1,8 +1,8 @@
 (ns degree9.client
  (:refer-clojure :exclude [find get update remove])
  (:require
-  #?(:browser [meta.client :as client]
-              [hoplon.feathers :as fs])
+  #?@(:browser [[meta.client :as client]
+                [hoplon.feathers :as fs]])
   [degree9.debug :as dbg]))
 
 (dbg/defdebug debug "degree9:enterprise:client")
