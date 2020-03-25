@@ -3,15 +3,10 @@
   (:require
    ["@kubernetes/client-node" :as k8s]
    [goog.object :as obj]
+   [clojure.string :as s]
    [feathers.errors :as error]
    [degree9.env :as env]
-   [degree9.debug :as dbg]
-   [degree9.kubernetes.custom-resource :as custom-resource]
-   [degree9.kubernetes.deployment :as deployment]
-   [degree9.kubernetes.ingress :as ingress]
-   [degree9.kubernetes.namespace :as namespace]
-   [degree9.kubernetes.secret :as secret]
-   [degree9.kubernetes.service :as service]))
+   [degree9.debug :as dbg]))
 
 (dbg/defdebug debug "degree9:enterprise:kubernetes")
 
@@ -42,8 +37,12 @@
 (defn apps-api
   "Initializes Kubernetes AppsV1 API."
   [config]
-  (mkclient config k8s/appsV1Api))
+  (mkclient config k8s/AppsV1Api))
 
+(defn net-api
+  "Initializes Kubernetes NetworkingV1 API."
+  [config]
+  (mkclient config k8s/NetworkingV1beta1Api))
 ; (defn watcher
 ;   "A watcher for Kubernetes, implements reconnecting by calling watcher again once stream closes."
 ;   ([path callback]
@@ -71,41 +70,4 @@
 ;         "DELETED"  (deleted obj)
 ;         "MODIFIED" (modified obj)
 ;         (default type obj)))))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; Kubernetes Helpers ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defn- k8s->clj
-  "Converts Kubernetes response to ClojureScript."
-  [k8s]
-  (debug "Converting kubernetes response to cljs" k8s)
-  (js->clj k8s :keywordize-keys true))
-
-(defn- k8s-response [res]
-  (obj/get res "body"))
-
-(defn k8s-error
-  "Converts Kubernetes error response to FeathersJS error object."
-  [err]
-  (let [{:keys [message data code]} (k8s->clj (k8s-response err))]
-    (case code
-      404 (error/not-found message data)
-      409 (error/conflict message data)
-      500 (error/general message data)
-      (error/general message data))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(def cluster-custom-resource custom-resource/cluster-custom-resource)
-
-(def namespaced-custom-resource custom-resource/namespaced-custom-resource)
-
-(def deployment deployment/deployment)
-
-(def ingress ingress/ingress)
-
-(def namespace namespace/namespace)
-
-(def secret secret/secret)
-
-(def service service/service)
