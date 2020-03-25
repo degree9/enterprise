@@ -42,7 +42,7 @@
 (defn net-api
   "Initializes Kubernetes NetworkingV1 API."
   [config]
-  (mkclient config k8s/NetworkingV1Api))
+  (mkclient config k8s/NetworkingV1beta1Api))
 ; (defn watcher
 ;   "A watcher for Kubernetes, implements reconnecting by calling watcher again once stream closes."
 ;   ([path callback]
