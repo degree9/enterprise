@@ -56,7 +56,7 @@
 
 ;; Public Async/Await API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defmacro async
-  "Wraps body into self-invoking JavaScript's async function, returns promise"
+  "Wraps body in native async block."
   [& body]
   `(~'async* ~@body))
 
