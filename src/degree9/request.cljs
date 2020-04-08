@@ -21,11 +21,11 @@
 (defn clj->json [data]
   (.stringify js/JSON (clj->js data)))
 
-(defn post [url & [opts]]
+(defn post [url data & [opts]]
   (request url
     (merge opts
       {:method "POST"
        :headers (merge (:headers opts)
                   {:accept "application/json"
                    :content-type "application/json"})
-       :body (clj->json (:body opts))})))
+       :body (clj->json data)})))
