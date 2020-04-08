@@ -12,7 +12,6 @@
     (debug "Constructing request using %s" req)
     (fetch url req)))
 
-
 (defn get [url & [opts]]
   (request url
     (merge opts
