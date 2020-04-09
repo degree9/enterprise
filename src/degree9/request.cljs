@@ -1,4 +1,5 @@
 (ns degree9.request
+  (:refer-clojure :exclude [get])
   (:require ["node-fetch" :as fetch]
             [degree9.debug :as dbg]))
 
