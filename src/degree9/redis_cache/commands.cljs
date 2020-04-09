@@ -229,80 +229,80 @@
   [client]
   (.cluster-nodes client))
 
-(defn client-kill
-  "Kill the connection of a client"
-  [client & args]
-  (.client-kill client args))
+(defn cluster-replicate
+  "Reconfigure a node as a replica of the specified master node"
+  [client node-id]
+  (.cluster-replicate client node-id))
 
-(defn client-id
-  "Returns the client ID for the current connection"
+(defn cluster-reset
+  "Reset a redis cluster node"
+  [client & args]
+  (.cluster-reset client args))
+
+(defn cluster-save-config
+  "Forces node to save cluster state on disk"
   [client]
-  (.client-id client))
+  (.cluster-save-config client))
 
-(defn client-kill
-  "Kill the connection of a client"
-  [client & args]
-  (.client-kill client args))
+(defn cluster-set-config-epoch
+  "Set the configuration epoch in a new node"
+  [client config-epoch]
+  (.client-id client config-epoch))
 
-(defn client-id
-  "Returns the client ID for the current connection"
+(defn cluster-set-slot
+  "Bind a hash slot to a specific node"
+  [client slot & args]
+  (.cluster-set-slot client slot args))
+
+(defn cluster-slaves
+  "List replica nodes of the specified master node"
+  [client node-id]
+  (.cluster-slaves client node-id))
+
+(defn cluster-replicas
+  "List replica nodes of the specified master node"
+  [client node-id]
+  (.cluster-replicas client node-id))
+
+(defn cluster-slots
+  "Get array of cluster slot to node mappings"
   [client]
-  (.client-id client))
+  (.cluster-slots client))
 
-(defn client-kill
-  "Kill the connection of a client"
-  [client & args]
-  (.client-kill client args))
-
-(defn client-id
-  "Returns the client ID for the current connection"
+(defn command
+  "Get array of redis command details"
   [client]
-  (.client-id client))
+  (.command client))
 
-(defn client-kill
-  "Kill the connection of a client"
-  [client & args]
-  (.client-kill client args))
-
-(defn client-id
-  "Returns the client ID for the current connection"
+(defn command-count
+  "Get total number of redis commands"
   [client]
-  (.client-id client))
+  (.command-count client))
 
-(defn client-kill
-  "Kill the connection of a client"
-  [client & args]
-  (.client-kill client args))
-
-(defn client-id
-  "Returns the client ID for the current connection"
+(defn command-get-keys
+  "Extract keys given a full redis command"
   [client]
-  (.client-id client))
+  (.command-get-keys client))
 
-(defn client-kill
-  "Kill the connection of a client"
-  [client & args]
-  (.client-kill client args))
+(defn command-info
+  "Get array of specific redis command details"
+  [client command-name & args]
+  (.command-info client command-name args))
 
-(defn client-id
-  "Returns the client ID for the current connection"
+(defn config-get
+  "Get the value of a configuration parameter"
+  [client parameter]
+  (.client-kill client parameter))
+
+(defn config-rewrite
+  "Rewrite the configuration file with the in memory configuration"
   [client]
-  (.client-id client))
+  (.config-rewrite client))
 
-(defn client-kill
-  "Kill the connection of a client"
-  [client & args]
-  (.client-kill client args))
-
-(defn client-id
-  "Returns the client ID for the current connection"
-  [client]
-  (.client-id client))
-
-(defn client-kill
-  "Kill the connection of a client"
-  [client & args]
-  (.client-kill client args))
+(defn config-reset-stat
+  "Set a configuration parameter to the given value"
+  [client parameter value]
+  (.config-reset-stat parameter value))
 
 (defn client-id
   "Returns the client ID for the current connection"
