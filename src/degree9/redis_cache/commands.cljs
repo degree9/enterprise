@@ -299,85 +299,86 @@
   [client]
   (.config-rewrite client))
 
-(defn config-reset-stat
+(defn config-set
   "Set a configuration parameter to the given value"
   [client parameter value]
-  (.config-reset-stat parameter value))
+  (.config-set client parameter value))
 
-(defn client-id
-  "Returns the client ID for the current connection"
+(defn config-reset-stat
+  "Reset the stats returned by INFO"
   [client]
-  (.client-id client))
+  (.config-reset-stat client))
 
-(defn client-kill
-  "Kill the connection of a client"
-  [client & args]
-  (.client-kill client args))
 
-(defn client-id
-  "Returns the client ID for the current connection"
+(defn dbsize
+  "Return the number of keys in the selected database"
   [client]
-  (.client-id client))
+  (.dbsize client))
 
-(defn client-kill
-  "Kill the connection of a client"
-  [client & args]
-  (.client-kill client args))
+(defn debug-object
+  "Get debugging information about a key"
+  [client destkey]
+  (.debug-object client key))
 
-(defn client-id
-  "Returns the client ID for the current connection"
+(defn debug-segfault
+  "Make the server crash"
   [client]
-  (.client-id client))
+  (.debug-segfault client))
 
-(defn client-kill
-  "Kill the connection of a client"
-  [client & args]
-  (.client-kill client args))
+(defn decr
+  "Decrements the integer value of a key by one"
+  [client key]
+  (.decr client key))
 
-(defn client-id
-  "Returns the client ID for the current connection"
+(defn decrby
+  "Decrement the integer value of a key by the given number"
+  [client key decrement]
+  (.decrby client key decrement))
+
+(defn del
+  "Delete a key"
+  [client key & args]
+  (.del client key args))
+
+(defn discard
+  "Discard all commands issued after MULTI"
   [client]
-  (.client-id client))
+  (.discard client))
 
-(defn client-kill
-  "Kill the connection of a client"
-  [client & args]
-  (.client-kill client args))
+(defn dump
+  "Returns a serialized version of the value stored at the specified key"
+  [client key]
+  (.dump client key))
 
-(defn client-id
-  "Returns the client ID for the current connection"
+(defn echo
+  "Echo the given string"
+  [client message]
+  (.echo client message))
+
+(defn eval
+  "Execute a lua script server side"
+  [client script numkeys key & args]
+  (.eval client script numkeys key args))
+
+(defn eval-sha
+  "Execute a lua script server side"
+  [client sha1 numkeys key & args]
+  (.eval-sha client shai numkeys key args))
+
+(defn exec
+  "Executes all commands issued after MULTI"
   [client]
-  (.client-id client))
+  (.exec client))
 
-(defn client-kill
-  "Kill the connection of a client"
-  [client & args]
-  (.client-kill client args))
+(defn exists
+  "Determines if a key exists"
+  [client key & args]
+  (.exists client key args))
 
-(defn client-id
-  "Returns the client ID for the current connection"
-  [client]
-  (.client-id client))
-
-(defn client-kill
-  "Kill the connection of a client"
-  [client & args]
-  (.client-kill client args))
-
-(defn client-id
-  "Returns the client ID for the current connection"
-  [client]
-  (.client-id client))
-
-(defn client-kill
-  "Kill the connection of a client"
-  [client & args]
-  (.client-kill client args))
-
-(defn client-id
-  "Returns the client ID for the current connection"
-  [client]
-  (.client-id client))
+(defn expire
+  "Set a key's time to live in seconds"
+  [client key seconds]
+  (.client-id client key seconds))
 
 (defn client-kill
   "Kill the connection of a client"
