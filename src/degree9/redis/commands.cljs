@@ -236,7 +236,7 @@
 (defn last-save
   "Get the UNIX time stamp of the last successful save to disk"
   [client]
-  (.last-save client))
+  (.lastsave client))
 
 (defn lindex
   "Get an element from a list by its index"
@@ -248,12 +248,132 @@
   [client key pivot element & args]
   (.linsert client key pivot element & args))
 
-(defn client-kill
+(defn llen
+  "Get the length of a list"
+  [client key]
+  (.llen client key))
+
+(defn lpop
+  "Remove and get the first element in a list"
+  [client key]
+  (.lpop client key))
+
+(defn lpush
+  "Prepend one or multiple elements to a list"
+  [client key element & args]
+  (.client-kill client key element args))
+
+(defn lpushx
+  "Prepend an element to a list, only if the list exists"
+  [client key element & args]
+  (.lpushx client key element & args))
+
+(defn lrange
+  "Get a range of elements from a list"
+  [client key start stop]
+  (.lrange client key start stop))
+
+(defn lrem
+  "Remove elements from a list"
+  [client key count element]
+  (.lrem client key count element))
+
+(defn lset
+  "Set the value of an element in a list by its index"
+  [client key index element]
+  (.lset client key index element))
+
+(defn ltrim
+  "Trim a list to the specified range"
+  [client key start stop]
+  (.ltrim client key start stop))
+
+(defn memory-doctor
+  "Outputs memory problems report"
+  [client]
+  (.memory-doctor client))
+
+(defn memory-help
+  "Show helpful text about the different subcommands"
+  [client]
+  (.memory-help client))
+
+(defn memory-malloc-stats
+  "Show allocator internal stats"
+  [client]
+  (.memory-malloc-stats client))
+
+(defn memory-purge
+  "Ask the allocator to release memory"
+  [client]
+  (.memory-purge client))
+
+(defn memory-stats
+  "Show memory usage details"
+  [client]
+  (.memory-stats client))
+
+(defn memory-usage
+  "Estimate the memory usage of a key"
+  [client key & args]
+  (.client-id client key args))
+
+(defn mget
+  "Get the values of all the given keys"
+  [client key & args]
+  (.mget client key args))
+
+(defn migrate
+  "Atomically transfer a key from a redis instance to another one"
+  [client host port key destination-db timeout & args]
+  (.migrate client host port key destination-db timeout args))
+
+(defn module-list
+  "List all modules loaded by the server"
+  [client]
+  (.module-list client))
+
+(defn module-load
+  "Load a module"
+  [client path & args]
+  (.module-load client path args))
+
+(defn module-unload
+  "Unload a module"
+  [client name]
+  (.module-unload client name))
+
+(defn monitor
+  "Listen for all requests received by the server in real time"
+  [client]
+  (.monitor client))
+
+(defn move
+  "Move a key to another database"
+  [client key db]
+  (.move client key db))
+
+(defn mset
+  "Set multiple keys to multiple values"
+  [client key value & args]
+  (.mset client key value & args))
+
+(defn msetnx
+  "Set multiple keys to multiple values, only if none of the keys exist"
+  [client key value & args]
+  (.msetnx client key value args))
+
+(defn multi
+  "Returns the client ID for the current connection"
+  [client]
+  (.multi client))
+
+(defn object
   "Kill the connection of a client"
   [client & args]
-  (.client-kill client args))
+  (.object client args))
 
-(defn client-id
+(defn lrem
   "Returns the client ID for the current connection"
   [client]
   (.client-id client))
@@ -263,7 +383,7 @@
   [client & args]
   (.client-kill client args))
 
-(defn client-id
+(defn lrem
   "Returns the client ID for the current connection"
   [client]
   (.client-id client))
@@ -273,7 +393,68 @@
   [client & args]
   (.client-kill client args))
 
-(defn client-id
+(defn lrem
+  "Returns the client ID for the current connection"
+  [client]
+  (.client-id client))
+
+(defn client-kill
+  "Kill the connection of a client"
+  [client & args]
+  (.client-kill client args))
+
+
+(defn lrem
+  "Returns the client ID for the current connection"
+  [client]
+  (.client-id client))
+
+(defn client-kill
+  "Kill the connection of a client"
+  [client & args]
+  (.client-kill client args))
+
+(defn lrem
+  "Returns the client ID for the current connection"
+  [client]
+  (.client-id client))
+
+(defn client-kill
+  "Kill the connection of a client"
+  [client & args]
+  (.client-kill client args))
+
+(defn lrem
+  "Returns the client ID for the current connection"
+  [client]
+  (.client-id client))
+
+(defn client-kill
+  "Kill the connection of a client"
+  [client & args]
+  (.client-kill client args))
+
+(defn lrem
+  "Returns the client ID for the current connection"
+  [client]
+  (.client-id client))
+
+(defn client-kill
+  "Kill the connection of a client"
+  [client & args]
+  (.client-kill client args))
+
+(defn lrem
+  "Returns the client ID for the current connection"
+  [client]
+  (.client-id client))
+
+(defn client-kill
+  "Kill the connection of a client"
+  [client & args]
+  (.client-kill client args))
+
+(defn lrem
   "Returns the client ID for the current connection"
   [client]
   (.client-id client))
