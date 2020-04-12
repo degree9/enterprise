@@ -15,7 +15,7 @@
   (ps/get (str "/merchants/" id)))
 
 (defn create-merchant-account [id data]
-  (ps/delete (str "/merchants/" id) data))
+  (ps/post (str "/merchants/" id) data))
 
 (defn update-merchant-account [id data]
   (ps/patch "/accounts/" id) data)
