@@ -157,7 +157,7 @@
   (ps/get (str "/accounts/" account "/wirebankaccounts" id)))
 
 (defn delete-wirebankaccount [account id]
-  (ps/delete (str "/accounts/" account "/wirebankaccounts" id)))
+  (ps/delete (str "/accounts/" account "/wirebankaccounts/" id)))
 
 ;Terms and conditions;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn create-termsandconditions [account data]
@@ -166,12 +166,49 @@
 ;Activate a merchant account;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn activate-merchant-account [account data]
   (ps/post "/accounts/" account "/activation") data)
+
 ;Validate a bank account;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn validate-bankaccount [id]
   (ps/post (str "/accounts/" id "/microdeposits")))
 
+;Get a bank microdepsit;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn get-bank-microsdeposit [id]
   (ps/get (str "/microdeposits/" id)))
 
+;Validate a bank account;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn validate-bankaccount [id]
   (ps/post (str "/microdepsit/" id "/validate")))
+
+;Creat bank accounts for subaccounts;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn create-achbank-subaccount [id data]
+  (ps/post (str "/merchants/" id "/achbankaccounts") data))
+
+(defn update-achbank-subaccount [id data]
+  (ps/put (str "/achbankaccounts/" id) data))
+
+(defn get-achbank-subaccount [id]
+  (ps/get (str "/achbankaccounts/" id)))
+
+(defn create-eftbank-subaccount [id data]
+  (ps/post (str "/merchants/" id "/eftbankaccounts") data))
+
+(defn update-eftbank-subaccount [id data]
+  (ps/put (str "/eftbankaccounts/" id) data))
+
+(defn get-eftbank-subaccount [id]
+  (ps/get (str "/eftbankaccounts/" id)))
+
+(defn create-subaccount [id data]
+  (ps/get (str "/accounts/" id) "/subaccounts" data))
+
+(defn update-subaccount [id data]
+  (ps/patch (str "/subaccounts/" id) data))
+
+(defn get-subaccount [id]
+  (ps/get (str "/subaccounts/" id)))
+
+(defn merchant-subaccounts [id]
+  (ps/get (str "/accounts/" id "/subaccounts")))
+
+(defn disable-merchant-subaccount [id]
+  (ps/patch (str "accounts" id "/subaccounts/")))
