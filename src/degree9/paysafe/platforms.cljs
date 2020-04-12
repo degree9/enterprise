@@ -1,4 +1,4 @@
-(ns degree9.paysafe.debit
+(ns degree9.paysafe.platforms
   (:require [degree9.paysafe.core :as ps]))
 
 ;Platforms APIs;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
