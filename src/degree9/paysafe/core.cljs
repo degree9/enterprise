@@ -14,3 +14,6 @@
 
 (defn put [path data & [{:or {} :as opts}]]
   (req/put (paysafe-url path) data opts))
+
+(defn patch [path data & [{:or {} :as opts}]]
+  (req/patch (paysafe-url path) data opts))  
