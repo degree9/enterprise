@@ -212,3 +212,22 @@
 
 (defn disable-merchant-subaccount [id]
   (ps/patch (str "accounts" id "/subaccounts/")))
+
+;Balance transfers;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn create-credit-account [account data]
+  (ps/post (str "/accounts/" account) "/credits" data))
+
+(defn get-credit-transfer [account id]
+  (ps/get (str "/accounts/" account "credits" id)))
+
+(defn get-credit-transfer-by-merchant [account ref]
+  (ps/get (str "/accounts/" account "/credits?merchantRefNum=" ref)))
+
+(defn create-debit-account [account data]
+  (ps/post (str "/accounts/" account "/debits" data)))
+
+(defn get-debit-transfer [account id]
+  (ps/get (str "/accounts/" account "/debits" id)))
+
+(defn get-debit-transfer-by-merchant [account ref]
+  (ps/get (str "/accounts/" account "/debits?merchantRefNum=" ref)))
