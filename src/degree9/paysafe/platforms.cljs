@@ -199,7 +199,7 @@
   (ps/get (str "/eftbankaccounts/" id)))
 
 (defn create-subaccount [id data]
-  (ps/get (str "/accounts/" id) "/subaccounts" data))
+  (ps/post (str "/accounts/" id) "/subaccounts" data))
 
 (defn update-subaccount [id data]
   (ps/patch (str "/subaccounts/" id) data))
