@@ -79,7 +79,7 @@
 ;   (ps/put "/previousaddresses/" id) data)
 
 (defn get-owner-previous-address [id]
-  (ps/get (str "/currentaddresses/" id)))
+  (ps/get (str "/previousaddresses/" id)))
 
 ;Canadian Business owner drivers licenses ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn create-drivers-license [id data]
