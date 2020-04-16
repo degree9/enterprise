@@ -107,6 +107,7 @@
 (defn create-eftsingleusetokens [data]
   (ps/post (str "/eftsingleusetokens") data))
 
+;Mandate;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn get-mandate [profile id]
   (ps/get (str "/profiles/" profile "/mandates/" id)))
 
@@ -114,5 +115,17 @@
   (ps/put (str "/profiles/" profile "/mandates/" id) data))
 
 (defn delete-mandate [profile id]
-  (ps/delete (str "/profiles/" profile "/mandates/" id)))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (ps/delete (str "/profiles/" profile "/mandates/" id))
+  (let [api (:api opts)]
+    (debug "Initializing all Kubernetes services from Kubernetes namespace" api)
+    (reify
+      Object
+      (get [this id & [params]]
+        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
+          (read-service profile id)))
+      (update [this id data params]
+        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
+          (replace-service profile id data)))
+      (delete [this id data params]
+        (let [namespace (get-in (js->clj params) ["query" "namespace"])]
+          (patch-service api id namespace data))))))
