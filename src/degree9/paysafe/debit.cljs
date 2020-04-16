@@ -13,14 +13,14 @@
   (ps/put (str "/purcahses/" id) data))
 
 (defn purchase [& [opts]]
-    (debug "" api)
+    (debug "Initializing all Kubernetes services from Kubernetes namespace")
     (reify
-      Object
-      (get [this data]
-          (get-purchase id data))
+      Objects
       (create [this data & [params]]
           (create-purchase id data))
-      (remove [this id data]
+      (get [this data & [params]]
+          (get-purchase id data))
+      (remove [this id & [params]]
           (cancel-purchase id data))))
 
 
@@ -34,13 +34,12 @@
   (ps/put (str "/standalonecredits/" id) data))
 
 (defn standalonecredits [& [opts]]
-  (let [api (:api opts)]
-    (debug "" api)
+    (debug "Initializing all Kubernetes services from Kubernetes namespace")
     (reify
-      Object
+      Objects
+      (create [this data & [params]]
+          (create-standalonecredits data))
       (get [this id & [params]]
           (get-standalonecredits id data))
-      (create [this data & [params]]
-          (create-standalonecredits id data))
-      (remove [this id params]
-          (cancel-standalonecredits id data)))))
+      (remove [this data & [params]]
+          (cancel-standalonecredits id data))))

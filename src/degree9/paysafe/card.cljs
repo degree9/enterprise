@@ -18,22 +18,17 @@
   (ps/post (str "/auths/" id "/settlements") data))
 
 (defn authorization [& [opts]]
-  (let [api (:api opts)]
-    (debug "" api)
+    (debug "")
     (reify
       Object
       (get [this id & [params]]
-          (get-authorization id data))
+          (get-authorization id))
       (create [this data & [params]]
-          (create-authorization id data))
+          (create-authorization data))
       (remove [this id params]
           (void-authorization id data))
-      (update [this id & [params]]
-          (update-authorization id data))
-      (find [this data & [params]]
-          (create-authorization id data))
-      (patch [this id params]
-          (cancel-authorization id data)))))
+      (update [this id data & [params]]
+          (update-authorization id data))))
 
 ;Get Void Authentication
 
@@ -41,10 +36,10 @@
   (ps/get (str "/voidauths/" id)))
 
 (defn void-authorization [& [opts]]
-    (debug "" api)
+    (debug "")
     (reify
       Object
-      (get [this id]
+      (get [this id & [params]]
           (get-void-authorization id))))
 
 
@@ -56,11 +51,11 @@
   (ps/put (str "/settlements/" id) data))
 
 (defn settlement [& [opts]]
-    (debug "" api)
+    (debug "")
     (reify
       Object
-      (get [this id]
-          (get-settlement id data))
+      (get [this id & [params]]
+          (get-settlement id))
       (remove [this id data]
           (cancel-settlement id data))))
 
@@ -75,7 +70,7 @@
   (ps/put (str "/refunds/" id) data))
 
 (defn refund [& [opts]]
-    (debug "" api)
+    (debug "")
     (reify
       Object
       (create [this id data]
@@ -93,7 +88,7 @@
   (ps/get (str "/verifications/" id)))
 
 (defn verification [& [opts]]
-    (debug "" api)
+    (debug "")
     (reify
       Object
       (create [this data]
@@ -112,7 +107,7 @@
   (ps/put (str "/originalcredits/" id) data))
 
 (defn originalcredits [& [opts]]
-    (debug "" api)
+    (debug "")
     (reify
       Object
       (create [this data]
@@ -133,14 +128,14 @@
   (ps/put (str "/standalonecredits/" id) data))
 
 (defn standalonecredits [& [opts]]
-    (debug "" api)
+    (debug "")
     (reify
       Object
-      (create [this data]
+      (create [this data & [params]]
           (create-standalonecredits data))
-      (get [this id data]
+      (get [this id & [params]]
           (get-standalonecredits id data))
-      (remove [this id data]
+      (remove [this id & [params]]
           (cancel-standalonecredits id data))))
 
 
