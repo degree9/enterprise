@@ -73,11 +73,11 @@
     (debug "")
     (reify
       Object
-      (create [this id data]
+      (create [this data & [param]]
           (submit-refund id data))
-      (get [this id]
+      (get [this id & [param]]
           (get-refund id))
-      (remove [this id data]
+      (remove [this id & [param]]
           (cancel-refund id data))))
 
 ;Verification;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -110,11 +110,11 @@
     (debug "")
     (reify
       Object
-      (create [this data]
+      (create [this data & [param]]
           (create-originalcredits data))
-      (get [this id data]
+      (get [this id data & [param]]
           (get-originalcredits id data))
-      (remove [this id data]
+      (remove [this id data & [param]]
           (cancel-originalcredits id data))))
 
 ; Standalone credits;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
