@@ -16,3 +16,19 @@
 
 (defn delete-calendar [client id]
   (.deleteCalendar client id))
+
+(defn calendar [& [opts]]
+  (let [client (:client opts)]
+    (debug "" client)
+    (reify
+      Object
+      (find [this & [params]]
+          (get-calendars client))
+      (get [this id & [params]]
+          (get-calendar client id))
+      (create [this data & [params]]
+          (create-calendar client))
+      (update [this id data params]
+          (update-calendar client id))
+      (remove [this id params]
+          (delete-calendar client id)))))

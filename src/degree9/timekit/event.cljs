@@ -16,3 +16,19 @@
 
 (defn delete-event [client id]
   (.deleteEvent client id))
+
+(defn event [& [opts]]
+  (let [client (:client opts)]
+    (debug "" client)
+    (reify
+      Object
+      (find [this & [params]]
+          (get-events client))
+      (get [this id & [params]]
+          (get-event client id))
+      (create [this data & [params]]
+          (create-event client))
+      (update [this id data params]
+          (update-event client id))
+      (remove [this id params]
+          (delete-event client id)))))
