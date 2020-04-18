@@ -1,5 +1,8 @@
 (ns degree9.timekit.booking
-  (:require [degree9.timekit.core :as tk]))
+  (:require [degree9.timekit.core :as tk]
+            [degree9.debug :as dbg]))
+
+(dbg/defdebug debug "degree9:timekit:booking")
 
 
 (defn get-bookings [client]
@@ -18,20 +21,21 @@
   (.deleteBooking client id))
 
 (defn booking [& [opts]]
-  (let [client (:client opts)]
-    (debug "" client)
+  (let [conf (merge {:key (env/get "TIMEKIT_API_KEY")} opts)
+        timekit (tk/configure conf)]
+    (debug "" timekit)
     (reify
       Object
       (find [this & [params]]
-          (get-bookings client))
+          (get-bookings timekit))
       (get [this id & [params]]
-          (get-booking client id))
+          (get-booking timekit id))
       (create [this data & [params]]
-          (create-booking client data))
+          (create-booking timekit data))
       (update [this id data params]
-          (update-booking client id action data))
+          (update-booking timekit id action data))
       (remove [this id params]
-          (delete-booking client id)))))
+          (delete-booking timekit id)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -42,14 +46,15 @@
   (.updateBookingsBulk client args))
 
 (defn booking-bulk [& [opts]]
-  (let [client (:client opts)]
-    (debug "" client)
+    (let [conf (merge {:key (env/get "TIMEKIT_API_KEY")} opts)
+          timekit (tk/configure conf)])
+    (debug "" timekit)
     (reify
       Object
       (create [this data & [params]]
           (create-booking-bulk api data))
       (update [this id data params]
-          (update-booking-bulk client data)))))
+          (update-booking-bulk timekit data))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -60,11 +65,12 @@
   (.getGroupBooking client id))
 
 (defn group-booking [& [opts]]
-  (let [client (:client opts)]
-    (debug "" client)
+    (let [conf (merge {:key (env/get "TIMEKIT_API_KEY")} opts)
+          timekit (tk/configure conf)])
+    (debug "" timekit)
     (reify
       Object
       (find [this [params]]
-          (create-group-booking client))
+          (create-group-booking timekit))
       (get [this id params]
-          (update-group-booking client id)))))
+          (update-group-booking timekit id))))

@@ -15,6 +15,8 @@
   (ps/delete (str "/profiles/" id)))
 
 (defn profile [& [opts]]
+  (let [conf (merge {:key (env/get "PAYSAFE_API_KEY")} opts)]
+       [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
     (debug "")
     (reify
       Object
@@ -25,7 +27,7 @@
       (update [this id data & [params]]
           (update-profile id data))
       (remove [this id & [params]]
-          (delete-profile id))))
+          (delete-profile id)))))
 
 (defn create-address [profile data]
   (ps/post (str "/profiles/" profile "/addresses") data))
@@ -40,6 +42,8 @@
   (ps/delete (str "/profiles/" profile "/addresses/" id)))
 
 (defn address [& [opts]]
+  (let [conf (merge {:key (env/get "PAYSAFE_API_KEY")} opts)]
+       [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
     (debug "")
     (reify
       Object
@@ -50,7 +54,7 @@
       (update [this id data & [params]]
           (update-address profile id data))
       (remove [this id data & [params]]
-          (delete-address profile id))))
+          (delete-address profile id)))))
 
 (defn create-card [profile data]
   (ps/post (str "/profiles/" profile "/cards") data))
@@ -78,6 +82,8 @@
   (ps/delete (str "/profiles/" profile "/achbankaccounts/" id)))
 
 (defn achbankaccount [& [opts]]
+  (let [conf (merge {:key (env/get "PAYSAFE_API_KEY")} opts)]
+       [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
     (debug "")
     (reify
       Object
@@ -88,7 +94,7 @@
       (update [this id data & [params]]
           (update-achbankaccount profile id data))
       (remove [this id data & [params]]
-          (cancel-achbankaccount profile id data))))
+          (cancel-achbankaccount profile id data)))))
 
 (defn create-bacsbankaccount [profile data]
   (ps/post (str "/profiles/" profile "/bacsbankaccounts") data))
@@ -106,6 +112,8 @@
   (ps/post (str "/profiles/" profile "/bacsbankaccounts/" id "/mandates") data))
 
 (defn bacsbankaccount [& [opts]]
+  (let [conf (merge {:key (env/get "PAYSAFE_API_KEY")} opts)]
+       [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
     (debug "")
     (reify
       Object
@@ -116,7 +124,7 @@
       (update [this id data & [params]]
           (update-bacsbankaccount profile id data))
       (remove [this id & [params]]
-          (cancel-bacsbankaccount profile id data))))
+          (cancel-bacsbankaccount profile id data)))))
 
 (defn create-eftbankaccount [profile data]
   (ps/post (str "/profiles/" profile "/eftbankaccounts") data))
@@ -131,6 +139,8 @@
   (ps/delete (str "/profiles/" profile "/eftbankaccounts/" id)))
 
 (defn eftbankaccount [& [opts]]
+  (let [conf (merge {:key (env/get "PAYSAFE_API_KEY")} opts)]
+       [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
     (debug "")
     (reify
       Object
@@ -141,7 +151,7 @@
       (update [this id data & [params]]
           (update-eftbankaccount profile id data))
       (remove [this id & [params]]
-          (cancel-eftbankaccount profile id))))
+          (cancel-eftbankaccount profile id)))))
 
 (defn create-sepabankaccount [profile data]
   (ps/post (str "/profiles/" profile "/sepabankaccounts") data))
@@ -159,6 +169,8 @@
   (ps/post (str "/profiles/" profile "/sepabankaccounts/" id "/mandates") data))
 
 (defn sepabankaccount [& [opts]]
+  (let [conf (merge {:key (env/get "PAYSAFE_API_KEY")} opts)]
+       [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
     (debug "")
     (reify
       Object
@@ -169,7 +181,7 @@
       (update [this id data & [params]]
           (update-sepabankaccount profile id data))
       (remove [this id data & [params]]
-          (cancel-sepabankaccount profile id))))
+          (cancel-sepabankaccount profile id)))))
 
 
 

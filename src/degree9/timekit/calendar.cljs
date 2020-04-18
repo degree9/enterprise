@@ -1,6 +1,8 @@
 (ns degree9.timekit.calendar
-  (:require [degree9.timekit.core :as tk]))
+  (:require [degree9.timekit.core :as tk]
+            [degree9.debug :as dbg]))
 
+(dbg/defdebug debug "degree9:timekit:calendar")
 
 (defn get-calendars [client]
   (.getCalendars client))
@@ -18,17 +20,18 @@
   (.deleteCalendar client id))
 
 (defn calendar [& [opts]]
-  (let [client (:client opts)]
-    (debug "" client)
+    (let [conf (merge {:key (env/get "TIMEKIT_API_KEY")} opts)
+          timekit (tk/configure conf)])
+    (debug "" timekit)
     (reify
       Object
       (find [this & [params]]
-          (get-calendars client))
+          (get-calendars timekit))
       (get [this id & [params]]
-          (get-calendar client id))
+          (get-calendar timekit id))
       (create [this data & [params]]
-          (create-calendar client))
+          (create-calendar timekit))
       (update [this id data params]
-          (update-calendar client id))
+          (update-calendar timekit id))
       (remove [this id params]
-          (delete-calendar client id)))))
+          (delete-calendar timekit id))))

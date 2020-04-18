@@ -18,6 +18,9 @@
   (ps/post (str "/auths/" id "/settlements") data))
 
 (defn authorization [& [opts]]
+  (let [conf (merge {:key (env/get "PAYSAFE_API_KEY")} opts)]
+       [id (merge {:key (env/get "ACCOUNT_ID")} opts)
+        timekit (tk/configure conf)]
     (debug "")
     (reify
       Object
@@ -28,19 +31,21 @@
       (remove [this id params]
           (void-authorization id data))
       (update [this id data & [params]]
-          (update-authorization id data))))
+          (update-authorization id data)))))
 
 ;Get Void Authentication
 
 (defn get-void-authorization [id]
   (ps/get (str "/voidauths/" id)))
 
-(defn void-authorization [& [opts]]
+(defn void-auth [& [opts]]
+  (let [conf (merge {:key (env/get "PAYSAFE_API_KEY")} opts)]
+       [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
     (debug "")
     (reify
       Object
       (get [this id & [params]]
-          (get-void-authorization id))))
+          (get-void-authorization id)))))
 
 
 ;Settlements;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -51,13 +56,15 @@
   (ps/put (str "/settlements/" id) data))
 
 (defn settlement [& [opts]]
+  (let [conf (merge {:key (env/get "PAYSAFE_API_KEY")} opts)]
+       [account (merge {:key (env/get "ACCOUNT_ID")} opts)]
     (debug "")
     (reify
       Object
       (get [this id & [params]]
           (get-settlement id))
       (remove [this id data]
-          (cancel-settlement id data))))
+          (cancel-settlement id data)))))
 
 ;Debit refunds;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn submit-refund [id data]
@@ -70,6 +77,8 @@
   (ps/put (str "/refunds/" id) data))
 
 (defn refund [& [opts]]
+  (let [conf (merge {:key (env/get "PAYSAFE_API_KEY")} opts)]
+       [account (merge {:key (env/get "ACCOUNT_ID")} opts)]
     (debug "")
     (reify
       Object
@@ -78,7 +87,7 @@
       (get [this id & [param]]
           (get-refund id))
       (remove [this id & [param]]
-          (cancel-refund id data))))
+          (cancel-refund id data)))))
 
 ;Verification;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn create-verification [data]
@@ -88,13 +97,15 @@
   (ps/get (str "/verifications/" id)))
 
 (defn verification [& [opts]]
+  (let [conf (merge {:key (env/get "PAYSAFE_API_KEY")} opts)]
+       [account (merge {:key (env/get "ACCOUNT_ID")} opts)]
     (debug "")
     (reify
       Object
       (create [this data]
           (create-verification data))
       (get [this id]
-          (get-verification id))))
+          (get-verification id)))))
 
 ;Original credits;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn create-originalcredits [data]
@@ -107,6 +118,8 @@
   (ps/put (str "/originalcredits/" id) data))
 
 (defn originalcredits [& [opts]]
+  (let [conf (merge {:key (env/get "PAYSAFE_API_KEY")} opts)]
+       [account (merge {:key (env/get "ACCOUNT_ID")} opts)]
     (debug "")
     (reify
       Object
@@ -115,7 +128,7 @@
       (get [this id data & [param]]
           (get-originalcredits id data))
       (remove [this id data & [param]]
-          (cancel-originalcredits id data))))
+          (cancel-originalcredits id data)))))
 
 ; Standalone credits;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn create-standalonecredits [data]
@@ -128,6 +141,8 @@
   (ps/put (str "/standalonecredits/" id) data))
 
 (defn standalonecredits [& [opts]]
+  (let [conf (merge {:key (env/get "PAYSAFE_API_KEY")} opts)]
+       [account (merge {:key (env/get "ACCOUNT_ID")} opts)]
     (debug "")
     (reify
       Object
@@ -136,7 +151,7 @@
       (get [this id & [params]]
           (get-standalonecredits id data))
       (remove [this id & [params]]
-          (cancel-standalonecredits id data))))
+          (cancel-standalonecredits id data)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -13,6 +13,8 @@
   (ps/put (str "/purcahses/" id) data))
 
 (defn purchase [& [opts]]
+  (let [conf (merge {:key (env/get "PAYSAFE_API_KEY")} opts)]
+       [account (merge {:key (env/get "ACCOUNT_ID")} opts)]
     (debug "Initializing all Kubernetes services from Kubernetes namespace")
     (reify
       Objects
@@ -21,7 +23,7 @@
       (get [this data & [params]]
           (get-purchase id data))
       (remove [this id & [params]]
-          (cancel-purchase id data))))
+          (cancel-purchase id data)))))
 
 
 (defn create-standalonecredits [data]
@@ -34,7 +36,9 @@
   (ps/put (str "/standalonecredits/" id) data))
 
 (defn standalonecredits [& [opts]]
-    (debug "Initializing all Kubernetes services from Kubernetes namespace")
+  (let [conf (merge {:key (env/get "PAYSAFE_API_KEY")} opts)]
+       [account (merge {:key (env/get "ACCOUNT_ID")} opts)]
+    (debug "")
     (reify
       Objects
       (create [this data & [params]]
@@ -42,4 +46,4 @@
       (get [this id & [params]]
           (get-standalonecredits id data))
       (remove [this data & [params]]
-          (cancel-standalonecredits id data))))
+          (cancel-standalonecredits id data)))))

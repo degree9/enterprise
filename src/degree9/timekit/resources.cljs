@@ -1,6 +1,8 @@
 (ns degree9.timekit.resources
-  (:require [degree9.timekit.core :as tk]))
+  (:require [degree9.timekit.core :as tk]
+            [degree9.debug :as dbg]))
 
+(dbg/defdebug debug "degree9:timekit:resources")
 
 (defn get-resources [client]
   (.getResources client))
@@ -15,18 +17,19 @@
   (.updateResource client id args))
 
 (defn resource [& [opts]]
-  (let [client (:client opts)]
-    (debug "" client)
+    (let [conf (merge {:key (env/get "TIMEKIT_API_KEY")} opts)
+          timekit (tk/configure conf)])
+    (debug "" timekit)
     (reify
       Object
       (find [this & [params]]
-          (get-resources client))
+          (get-resources timekit))
       (get [this id & [params]]
-          (get-resource client id))
+          (get-resource timekit id))
       (create [this data & [params]]
-          (create-resource client))
+          (create-resource timekit))
       (update [this id data params]
-          (update-resource client id)))))
+          (update-resource timekit id))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -34,12 +37,13 @@
   (.getResourcePassword client args))
 
 (defn resource-password [& [opts]]
-  (let [client (:client opts)]
-    (debug "" client)
+    (let [conf (merge {:key (env/get "TIMEKIT_API_KEY")} opts)
+          timekit (tk/configure conf)])
+    (debug "" timekit)
     (reify
       Object
       (get [this id & [params]]
-          (reset-resource-password client)))))
+          (reset-resource-password timekit))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -47,9 +51,10 @@
   (.getResourceTimezone client email))
 
 (defn resource-timezone [& [opts]]
-  (let [client (:client opts)]
-    (debug "" client)
+    (let [conf (merge {:key (env/get "TIMEKIT_API_KEY")} opts)
+          timekit (tk/configure conf)])
+    (debug "" timekit)
     (reify
       Object
       (get [this id & [params]]
-          (get-resource-timezone client email)))))
+          (get-resource-timezone timekit email))))

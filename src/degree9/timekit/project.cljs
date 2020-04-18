@@ -1,5 +1,8 @@
 (ns degree9.timekit.project
-  (:require [degree9.timekit.core :as tk]))
+  (:require [degree9.timekit.core :as tk]
+            [degree9.debug :as dbg]))
+
+(dbg/defdebug debug "degree9:timekit:project")
 
 
 (defn get-projects [client]
@@ -18,20 +21,21 @@
   (.deleteProject client id))
 
 (defn project [& [opts]]
-  (let [client (:client opts)]
-    (debug "" client)
+    (let [conf (merge {:key (env/get "TIMEKIT_API_KEY")} opts)
+          timekit (tk/configure conf)])
+    (debug "" timekit)
     (reify
       Object
       (find [this & [params]]
-          (get-projects client))
+          (get-projects timekit))
       (get [this id & [params]]
-          (get-project client id))
+          (get-project timekit id))
       (create [this data & [params]]
-          (create-project client))
+          (create-project timekit))
       (update [this id data params]
-          (update-project client id))
+          (update-project timekit id))
       (remove [this id params]
-          (delete-project client id)))))
+          (delete-project timekit id))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -39,12 +43,13 @@
   (.getHostedProject client slug))
 
 (defn hosted-project [& [opts]]
-  (let [client (:client opts)]
-    (debug "" client)
+    (let [conf (merge {:key (env/get "TIMEKIT_API_KEY")} opts)
+          timekit (tk/configure conf)])
+    (debug "" timekit)
     (reify
       Object
       (get [this id & [params]]
-          (get-hosted-project client id)))))
+          (get-hosted-project timekit id))))
 
 
 
@@ -53,12 +58,13 @@
   (.getEmbedProject client id))
 
 (defn embeded-project [& [opts]]
-  (let [client (:client opts)]
-    (debug "" client)
+    (let [conf (merge {:key (env/get "TIMEKIT_API_KEY")} opts)
+          timekit (tk/configure conf)])
+    (debug "" timekit)
     (reify
       Object
       (get [this id & [params]]
-          (get-embeded-project client id)))))
+          (get-embeded-project timekit id))))
 
 
 
@@ -70,14 +76,15 @@
   (.setProjectResources client id resources))
 
 (defn project-resources [& [opts]]
-  (let [client (:client opts)]
-    (debug "" client)
+    (let [conf (merge {:key (env/get "TIMEKIT_API_KEY")} opts)
+          timekit (tk/configure conf)])
+    (debug "" timekit)
     (reify
       Object
       (get [this id & [params]]
-          (get-project-resources client id))
+          (get-project-resources timekit id))
       (update [this id data & [params]]
-          (set-project-resources client id resources)))))
+          (set-project-resources timekit id resources))))
 
 
 
