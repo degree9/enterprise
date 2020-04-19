@@ -91,5 +91,8 @@
 (defn populate
   "Populates the entity properties with queries to other collections."
   [props]
-  (merge-params {:query {"$populate" props}}))
+  (fn [hook]
+    (let [params (params hook)]
+      (doto hook
+        (params! (merge-with merge params {"query" {"$populate" props}}))))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
