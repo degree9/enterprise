@@ -20,17 +20,11 @@
 (defn- current-step [needle haystack]
   (first (keep-indexed #(when (= %2 needle) %1) haystack)))
 
-(h/defelem simple-wizard [attr kids]
+(h/defelem simple-wizard [{:keys [steps previous next cancel complete] :as attr} kids]
   (let [current   (j/cell 0)
-        steps     (j/cell= (:steps attr))
         step      (j/cell= (get steps current))
-        previous! (:previous! attr #(swap! current dec))
-        next!     (:next! attr #(swap! current inc))
-        submit!   (:submit! attr debug)
-        previous? (j/cell= (:previous? step (:previous? attr)))
-        next?     (j/cell= (:next? step (:next? attr)))
-        complete? (j/cell= (:complete? step (:complete? attr)))]
-    (modal/modal
+        id        (:id attr (gensym))]
+    (modal/modal :id id
       (modal/dialog
         (modal/header
           (modal/title (:title attr "Simple Wizard")))
@@ -38,10 +32,10 @@
           (grid/grid ::width/width-1-1 true
             (grid/cell ::width/width-auto true
               (tab/tab :left true ::width/child-width-auto true
-                (h/for-tpl [[i s] (j/cell= (map-indexed (partial vector) steps))]
-                  (tab/item ::util/active (j/cell= (= s step))
-                    :click #(reset! current @i)
-                    (h/a (h/text "~{(:title s)}"))))))
+                (h/for-tpl [[key val] (j/cell= (map-indexed vector steps))]
+                  (tab/item ::util/active (j/cell= (= val step))
+                    :click #(reset! current @key)
+                    (h/a (h/text "~{(:title val)}"))))))
             (grid/cell ::width/width-expand true
               (j/cell= (get kids current)))))
         (modal/footer
@@ -50,15 +44,27 @@
               (h/text "~{(str (inc current) \" / \" (count steps))}"))
             (grid/cell ::text/right true ::width/width-expand true
               (button/group ::width/child-width-auto true
-                (h/when-tpl previous?
-                  (button/button :default true
-                    :click previous!
-                    (:previous attr "Previous")))
-                (h/when-tpl next?
-                  (button/button :default true
-                    :click next!
-                    (:next attr "Next")))
-                (h/when-tpl complete?
-                  (button/button :primary true
-                    :click submit!
-                    (:complete attr "Complete")))))))))))
+                (h/when-tpl (j/cell= (:cancel? step (:cancel step (:cancel? attr))))
+                  (button/button
+                    :default true
+                    ::modal/close true
+                    :disabled (j/cell= (get-in step [:cancel :disabled]))
+                    (j/cell= (get-in step [:cancel :text] (get cancel :text cancel)))))
+                (h/when-tpl (j/cell= (:previous? step (:previous step (:previous? attr))))
+                  (button/button
+                    :default true
+                    :click (:previous! attr #(swap! current dec))
+                    :disabled (j/cell= (get-in step [:previous :disabled]))
+                    (j/cell= (get-in step [:previous :text] (get previous :text previous)))))
+                (h/when-tpl (j/cell= (:next? step (:next step (:next? attr))))
+                  (button/button
+                    :default true
+                    :click (:next! attr #(swap! current inc))
+                    :disabled (j/cell= (get-in step [:next :disabled]))
+                    (j/cell= (get-in step [:next :text] (get next :text next)))))
+                (h/when-tpl (j/cell= (:complete? step (:complete step (:complete? attr))))
+                  (button/button
+                    :primary true
+                    :click (:submit! attr)
+                    :disabled (j/cell= (get-in step [:complete :disabled]))
+                    (j/cell= (get-in step [:complete :text] (get complete :text complete)))))))))))))
