@@ -1,5 +1,5 @@
 (ns degree9.azure.insights
-  "Azure Application Insights Node.JS Client"
+  "Azure Application Insights NodeJS Client"
   (:require ["applicationinsights" :as insights]
             [degree9.env :as env]
             [goog.object :as obj]))
