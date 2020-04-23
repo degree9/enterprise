@@ -1,9 +1,8 @@
 (ns degree9.fullcalendar.core
   (:require [hoplon.core :as h]
             [goog.object :as obj]
-            ["@fullcalendar/core" :as fullcal]
-            [degree9.fullcalendar.plugins :as plugins]))
-
+            ["@fullcalendar/core" :as fullcal]))
+          
 (defn mkcal [el & [opts]]
   (let [calendar (obj/get fullcal "Calendar")]
     (calendar. el (clj->js opts))))
