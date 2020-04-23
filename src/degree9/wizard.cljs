@@ -25,7 +25,7 @@
         step      (j/cell= (get steps current))
         id        (:id attr (gensym))]
     (modal/modal :id id
-      (modal/dialog
+      (modal/dialog attr
         (modal/header
           (modal/title (:title attr "Simple Wizard")))
         (modal/body ::section/muted true ::padding/small true
