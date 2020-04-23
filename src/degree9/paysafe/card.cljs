@@ -41,6 +41,24 @@
 (defn get-verification [id]
   (ps/get (str "/verifications/" id)))
 
-;; TODO: Standalone & Original Credits have not been implemented
+(defn create-originalcredits [data]
+  (ps/post "/originalcredits" data))
+
+(defn get-originalcredits [id data]
+  (ps/get (str "/originalcredits/" id) data))
+
+(defn cancel-originalcredits [id data]
+  (ps/put (str "/standalonecredits/" id) data))
+
+(defn create-standalonecredits [data]
+  (ps/post "/standalonecredits" data))
+
+(defn get-standalonecredits [id data]
+  (ps/get (str "/standalonecredits/" id) data))
+
+(defn cancel-standalonecredits [id data]
+  (ps/put (str "/standalonecredits/" id) data))
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
