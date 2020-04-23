@@ -4,18 +4,6 @@
 
 
 
-
-
-
-
-
-
-
-(defn append
-  "Append a value to a key"
-  [client key value]
-  (.append client key value))
-
 (defn auth
   "Authenticate to the server"
   [client password]
@@ -97,36 +85,20 @@
   (.command-info client command-name args))
 
 
-
 (defn db-size
   "Return the number of keys in the selected database"
   [client]
-  (.db-size client))
+  (.dbsize client))
 
 (defn debug-object
   "Get debugging information about a key"
   [client destkey]
-  (.debug-object client key))
+  (.debugobject client key))
 
 (defn debug-segfault
   "Make the server crash"
   [client]
-  (.debug-segfault client))
-
-(defn decr
-  "Decrements the integer value of a key by one"
-  [client key]
-  (.decr client key))
-
-(defn decrby
-  "Decrement the integer value of a key by the given number"
-  [client key decrement]
-  (.decrby client key decrement))
-
-(defn del
-  "Delete a key"
-  [client key & args]
-  (.del client key args))
+  (.debugsegfault client))
 
 (defn discard
   "Discard all commands issued after MULTI"
@@ -288,35 +260,7 @@
   [client key start stop]
   (.ltrim client key start stop))
 
-(defn memory-doctor
-  "Outputs memory problems report"
-  [client]
-  (.memory-doctor client))
 
-(defn memory-help
-  "Show helpful text about the different subcommands"
-  [client]
-  (.memory-help client))
-
-(defn memory-malloc-stats
-  "Show allocator internal stats"
-  [client]
-  (.memory-malloc-stats client))
-
-(defn memory-purge
-  "Ask the allocator to release memory"
-  [client]
-  (.memory-purge client))
-
-(defn memory-stats
-  "Show memory usage details"
-  [client]
-  (.memory-stats client))
-
-(defn memory-usage
-  "Estimate the memory usage of a key"
-  [client key & args]
-  (.client-id client key args))
 
 (defn mget
   "Get the values of all the given keys"
@@ -905,33 +849,3 @@
   but never acknowledged"
   [client key group & args]
   (.xpending client key group args))
-
-(defn latency-doctor
-  "Return a human readable latency analysis report"
-  [client]
-  (.latency-doctor client))
-
-(defn latency-graph
-  "Return a latency graph for event"
-  [client event]
-  (.latency-graph client event))
-
-(defn latency-history
-  "Return timestamp-latency samples for the event"
-  [client event]
-  (.latency-history client event))
-
-(defn latency-latest
-  "Return the latest latency samples for all event"
-  [client]
-  (.latency-latest client))
-
-(defn latency-reset
-  "Reset latency data for one or more events"
-  [client & args]
-  (.client-kill client args))
-
-(defn latency-help
-  "Show helpful text about the different subcommands"
-  [client]
-  (.latency-help client))
