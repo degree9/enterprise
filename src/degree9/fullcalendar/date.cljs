@@ -21,5 +21,5 @@
 
 (defn scroll-to-time
   "Programatically scroll the current view to the given time"
-  [cal durationInput]
-  (.scrollToTime cal durationInput))
+  [cal durationinput]
+  (.scrollToTime cal durationinput))
