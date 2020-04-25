@@ -1,4 +1,4 @@
-(ns degree9.timekit.credntial_endpoints
+(ns degree9.timekit.credential_endpoints
   (:require [degree9.timekit.core :as tk]))
 
 
@@ -9,4 +9,4 @@
   (.createCredential client args))
 
 (defn delete-credential [client id]
-  (.deleteCredential client id))  
+  (.deleteCredential client id))
