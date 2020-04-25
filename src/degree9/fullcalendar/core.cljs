@@ -1,19 +1,33 @@
 (ns degree9.fullcalendar.core
   (:require [hoplon.core :as h]
             [goog.object :as obj]
-            ["@fullcalendar/core" :as fullcal]
+            ["jquery" :as jq]
+            ["fullcalendar" :as fullcal]
             [degree9.fullcalendar.plugins :as plugins]))
 
-(defn mkcal [el & [opts]]
+(defn mkcalendar [el & [opts]]
   (let [calendar (obj/get fullcal "Calendar")]
     (calendar. el (clj->js opts))))
 
-(h/defelem calendar [attr kids]
-  (let [cal (h/div)
-        plugins (:plugins attr #js["dayGrid"]);plugins/daygrid plugins/timegrid plugins/list])
-        fcal (mkcal cal {:plugins plugins})]
-    (.render fcal)
-    cal))
+; (prn (js/jQuery "#calendar"))
+;
+; (.addEventListener js/window "DOMContentLoaded"
+;   #(let [calendar (obj/get fullcal "Calendar")]
+;     (doto (calendar. (js/jQuery "#calendar"))
+;       (.render)
+;       (.updateSize))))
+
+(defmethod h/do! :fullcalendar
+  [elem key val]
+  (let [calendar (obj/get fullcal "Calendar")]
+    (h/with-timeout 500
+      (.render (calendar. elem (clj->js val))))))
+
+; (h/defelem calendar [attr kids]
+;   (let [cal (h/div)
+;         fcal (mkcalendar cal)]
+;     (.render fcal)
+;     cal))
 
 (defn render
   "Will initially render a calendar, or if it is already rendered, will rerender it"
