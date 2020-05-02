@@ -1,6 +1,7 @@
 (ns degree9.timekit.account
   (:require [degree9.timekit.core :as tk]))
 
+(dbg/defdebug debug "degree9:timekit:account")
 
 (defn get-accounts [client]
   (.getAccounts client))

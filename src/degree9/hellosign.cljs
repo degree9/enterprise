@@ -38,24 +38,18 @@
 
 ;; HelloSign Signature Request ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn signature-request [& [opts]]
-  (let [conf  (merge {:key (env/get "HELLOSIGN_API_KEY")} opts)
-        hello (hello/signature-request (hello/hellosign conf))]
-    (reify Object
-      (get [this id params]
-        (sig/get-signature hello id)))))
-
-(defn embedded-request [& [opts]]
   (let [client (env/get "HELLOSIGN_CLIENT_ID")
         test   (env/get "HELLOSIGN_TEST_MODE")
         conf   (merge {:key (env/get "HELLOSIGN_API_KEY")} opts)
         hello  (hello/signature-request (hello/hellosign conf))]
     (reify Object
+      (get [this id params]
+        (sig/get-signature hello id))
       (create [this data params]
         (let [data (merge (js->clj data) {:clientId client :test_mode test})]
           (if (or (:file data) (:file_url data))
             (sig/create-embedded hello (clj->js data))
             (sig/create-embedded-template hello (clj->js data))))))))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; HelloSign Callback ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
