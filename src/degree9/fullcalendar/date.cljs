@@ -14,7 +14,12 @@
   [cal start end settings]
   (.formatDate cal start end settings))
 
+(defn format-iso
+  "Formats a date into an ISO8601 string. Outputs a UTC offset appropriate to the calendar it’s called on."
+  [cal start end settings]
+  (.formatiso cal start end settings))
+
 (defn scroll-to-time
   "Programatically scroll the current view to the given time"
-  [cal durationInput]
-  (.scrollToTime cal durationInput))
+  [cal durationinput]
+  (.scrollToTime cal durationinput))
