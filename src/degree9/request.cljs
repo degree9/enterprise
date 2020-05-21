@@ -18,6 +18,11 @@
     (merge req
       {:method "GET"})))
 
+(defn delete [url req]
+  (request url
+    (merge req
+      {:method "GET"})))
+
 (defn clj->json [data]
   (.stringify js/JSON (clj->js data)))
 
@@ -34,4 +39,10 @@
   (request url
     (merge req
       {:method "PUT"
+       :body (clj->json data)})))
+
+(defn patch [url data req]
+  (request url
+    (merge req
+      {:method "PATCH"
        :body (clj->json data)})))

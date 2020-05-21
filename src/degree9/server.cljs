@@ -8,6 +8,8 @@
 
 (dbg/defdebug debug "degree9:enterprise:server")
 
+(def api server/api)
+
 (defn app [& opts]
  (debug "Starting enterprise server with" opts)
  (let [opts (set opts)]
@@ -17,7 +19,8 @@
      (:socket     opts) (server/with-socketio)
      (:channels   opts) (chan/with-channels)
      (:auth       opts) (server/with-authentication)
-     (:roles      opts) (roles/with-authorization))))
+     (:roles      opts) (roles/with-authorization)
+     (:errors     opts) (server/with-error-handler))))
 
 (defn start! [app]
   (let [port (env/get "APP_PORT")]
