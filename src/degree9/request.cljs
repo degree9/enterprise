@@ -1,9 +1,11 @@
 (ns degree9.request
   (:refer-clojure :exclude [get])
-  (:require ["node-fetch" :as fetch]
+  (:require ["node-fetch" :as node-fetch]
             [degree9.debug :as dbg]))
 
 (dbg/defdebug debug "degree9:enterprise:request")
+
+(def fetch node-fetch)
 
 (defn request [url req]
   (let [defaults {:method "GET"
