@@ -13,11 +13,11 @@
     (throw (js/Error. (.-statusText res)))))
 
 (defn- paysafe-url [path & [query]]
-  (str (env/get "PAYSAFE_API_URL" "http://api.test.paysafe.com") path))
+  (str (env/get "PAYSAFE_URL" "http://api.test.paysafe.com") path))
 
 (defn- paysafe-headers [headers]
-  (let [username (env/get "PAYSAFE_API_USERNAME")
-        password (env/get "PAYSAFE_API_PASSWORD")
+  (let [username (env/get "PAYSAFE_USERNAME")
+        password (env/get "PAYSAFE_PASSWORD")
         auth     (base64/encodeString (str username ":" password))]
     (merge {:authorization (str "Basic " auth)} headers)))
 
