@@ -1,34 +1,67 @@
 (ns degree9.env
- (:refer-clojure :exclude [get keys])
- (:require
-  [cuerdas.core :as str]
-  [goog.object :as obj]
-  [degree9.debug :as dbg]
-  [cljs.test :refer-macros [deftest is]]
-  ["dotenv" :as dotenv]))
+  "Load configuration variables from process.env or .env file."
+  (:refer-clojure :exclude [get keys])
+  (:require ["fs" :as fs]
+            ["path" :as path]
+            [goog.object :as obj]
+            [clojure.string :as cstr]
+            [degree9.debug :as dbg]))
+
 
 (dbg/defdebug debug "degree9:enterprise:env")
 
-(def ^:dynamic *env* (atom nil))
+;; Env Helpers ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn- read-file [path]
+  (.readFileSync fs path #js{:encoding "utf8"}))
 
-(defn env-obj
-  "Initialize dotenv and return the process.env object."
-  [& conf]
-  (debug "Initializing env object with config %s" conf)
-  (when-not @*env*
-   (reset! *env* (.config dotenv conf)))
-  (obj/get js/process "env"))
+(defn- env-file [dir]
+  (.resolve path dir ".env"))
 
-(defn keys
-  "Return all keys from the process.env object."
-  []
-  (->> (env-obj)
-    (js-keys)
-    (js->clj)
-    (map str/kebab)
-    (map keyword)))
+(defn- split-kv [kvstr]
+  (cstr/split kvstr #"=" 2))
+
+(defn- split-config [config]
+  (->> (cstr/split-lines config)
+       (map split-kv)
+       (into {})))
+
+(defn- dot-env [path]
+  (-> (env-file path)
+      (read-file)
+      (split-config)))
+
+(defn- node-env [env]
+  (->> (js-keys env)
+       (map (fn [key] [key (obj/get env key)]))
+       (into {})))
+
+(defn- populate-env! [env]
+  (doseq [[k v] env]
+    (obj/set js/process.env k v)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Env Public API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn env-vars
+  "Return a map of all environment variables."
+  ([] (env-vars js/process.env))
+  ([env] (node-env env)))
 
 (defn get
-  "Return the process.env object value for `key` or `default`."
+  "Return the value for `key` in environment or `default`."
   ([key] (get key nil))
-  ([key default] (obj/get (env-obj) (-> key name str/snake str/upper) default)))
+  ([key default] (get js/process.env key default))
+  ([env key default] (obj/get env key default)))
+
+(defn keys
+  "Return all keys from the environment."
+  ([] (keys js/process.env))
+  ([env] (js->clj (js-keys env))))
+
+(defn init!
+  "Initialize environment with variables from .env file."
+  ([] (init! {:path (.cwd js/process) :env js/process.env}))
+  ([{:keys [path env]}]
+   (populate-env!
+     (merge (dot-env path)
+            (node-env env)))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
