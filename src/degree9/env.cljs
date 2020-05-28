@@ -12,7 +12,8 @@
 
 ;; Env Helpers ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn- read-file [path]
-  (.readFileSync fs path #js{:encoding "utf8"}))
+  (when (.existsSync fs path)
+    (.readFileSync fs path #js{:encoding "utf8"})))
 
 (defn- env-file [dir]
   (.resolve path dir ".env"))
