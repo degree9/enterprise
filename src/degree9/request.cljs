@@ -1,9 +1,11 @@
 (ns degree9.request
   (:refer-clojure :exclude [get])
-  (:require ["node-fetch" :as fetch]
+  (:require ["node-fetch" :as node-fetch]
             [degree9.debug :as dbg]))
 
 (dbg/defdebug debug "degree9:enterprise:request")
+
+(def fetch node-fetch)
 
 (defn request [url req]
   (let [defaults {:method "GET"
@@ -14,6 +16,11 @@
     (fetch url req)))
 
 (defn get [url req]
+  (request url
+    (merge req
+      {:method "GET"})))
+
+(defn delete [url req]
   (request url
     (merge req
       {:method "GET"})))
@@ -34,4 +41,10 @@
   (request url
     (merge req
       {:method "PUT"
+       :body (clj->json data)})))
+
+(defn patch [url data req]
+  (request url
+    (merge req
+      {:method "PATCH"
        :body (clj->json data)})))

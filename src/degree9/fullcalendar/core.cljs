@@ -2,8 +2,7 @@
   (:require [hoplon.core :as h]
             [goog.object :as obj]
             ["jquery" :as jq]
-            ["fullcalendar" :as fullcal]
-            [degree9.fullcalendar.plugins :as plugins]))
+            ["fullcalendar" :as fullcal]))
 
 (defn mkcalendar [el & [opts]]
   (let [calendar (obj/get fullcal "Calendar")]

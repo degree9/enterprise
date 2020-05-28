@@ -3,10 +3,8 @@
 (defn get-deps    []     (:dependencies (shadow-cljs-edn)))
 
 (set-env!
- :dependencies (into (get-deps) '[[org.clojure/clojure "1.10.0"]
-                                  [org.clojure/clojurescript "1.10.520"]])
-
- :resource-paths #{"src"})
+  :dependencies (get-deps)
+  :resource-paths #{"src"})
 
 (require
  '[degree9.boot-semver :refer :all])
