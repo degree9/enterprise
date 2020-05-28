@@ -11,7 +11,7 @@
 (def api server/api)
 
 (defn app [& opts]
- (debug "Starting enterprise server with" opts)
+ (debug "Starting enterprise server")
  (let [opts (set opts)]
    (cond-> (server/app)
      (:default    opts) (server/with-defaults)
