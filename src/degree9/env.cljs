@@ -12,32 +12,39 @@
 
 ;; Env Helpers ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn- read-file [path]
-  (when (.existsSync fs path)
-    (.readFileSync fs path #js{:encoding "utf8"})))
+  (debug "Reading file from path %s" path)
+  (.readFileSync fs path #js{:encoding "utf8"}))
 
 (defn- env-file [dir]
+  (debug "Resolve path to .env file %s" dir)
   (.resolve path dir ".env"))
 
 (defn- split-kv [kvstr]
+  (debug "Split key/value pair from %s" kvstr)
   (cstr/split kvstr #"=" 2))
 
 (defn- split-config [config]
-  (->> (cstr/split-lines config)
-       (map split-kv)
-       (into {})))
+  (debug "Split lines from %s" config)
+  (map split-kv (cstr/split-lines config)))
 
 (defn- dot-env [path]
-  (-> (env-file path)
-      (read-file)
-      (split-config)))
+  (debug "Checking for .env file within %s" path)
+  (let [env (env-file path)]
+    (when (.existsSync fs env)
+      (debug "Loading .env file from %s" env)
+      (->> (read-file env)
+           (split-config)
+           (into {})))))
 
 (defn- node-env [env]
+  (debug "Loading node environment" env)
   (->> (js-keys env)
        (map (fn [key] [key (obj/get env key)]))
        (into {})))
 
 (defn- populate-env! [env]
-  (doseq [[k v] env]
+  (debug "Populate the node environment with %s" env)
+  (doseq [[k v] (into [] env)]
     (obj/set js/process.env k v)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
