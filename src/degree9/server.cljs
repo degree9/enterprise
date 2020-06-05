@@ -10,17 +10,29 @@
 
 (def api server/api)
 
+(def with-rest server/with-rest)
+
+(def with-socketio server/with-socketio)
+
+(def with-channels chan/with-channels)
+
+(def with-authentication server/with-authentication)
+
+(def with-authorization roles/with-authorization)
+
+(def with-errors server/with-error-handler)
+
 (defn app [& opts]
  (debug "Starting enterprise server")
  (let [opts (set opts)]
    (cond-> (server/app)
      (:default    opts) (server/with-defaults)
-     (:rest       opts) (server/with-rest)
-     (:socket     opts) (server/with-socketio)
-     (:channels   opts) (chan/with-channels)
-     (:auth       opts) (server/with-authentication)
-     (:roles      opts) (roles/with-authorization)
-     (:errors     opts) (server/with-error-handler))))
+     (:rest       opts) (with-rest)
+     (:socket     opts) (with-socketio)
+     (:channels   opts) (with-channels)
+     (:auth       opts) (with-authentication)
+     (:roles      opts) (with-authorization)
+     (:errors     opts) (with-errors))))
 
 (defn start! [app]
   (let [port (env/get "APP_PORT")]

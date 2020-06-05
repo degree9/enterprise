@@ -20,10 +20,9 @@
   (debug "Initializing remote microservice %s" uri)
   (reify
     Object
-    (id [this] (:id opts "id"))
     (setup [this app path]
       (let [client (:client opts (feathers))
-            conf   (clj->js (dissoc opts :id :client))
+            conf   (clj->js (dissoc opts :client))
             socket (io uri conf)
             proxy  (wsclient client socket)]
         (debug "Setup proxy to remote service %s" service)

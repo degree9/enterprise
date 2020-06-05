@@ -28,6 +28,7 @@
   []
   (comp
     (version :develop true
+             :minor 'inc
              :pre-release 'snapshot)
     (watch)
     (build-jar)))
