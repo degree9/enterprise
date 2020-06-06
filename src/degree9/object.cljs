@@ -1,5 +1,5 @@
 (ns degree9.object
-  (:refer-clojure :exclude [set get get-in filter remove])
+  (:refer-clojure :exclude [set get get-in filter remove merge])
   (:require [goog.object :as obj]))
 
 ;; JS Object Public Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -11,17 +11,19 @@
     (or (apply getValueByKeys (map name ks)) default)))
 
 (defn set [m k v]
-  (obj/set m (name k) v))
+  (doto m (obj/set (name k) v)))
 
 (defn set-in [m [k & ks] v]
-  (when-let [m (get m k)]
-    (if (empty? ks) (set m k v) (set-in m ks v))))
+  (set m k (if (empty? ks) v (set-in (get m k #js{}) ks v))))
 
 (defn filter [pred m]
   (obj/filter m pred))
 
 (defn remove [pred m]
   (obj/filter m (comp pred not)))
+
+(defn merge [& objs]
+  (clj->js (apply clojure.core/merge (map js->clj objs))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; JS Object Protocols ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
