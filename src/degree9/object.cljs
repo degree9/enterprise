@@ -1,5 +1,5 @@
 (ns degree9.object
-  (:refer-clojure :exclude [set get get-in filter remove merge])
+  (:refer-clojure :exclude [set get get-in filter remove merge dissoc])
   (:require [goog.object :as obj]))
 
 ;; JS Object Public Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -23,7 +23,10 @@
   (obj/filter m (comp pred not)))
 
 (defn merge [& objs]
-  (clj->js (apply clojure.core/merge (map js->clj objs))))
+  (clj->js (reduce clojure.core/merge (map js->clj objs))))
+
+(defn dissoc [m & ks]
+  (reduce (fn [i k] (doto i (obj/remove (name k)))) m ks))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; JS Object Protocols ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
