@@ -3,7 +3,7 @@
 (defn get-deps    []     (:dependencies (shadow-cljs-edn)))
 
 (set-env!
-  :dependencies (get-deps)
+  :dependencies (concat '[[org.clojure/clojure "1.10.1"]] (get-deps))
   :resource-paths #{"src"})
 
 (require
