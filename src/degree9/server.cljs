@@ -18,6 +18,10 @@
 
 (def with-authentication server/with-authentication)
 
+(def with-authentication-local server/with-authentication-local)
+
+(def with-authentication-oauth server/with-authentication-oauth)
+
 (def with-authorization roles/with-authorization)
 
 (def with-errors server/with-error-handler)
@@ -31,6 +35,8 @@
      (:socket     opts) (with-socketio)
      (:channels   opts) (with-channels)
      (:auth       opts) (with-authentication)
+     (:local      opts) (with-authentication-local)
+     (:oauth      opts) (with-authentication-oauth)
      (:roles      opts) (with-authorization)
      (:errors     opts) (with-errors))))
 

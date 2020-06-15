@@ -53,3 +53,16 @@
   ([app path uri opts service hooks]
    (debug "Mount remote microservice at %s" path)
    (server/api app path (µservice uri service opts) hooks)))
+
+;; Multi-Service ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn- api-service [app [prefix url services] hooks]
+  (reduce (fn [app service] (api app (str prefix service) url service hooks)) app services))
+
+(defn- reduce-apis [app services hooks]
+  (reduce (fn [app service] (api-service app service hooks)) app services))
+
+(defn multi-service
+  "Mount multiple remote services from different servers."
+  [app specs & [hooks]]
+  (reduce-apis app specs hooks))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
