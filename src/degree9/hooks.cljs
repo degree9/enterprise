@@ -1,6 +1,7 @@
 (ns degree9.hooks
   (:require [degree9.object :as obj]
-            [degree9.debug :as dbg]))
+            [degree9.debug :as dbg]
+            [degree9.error :as err]))
 
 (dbg/defdebug debug "degree9:enterprise:hooks")
 
