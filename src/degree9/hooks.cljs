@@ -120,7 +120,7 @@
   (fn [context]
     (let [svc (obj/get context :service)
           data (obj/get-in context [:data property])]
-      (hooks/then-context context
+      (then-context context
         (-> (.find svc (clj->js {:params {:query {property data}}}))
             (.then #(throw-when (< 0 (count %))
                       "Duplicate property (%s) found. (duplicate-property)" property)))))))
