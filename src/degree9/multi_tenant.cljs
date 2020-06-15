@@ -1,5 +1,5 @@
 (ns degree9.multi-tenant
-  (:require [goog.object :as obj]
+  (:require [degree9.object :as obj]
             [degree9.debug :as dbg]
             [degree9.env :as env]
             [degree9.hooks :as hooks]))
@@ -9,19 +9,14 @@
 (defn current-tenant [field]
   (fn [hook]
     (if-let [tenant (env/get "APP_TENANT_ID")]
-      (doto hook
-        (hooks/data!
-          (assoc (hooks/data hook) field tenant))
-        (hooks/params!
-          (assoc-in (hooks/params hook) ["query" field] tenant)))
+      (-> hook
+        (obj/set-in [:data field] tenant)
+        (obj/set-in [:params :query field] tenant))
       (throw (js/Error. "Tenant ID has not been configured.")))))
 
 (defn default-tenant [field]
   (fn [hook]
     (let [tenant  (env/get "APP_TENANT_ID")
-          params  (hooks/params hook)
-          current (get-in params ["query" field])]
+          current (obj/get-in hook [:params :query field])]
       (if current hook
-        (doto hook
-          (hooks/params!
-            (assoc-in params ["query" field] tenant)))))))
+        (obj/set-in hook [:params :query field] tenant)))))

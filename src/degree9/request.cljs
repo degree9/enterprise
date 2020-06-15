@@ -7,20 +7,28 @@
 
 (def fetch node-fetch)
 
-(defn request [url req]
+(defn- request-status [res]
+  (if (.-ok res) res
+    (throw (js/Error. (.-statusText res)))))
+
+(defn json [res]
+  (.json res))
+
+(defn request [url & [req]]
   (let [defaults {:method "GET"
                   :headers {:accept "application/json"
                             :content-type "application/json"}}
         req (clj->js (merge defaults req))]
     (debug "Constructing request to %s using %s" url req)
-    (fetch url req)))
+    (-> (fetch url req)
+        (.then request-status))))
 
-(defn get [url req]
+(defn get [url & [req]]
   (request url
     (merge req
       {:method "GET"})))
 
-(defn delete [url req]
+(defn delete [url & [req]]
   (request url
     (merge req
       {:method "GET"})))
@@ -28,7 +36,7 @@
 (defn clj->json [data]
   (.stringify js/JSON (clj->js data)))
 
-(defn post [url data req]
+(defn post [url data & [req]]
   (request url
     (merge req
       {:method "POST"
@@ -37,13 +45,13 @@
                    :content-type "application/json"})
        :body (clj->json data)})))
 
-(defn put [url data req]
+(defn put [url data & [req]]
   (request url
     (merge req
       {:method "PUT"
        :body (clj->json data)})))
 
-(defn patch [url data req]
+(defn patch [url data & [req]]
   (request url
     (merge req
       {:method "PATCH"

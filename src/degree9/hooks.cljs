@@ -1,5 +1,5 @@
 (ns degree9.hooks
-  (:require [goog.object :as obj]
+  (:require [degree9.object :as obj]
             [degree9.debug :as dbg]))
 
 (dbg/defdebug debug "degree9:enterprise:hooks")
@@ -10,11 +10,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Hook Return ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defn return-hook [hook]
-  (fn [_] hook))
+(defn return-context [context]
+  (fn [_] context))
 
-(defn then-hook [hook prom]
-  (.then prom (return-hook hook)))
+(defn then-context [context prom]
+  (.then prom (return-context context)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Block Transports ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -78,13 +78,6 @@
   (fn [hook]
     (doto hook
       (params! (merge (params hook) data)))))
-
-(defn default-data
-  "Merges the `default` hashmap with the `request.data`."
-  [default]
-  (fn [hook]
-    (doto hook
-      (data! (merge default (data hook))))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Common Request Hooks ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -95,4 +88,13 @@
     (let [params (params hook)]
       (doto hook
         (params! (merge-with merge params {"query" {"$populate" props}}))))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Default Entity Hooks ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn- default-entity
+  "Merges `entity` with `context.data`."
+  [entity]
+  (fn [{:keys [data] :as context}]
+    (doto context
+      (obj/set :data (obj/merge entity data)))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -1,96 +1,80 @@
 (ns degree9.es6
-  (:require [clojure.walk :as w]))
+  (:refer-clojure :exclude [class])
+  (:require [cljs.analyzer :as ana]
+            [cljs.compiler :as compiler]))
 
-; (defn parse-args [args]
-;   (loop [opts    (transient {})
-;          methods (transient [])
-;          [arg & args] args]
-;     (if-not (or arg args)
-;       [(persistent! opts) (persistent! methods)]
-;       (cond (map? arg)     (recur (reduce-kv assoc! opts arg) methods args)
-;             (keyword? arg) (recur (assoc! opts arg (first args)) methods (rest args))
-;             :else          (recur opts (conj! methods arg) args)))))
+;; Native ES6 Class Method compiler extension ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(alter-var-root #'ana/specials #(conj % 'class* 'method* 'super*))
 
+(defmethod ana/parse 'method*
+  [op env [_ method params & exprs :as form] _ _]
+  {:env env
+   :op :method
+   :children [:exprs]
+   :form form
+   :method method
+   :params params
+   :exprs (ana/disallowing-recur
+            (mapv #(ana/analyze (assoc env :context :statement) %) exprs))})
 
-(defn- method-fn-name
-  [method-name]
-  (str "__pylon$method$" method-name))
+(defmethod compiler/emit* :method
+  [{:keys [method params exprs]}]
+  (compiler/emitln method "(" (interpose "," (map compiler/munge params)) "){")
+  (doseq [e exprs]
+    (compiler/emitln e))
+  (compiler/emits "}"))
 
-(defn- transform-body [body]
-  (w/postwalk
-   (fn [form]
-     (if (and (seq? form)
-              (= 2 (count form))
-              (= 'clojure.core/deref (first form))
-              (symbol? (second form))
-              (= "." (subs (name (second form)) 0 1)))
-       (list (symbol (str ".-" (subs (name (second form)) 1))) (symbol "this"))
-       form))
-   body))
+(defmacro ^:private method
+  "Create a javascript class method. (es6+)
 
-(defn- method-def
-  [ctor method-name sig body]
-  (let [sig-with-this (apply vector 'this sig)
-        body (transform-body body)]
-    `(fn ~(symbol method-name) ~sig-with-this
-       (let [~'__pylon_method_name ~method-name
-             ~'__pylon_prototype (.-prototype ~ctor)]
-         ~@body))))
+   Javascript DOES NOT support overloading methods, since we are creating native
+   method blocks, we also do not support overloading methods."
+  [name & body]
+  `(~'method* ~name ~@body))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn- method-from-spec [spec]
-  (if (= 'defn (first spec)) (method-from-spec (rest spec))
-    (let [name (name (first spec))]
-      {:name name
-       :fn-name (method-fn-name name)
-       :sig (second spec)
-       :body (drop 2 spec)})))
+;; Native ES6 Class compiler extension ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defmethod ana/parse 'class*
+  [op env [_ class extends & methods :as form] _ _]
+  {:env env
+   :op :class
+   :children [:methods]
+   :form form
+   :class class
+   :extends extends
+   :methods (ana/disallowing-recur
+              (mapv #(ana/analyze (assoc env :context :method) %) methods))})
 
-(defn- parse-args [args]
-  (loop [args args opts {}]
-    (cond
-     (keyword? (first args))
-     (recur (drop 2 args) (assoc opts (first args) (second args)))
-     :else [opts args])))
+(defmethod compiler/emit* :class
+  [{:keys [class extends methods]}]
+  (let [extends (when extends (str " extends " extends))]
+    (compiler/emitln "class " class extends " {")
+    (doseq [m methods]
+      (compiler/emitln m))
+    (compiler/emits "}")))
+
+(defn parse-args [[extends & methods :as body]]
+  (let [extends (when (symbol? extends) extends)
+        methods (if extends methods body)]
+    [extends methods]))
+
+(defn- methodize [[fname & body]]
+  (let [name (symbol (name fname))]
+    `(~'method ~name ~@body)))
+
+(defmacro ^:private class
+  "Create a named or unnamed javascript class. (es6+)"
+  ([method-map] (class nil method-map))
+  ([name method-map] (class name nil method-map))
+  ([name extends method-map]
+   `(~'class* ~name ~extends ~@(map methodize method-map))))
 
 (defmacro defclass
-  [class-name & args]
-  (let [[{:keys [extends mixin]} specs] (parse-args args)
-        methods (map method-from-spec specs)
-        ctor (gensym "ctor")
-        class-string (str (ns-name *ns*) "." class-name)]
-    `(let [~ctor (create-ctor)]
-
-       ;; Build the constructor
-       (def ~class-name ~ctor)
-
-       ;; Extend with superclass prototype
-       ~(when extends
-          `(do
-             (goog/inherits ~class-name ~extends)
-             (aset (.-prototype ~class-name) "__pylon$superclass" ~extends)))
-
-       ;; Extend with mixins
-       ~@(for [m mixin]
-           `(let [proto# (or (.-prototype ~m) ~m)]
-              (goog/mixin (.-prototype ~class-name) proto#)))
-
-       (aset (.-prototype ~ctor) "__pylon$classname" ~class-string)
-
-       ;; Define methods
-       ~@(for [{:keys [name fn-name sig body]} methods
-               :let [dashname (symbol (str "-" name))]]
-           `(let [func# ~(method-def class-name name sig body)]
-              ;; Apply the method to the prototype
-              (aset (.-prototype ~class-name) ~fn-name func#)
-              (set! (.. ~class-name -prototype ~dashname)
-                    (method-wrapper ~fn-name))
-              ;; Export the method name
-              (goog/exportProperty (.-prototype ~class-name)
-                                   ~name (.. ~class-name -prototype ~dashname))))
-
-       ;; Export the class
-       (goog/exportSymbol ~class-string ~class-name))))
-
-(defmacro super [& args]
-  `(let [super# (aget ~'__pylon_prototype "__pylon$superclass")]
-     (invoke-super super# ~'__pylon_method_name ~'this ~args)))
+  "Define a named javascript class. (es6+)"
+  ([name & [extends & methods :as body]]
+   (prn name extends methods)
+   (let [extends (when (symbol? extends) extends)
+         methods (->> (when extends methods body)
+                      (reduce (fn [i [m & b]] (assoc i (keyword m) b)) {}))]
+     `(def ~name (class ~name ~extends ~methods)))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
