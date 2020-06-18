@@ -58,7 +58,7 @@
 (defmacro ^:private method
   "Create a javascript class method. (es6+)"
   [name & body]
-  `(~'method* ~name (let [~'super ~super] ~@body)))
+  `(~'method* ~name ~@body))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Native ES6 Class compiler extension ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

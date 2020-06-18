@@ -12,13 +12,13 @@
 (es6/defclass APIKeyStrategy BaseStrategy
   (constructor []
     (prn "APIKeyStrategy")
-    (super)))
-  ; (method authenticate [data params]
-  ;   (this-as this
-  ;     (let [api-key (obj/get-in this [:configuration :api-key-header])
-  ;           result (.findEntity this api-key (obj/dissoc params :provider))]
-  ;       (clj->js {:authentication {:strategy (obj/get this :name)}
-  ;                 :api-key (.getEntity this result params)})))))
+    (es6/super))
+  (authenticate [data params]
+    (this-as this
+      (let [api-key (obj/get-in this [:configuration :api-key-header])
+            result (.findEntity this api-key (obj/dissoc params :provider))]
+        (clj->js {:authentication {:strategy (obj/get this :name)}
+                  :api-key (.getEntity this result params)})))))
 
 ; (set! (.. oauth/OAuthStrategy -prototype -getProfile)
 ;   (fn [data & args]
