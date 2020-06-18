@@ -1,17 +1,18 @@
 (ns degree9.auth.api-key
   (:require [degree9.debug :as dbg]
             [degree9.object :as obj]
-            [degree9.es6 :as es6]))
-            ;["@feathersjs/authentication" :as auth]))
+            [degree9.es6 :as es6]
+            ["@feathersjs/authentication" :as auth]))
 
 
 (dbg/defdebug debug "degree9:enterprise:auth:api-key")
 
-;(def ^:private BaseStrategy (obj/get auth "AuthenticationBaseStrategy"))
+(def ^:private BaseStrategy (obj/get auth "AuthenticationBaseStrategy"))
 
-(es6/defclass APIKeyStrategy ;:extends BaseStrategy
+(es6/defclass APIKeyStrategy BaseStrategy
   (constructor []
-    (this-as this (prn "APIKeyStrategy"))))
+    (prn "APIKeyStrategy")
+    (super)))
   ; (method authenticate [data params]
   ;   (this-as this
   ;     (let [api-key (obj/get-in this [:configuration :api-key-header])
