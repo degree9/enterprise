@@ -40,7 +40,7 @@
   (let [[locals _] (reduce (analyzer/analyze-fn-method-param env)
                            [locals []]
                            (map-indexed vector params))]
-    (analyzer/analyze (assoc env :locals locals :context :statement) expr)))
+    (analyzer/analyze (assoc env :locals locals) expr)))
 
 (defmethod analyzer/parse 'js-method*
   [op env [_ method params & exprs :as form] _ _]
@@ -48,17 +48,20 @@
     (analyzer/disallowing-recur
       {:env env
        :op :js-method
-       :children [:exprs]
+       :children [:statements :ret]
        :form form
        :method method
        :params params
-       :exprs (mapv (partial analyze-with-locals env (vec params)) exprs)})))
+       :statements (mapv (partial analyze-with-locals (assoc env :context :statement) (vec params)) (butlast exprs))
+       :ret (when-let [expr (last exprs)]
+              (analyze-with-locals (assoc env :context :return) (vec params) expr))})))
 
 (defmethod compiler/emit* :js-method
-  [{:keys [method params exprs]}]
+  [{:keys [method params statement ret]}]
   (compiler/emitln method "(" (interpose "," params) "){")
-  (doseq [e exprs]
-    (compiler/emitln e))
+  (doseq [s statement]
+    (compiler/emitln s))
+  (when ret (compiler/emitln ret))
   (compiler/emitln "}"))
 
 (defn ^:private methodize [[method params & body]]
