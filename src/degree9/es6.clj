@@ -44,18 +44,24 @@
 
 (defmethod analyzer/parse 'js-method*
   [op env [_ method params & exprs :as form] _ _]
-  (let [params (remove '#{&} params)]
+  (let [params (remove '#{&} params)
+        statements (->> (butlast exprs)
+                        (mapv (partial analyze-with-locals
+                                      (assoc env :context :statement)
+                                      (vec params))))
+        ret        (->> (last exprs)
+                        (analyze-with-locals (assoc env :context :return)
+                                             (vec params)))]
     (analyzer/disallowing-recur
       {:env env
        :op :js-method
-       :children [:statements :ret]
+       :children (if statements [:statements :ret] [:ret])
        :form form
        :method method
        :params params
-       :statements (mapv (partial analyze-with-locals (assoc env :context :statement) (vec params)) (butlast exprs))
-       :ret (when-let [expr (last exprs)]
-              (analyze-with-locals (assoc env :context :return) (vec params) expr))})))
-
+       :statements statements
+       :ret ret})))
+       
 (defmethod compiler/emit* :js-method
   [{:keys [method params statement ret]}]
   (compiler/emitln method "(" (interpose "," params) "){")
