@@ -11,7 +11,7 @@
   (pd/delete (str "/templates/" id)))
 
 
-(defn folder [& [opts]]
+(defn template [& [opts]]
   (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)]
        [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
     (debug "")
