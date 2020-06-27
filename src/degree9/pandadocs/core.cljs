@@ -12,51 +12,51 @@
   (if (.-ok res) res
     (throw (js/Error. (.-statusText res)))))
 
-(defn- paysafe-url [path & [query]]
-  (str (env/get "PAYSAFE_URL" "https://api.pandadoc.com/public/v1/documents/") path))
+(defn- pandadoc-url [path & [query]]
+  (str (env/get "PANDADOC" "https://api.pandadoc.com/public/v1/documents/") path))
 
-(defn- paysafe-headers [headers]
-  (let [username (env/get "PAYSAFE_USERNAME")
-        password (env/get "PAYSAFE_PASSWORD")
+(defn- pandadoc-headers [headers]
+  (let [username (env/get "PANDADOC")
+        password (env/get "PANDADOC")
         auth     (base64/encodeString (str username ":" password))]
     (merge {:authorization (str "Basic " auth)} headers)))
 
-(defn- paysafe-request [{:keys [method path data query headers] :as opts}]
+(defn- pandadoc-request [{:keys [method path data query headers] :as opts}]
   (let [method  (cstr/upper-case (name method))
-        headers (paysafe-headers headers)
-        url     (paysafe-url path query)]
+        headers (pandadoc-headers headers)
+        url     (pandadoc-url path query)]
     (-> (req/fetch url (clj->js {:method method :body data :headers headers}))
         (.then check-status)
         (.then json->clj))))
 
 (defn post [path data & [{:keys [headers] :as opts}]]
-  (paysafe-request
+  (pandadoc-request
     {:method :post
      :path path
      :data data
      :headers headers}))
 
 (defn get [path & [{:keys [headers] :as opts}]]
-  (paysafe-request
+  (pandadoc-request
     {:method :get
      :path path
      :headers headers}))
 
 (defn delete [path & [{:keys [headers] :as opts}]]
-  (paysafe-request
+  (pandadoc-request
     {:method :delete
      :path path
      :headers headers}))
 
 (defn put [path data & [{:keys [headers] :as opts}]]
-  (paysafe-request
+  (pandadoc-request
     {:method :put
      :path path
      :data data
      :headers headers}))
 
 (defn patch [path data & [{:keys [headers] :as opts}]]
-  (paysafe-request
+  (pandadoc-request
     {:method :patch
      :path path
      :data data
