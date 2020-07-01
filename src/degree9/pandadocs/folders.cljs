@@ -15,18 +15,3 @@
 
 (defn rename-templates-folder [data]
   (pd/put (str "/templates/folders/templates_folder_uuid" data)))
-
-(defn folder [& [opts]]
-  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)]
-       [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
-    (debug "")
-    (reify
-      Object
-      (create [this data & [params]]
-          (create-documents-folder data))
-      (update [this id & [params]]
-          (rename-documents-folder id))
-      (create [this data & [params]]
-          (create-templates-folder data))
-      (update [this data & [params]]
-          (rename-templates-folder data)))))
