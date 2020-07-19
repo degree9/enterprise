@@ -61,7 +61,7 @@
        :params params
        :statements statements
        :ret ret})))
-       
+
 (defmethod compiler/emit* :js-method
   [{:keys [method params statement ret]}]
   (compiler/emitln method "(" (interpose "," params) "){")
@@ -111,4 +111,28 @@
   (let [extends (when (symbol? extends) extends)
         methods (if extends (rest methods) methods)]
     `(def ~name (class ~name ~extends ~@methods))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Extends Analyzer Special Forms ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(alter-var-root #'analyzer/specials #(conj % 'spread*))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; ES6 Spread Oporator ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defmethod analyzer/parse 'spread*
+  [op env [_ param :as form] _ _]
+  (analyzer/disallowing-recur
+    {:env env
+     :op :spread
+     :form form
+     :param (analyzer/analyze (assoc env :context :expr) param)}))
+
+(defmethod compiler/emit* :spread
+  [{:keys [param]}]
+  (compiler/emits "..." param))
+
+(defmacro js-spread [param]
+  `(~'spread* ~param))
+
+; (defmacro ^:private js-spread [param]
+;   `('js* "...~{param}"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

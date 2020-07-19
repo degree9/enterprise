@@ -5,7 +5,6 @@
             [clojure.string :as cstr]
             ["@feathersjs/authentication" :as auth]))
 
-
 (dbg/defdebug debug "degree9:enterprise:auth:api-key")
 
 (def ^:private BaseStrategy (obj/get auth "AuthenticationBaseStrategy"))
