@@ -1,4 +1,5 @@
-(ns degree9.regex)
+(ns degree9.regex
+  (:refer-clojure :exclude [name]))
 
 ;; JS RegExp Protocols ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (extend-type js/RegExp

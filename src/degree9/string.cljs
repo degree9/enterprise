@@ -7,6 +7,8 @@
 
 (def join cstr/join)
 
+(def blank? cstr/blank?)
+
 (defn pad-start
   ([s length] (.padStart (str s) length))
   ([s length pad] (.padStart (str s) length pad)))
