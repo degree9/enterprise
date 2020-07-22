@@ -1,6 +1,6 @@
 (ns degree9.regex)
 
-;; Extend RegExp ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; JS RegExp Protocols ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (extend-type js/RegExp
   IFn
   (-invoke
