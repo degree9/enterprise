@@ -9,6 +9,8 @@
 
 (def blank? cstr/blank?)
 
+(def not-blank? (comp cstr/blank? not))
+
 (defn pad-start
   ([s length] (.padStart (str s) length))
   ([s length pad] (.padStart (str s) length pad)))

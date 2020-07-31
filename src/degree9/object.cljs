@@ -1,5 +1,5 @@
 (ns degree9.object
-  (:refer-clojure :exclude [set get get-in filter remove merge dissoc reduce-kv])
+  (:refer-clojure :exclude [set get get-in update-in filter remove merge dissoc reduce-kv])
   (:require [goog.object :as obj]))
 
 ;; JS Object Public Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -15,6 +15,9 @@
 
 (defn set-in [o [k & ks] v]
   (set o k (if (empty? ks) (clj->js v) (set-in (get o k #js{}) ks v))))
+
+(defn update-in [o [k & ks] f]
+  (set o k (if (empty? ks) (clj->js (f (get o k))) (update-in (get o k #js{}) ks f))))
 
 (defn filter [pred o]
   (obj/filter o pred))

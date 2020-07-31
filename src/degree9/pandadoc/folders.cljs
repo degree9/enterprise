@@ -1,4 +1,4 @@
-(ns degree9.pandadocs.folders
+(ns degree9.pandadoc.folders
   :require [degree9.pandadoc.core :as pd])
 
 
