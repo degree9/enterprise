@@ -1,5 +1,5 @@
 (ns degree9.pandadoc.documents
-  :require [degree9.pandadoc.core :as pd])
+  (:require [degree9.pandadoc.core :as pd]))
 
 
 

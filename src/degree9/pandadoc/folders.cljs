@@ -1,5 +1,5 @@
 (ns degree9.pandadoc.folders
-  :require [degree9.pandadoc.core :as pd])
+  (:require [degree9.pandadoc.core :as pd]))
 
 ;; Folders for templates and documents API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn create-documents-folder [data]

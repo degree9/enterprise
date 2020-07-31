@@ -1,5 +1,5 @@
 (ns degree9.pandadoc.templates
-  :require [degree9.pandadoc.core :as pd])
+  (:require [degree9.pandadoc.core :as pd]))
 
 ;; Templates API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn template-details [data]
