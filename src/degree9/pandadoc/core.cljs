@@ -13,7 +13,7 @@
     (throw (js/Error. (.-statusText res)))))
 
 (defn- pandadoc-url [path & [query]]
-  (str (env/get "PANDADOC" "https://api.pandadoc.com/public/v1/documents/") path))
+  (str (env/get "PANDADOC" "https://api.pandadoc.com/public/v1/") path))
 
 (defn- pandadoc-headers [headers]
   (let [username (env/get "PANDADOC")

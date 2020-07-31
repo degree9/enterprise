@@ -1,8 +1,6 @@
 (ns degree9.pandadoc.templates
   :require [degree9.pandadoc.core :as pd])
 
-
-
 ;; Templates API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn template-details [data]
   (pd/get (str "/templates/" id "/details")))
