@@ -5,7 +5,7 @@
 
 ;; Templates API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn template-details [data]
-  (pd/get "/templates/" id "/details"))
+  (pd/get (str "/templates/" id "/details")))
 
 (defn delete-template [id]
   (pd/delete (str "/templates/" id)))

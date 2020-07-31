@@ -7,11 +7,11 @@
 (defn create-documents-folder [data]
   (pd/post "/documents/folders" data))
 
-(defn rename-documents-folder [data]
-  (pd/put (str "/documents/folders/documents_folder_uuid" data)))
+(defn rename-documents-folder [id data]
+  (pd/put (str "/documents/folders/" id) data))
 
 (defn create-templates-folder [id data]
   (pd/post (str "/templates/folders" id "/send") data))
 
-(defn rename-templates-folder [data]
-  (pd/put (str "/templates/folders/templates_folder_uuid" data)))
+(defn rename-templates-folder [id data]
+  (pd/put (str "/templates/folders/" id) data))
