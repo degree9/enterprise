@@ -10,8 +10,8 @@
 (dbg/defdebug debug "degree9:enterprise:pandadoc")
 
 (defn document [& [opts]]
-  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)]
-       [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
+  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)
+        id (merge {:key (env/get "ACCOUNT_ID")} opts)]
     (debug "")
     (reify
       Object
@@ -25,8 +25,8 @@
         (docs/delete-document id)))))
 
 (defn document-details [& [opts]]
-  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)]
-       [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
+  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)
+        id (merge {:key (env/get "ACCOUNT_ID")} opts)]
     (debug "")
     (reify
       Object
@@ -34,8 +34,8 @@
         (docs/document-details id)))))
 
 (defn document-send [& [opts]]
-  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)]
-       [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
+  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)
+        id (merge {:key (env/get "ACCOUNT_ID")} opts)]
     (debug "")
     (reify
       Object
@@ -43,8 +43,8 @@
         (docs/send-document id data)))))
 
 (defn document-download [& [opts]]
-  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)]
-       [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
+  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)
+        id (merge {:key (env/get "ACCOUNT_ID")} opts)]
     (debug "")
     (reify
       Object
@@ -52,8 +52,8 @@
         (docs/download-document id)))))
 
 (defn document-protected-download [& [opts]]
-  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)]
-       [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
+  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)
+        id (merge {:key (env/get "ACCOUNT_ID")} opts)]
     (debug "")
     (reify
       Object
@@ -61,8 +61,8 @@
         (docs/download-protected-document id)))))
 
 (defn document-folder [& [opts]]
-  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)]
-       [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
+  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)
+        id (merge {:key (env/get "ACCOUNT_ID")} opts)]
     (debug "")
     (reify
       Object
@@ -74,8 +74,8 @@
         (folders/rename-documents-folder id data)))))
 
 (defn template-folder [& [opts]]
-  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)]
-       [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
+  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)
+        id (merge {:key (env/get "ACCOUNT_ID")} opts)]
     (debug "")
     (reify
       Object
@@ -87,8 +87,8 @@
         (folders/rename-templates-folder id data)))))
 
 (defn template [& [opts]]
-  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)]
-       [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
+  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)
+        id (merge {:key (env/get "ACCOUNT_ID")} opts)]
     (debug "")
     (reify
       Object
@@ -96,8 +96,8 @@
           (tpl/delete-template id)))))
 
 (defn template-details [& [opts]]
-  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)]
-       [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
+  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)
+        id (merge {:key (env/get "ACCOUNT_ID")} opts)]
     (debug "")
     (reify
       Object
