@@ -5,10 +5,10 @@
 
 ;; Documents API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn list-documents []
-  (pd/get (str "/documents")))
+  (pd/get "/documents"))
 
 (defn create-document [data]
-  (pd/post (str "/documents" data)))
+  (pd/post "/documents" data))
 
 (defn document-status [id]
   (pd/get (str "/documents/" id)))
