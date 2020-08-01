@@ -1,4 +1,4 @@
-(ns degree9.pandadocs.core
+(ns degree9.pandadoc.core
   (:refer-clojure :exclude [get])
   (:require [goog.crypt.base64 :as base64]
             [clojure.string :as cstr]

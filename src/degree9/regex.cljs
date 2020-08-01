@@ -1,4 +1,12 @@
-(ns degree9.regex)
+(ns degree9.regex
+  (:refer-clojure :exclude [name]))
+
+;; JS RegExp Protocols ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(extend-type js/RegExp
+  IFn
+  (-invoke
+    ([regexp s] (re-find regexp s))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Email ;; MongoDB Regular Expressions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (def email #"^.+@[^\.].*\.[a-z]{2,}$")

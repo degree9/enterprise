@@ -10,9 +10,9 @@
 #?(:browser
    (do
     ;; App Client ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    (defn app []
+    (defn app [& [{:keys [uri socketio]}]]
       (-> (client/app)
-        (client/with-socketio)
+        (client/with-socketio uri socketio)
         (client/with-authentication)))
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

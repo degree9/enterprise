@@ -4,6 +4,9 @@
 
 
 ;; Documents API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn list-documents []
+  (pd/get "/documents"))
+
 (defn create-document [data]
   (pd/post "/documents" data))
 

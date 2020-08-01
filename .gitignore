@@ -17,3 +17,4 @@ repl-public
 repl-node
 test
 .env
+*.envrc
