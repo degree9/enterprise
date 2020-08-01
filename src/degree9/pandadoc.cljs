@@ -1,6 +1,7 @@
 (ns degree9.pandadoc
   (:require [goog.object :as obj]
             [degree9.env :as env]
+            [degree9.debug :as debug]
             [degree9.pandadoc.core :as hello]
             [degree9.pandadoc.documents :as docs]
             [degree9.pandadoc.folders :as folders]
