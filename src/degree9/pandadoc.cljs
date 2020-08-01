@@ -102,4 +102,4 @@
     (reify
       Object
       (get [this id & [params]]
-        (docs/template-details id)))))
+        (tpl/template-details id)))))
