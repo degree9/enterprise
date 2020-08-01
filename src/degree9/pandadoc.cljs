@@ -14,37 +14,76 @@
     (debug "")
     (reify
       Object
-      (create [this data & [params]]
-          (docs/create-document data))
+      (find [this & [params]]
+        (docs/list-documents))
       (get [this id & [params]]
-          (docs/document-status id))
-      (get [this id & [params]]
-          (docs/document-details id))
+        (docs/document-status id))
       (create [this data & [params]]
-          (docs/send-document data))
-      (create [this data & [params]]
-          (docs/create-document-link data))
-      (get [this id & [params]]
-          (docs/download-documents id))
+        (docs/create-document data))
       (remove [this id & [params]]
-          (docs/delete-document id)))))
+        (docs/delete-document id)))))
 
-
-(defn folder [& [opts]]
+(defn document-details [& [opts]]
   (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)]
        [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
     (debug "")
     (reify
       Object
-      (create [this data & [params]]
-          (folders/create-documents-folder data))
-      (update [this id & [params]]
-          (folders/rename-documents-folder id))
-      (create [this data & [params]]
-          (folders/create-templates-folder data))
-      (update [this data & [params]]
-          (folders/rename-templates-folder data)))))
+      (get [this id & [params]]
+        (docs/document-details id)))))
 
+(defn document-send [& [opts]]
+  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)]
+       [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
+    (debug "")
+    (reify
+      Object
+      (update [this id data & [params]]
+        (docs/send-document id data)))))
+
+(defn document-download [& [opts]]
+  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)]
+       [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
+    (debug "")
+    (reify
+      Object
+      (get [this id & [params]]
+        (docs/download-document id)))))
+
+(defn document-protected-download [& [opts]]
+  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)]
+       [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
+    (debug "")
+    (reify
+      Object
+      (get [this id & [params]]
+        (docs/download-protected-document id)))))
+
+(defn document-folder [& [opts]]
+  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)]
+       [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
+    (debug "")
+    (reify
+      Object
+      (find [this & [params]]
+        (folders/list-documents-folder))
+      (create [this data & [params]]
+        (folders/create-documents-folder data))
+      (patch [this id data & [params]]
+        (folders/rename-documents-folder id data)))))
+
+(defn template-folder [& [opts]]
+  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)]
+       [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
+    (debug "")
+    (reify
+      Object
+      (find [this & [params]]
+        (folders/list-templates-folder))
+      (create [this data & [params]]
+        (folders/create-templates-folder data))
+      (patch [this id data & [params]]
+        (folders/rename-templates-folder id data)))))
 
 (defn template [& [opts]]
   (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)]
@@ -52,7 +91,14 @@
     (debug "")
     (reify
       Object
-      (get [this id data & [params]]
-          (tpl/template-details id))
       (remove [this id data & [params]]
           (tpl/delete-template id)))))
+
+(defn template-details [& [opts]]
+  (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)]
+       [id (merge {:key (env/get "ACCOUNT_ID")} opts)]
+    (debug "")
+    (reify
+      Object
+      (get [this id & [params]]
+        (docs/template-details id)))))
