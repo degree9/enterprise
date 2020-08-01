@@ -1,12 +1,13 @@
 (ns degree9.pandadoc
   (:require [goog.object :as obj]
             [degree9.env :as env]
-            [degree9.debug :as debug]
+            [degree9.debug :as dbg]
             [degree9.pandadoc.core :as hello]
             [degree9.pandadoc.documents :as docs]
             [degree9.pandadoc.folders :as folders]
             [degree9.pandadoc.templates :as tpl]))
 
+(dbg/defdebug debug "degree9:enterprise:pandadoc")
 
 (defn document [& [opts]]
   (let [conf (merge {:key (env/get "PANDADOC_API_KEY")} opts)]
