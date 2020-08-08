@@ -23,7 +23,7 @@
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     ;; Client Service Cell ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    (def service-coll client/service-cell)
+    (def service-coll fs/feathers-cell)
 
     (defn service-id [service id & [params]]
       (let [fcell  (j/cell nil)
