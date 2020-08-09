@@ -1,6 +1,7 @@
 (ns degree9.hooks
-  (:require [goog.object :as obj]
-            [degree9.debug :as dbg]))
+  (:require [degree9.object :as obj]
+            [degree9.debug :as dbg]
+            [degree9.error :as err]))
 
 (dbg/defdebug debug "degree9:enterprise:hooks")
 
@@ -10,11 +11,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Hook Return ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defn return-hook [hook]
-  (fn [_] hook))
+(defn return-context [context]
+  (fn [_] context))
 
-(defn then-hook [hook prom]
-  (.then prom (return-hook hook)))
+(defn then-context [context prom]
+  (.then prom (return-context context)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Block Transports ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -78,13 +79,6 @@
   (fn [hook]
     (doto hook
       (params! (merge (params hook) data)))))
-
-(defn default-data
-  "Merges the `default` hashmap with the `request.data`."
-  [default]
-  (fn [hook]
-    (doto hook
-      (data! (merge default (data hook))))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Common Request Hooks ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -96,3 +90,37 @@
       (doto hook
         (params! (merge-with merge params {"query" {"$populate" props}}))))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;; Default Entity Hooks ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn- default-entity
+  "Merges `entity` with `context.data`."
+  [entity]
+  (fn [{:keys [data] :as context}]
+    (doto context
+      (obj/set :data (obj/merge entity data)))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Data Validation Hooks;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defn property-exists [property]
+  (fn [context]
+    (if (obj/get-in context [:data property]) context
+      (throw (err/error "Missing data property (%s). (property-exists)" property)))))
+
+(defn property-regex [property regex]
+  (fn [context]
+    (if (re-find regex (obj/get-in context [:data property])) context
+      (throw (err/error "Property (%s) does not pass regex (%s). (property-regex)" property regex)))))
+
+(defn- throw-when [pred msg & args]
+  (when pred (throw (apply err/error msg args))))
+
+(defn duplicate-property [property]
+  (fn [context]
+    (let [svc (obj/get context :service)
+          data (obj/get-in context [:data property])]
+      (then-context context
+        (-> (.find svc (clj->js {:params {:query {property data}}}))
+            (.then #(throw-when (< 0 (count %))
+                      "Duplicate property (%s) found. (duplicate-property)" property)))))))

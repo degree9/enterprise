@@ -1,5 +1,5 @@
 (ns degree9.mongodb
-  (:require [goog.object :as obj]
+  (:require [degree9.object :as obj]
             [degree9.env :as env]
             [degree9.debug :as dbg]
             [meta.server :as server]
@@ -9,7 +9,7 @@
 (dbg/defdebug debug "degree9:enterprise:mongodb")
 
 ;; Mongoose Schema Types ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(def SchemaTypes (-> mongoose (obj/get "Schema") (obj/get "Types")))
+(def SchemaTypes (obj/get-in mongoose ["Schema" "Types"]))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; MongoDB Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -52,11 +52,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; D9 Public Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defn connect! [& opts]
-  (let [user (:username   opts (env/get "MONGODB_USERNAME"))
-        pass (:password   opts (env/get "MONGODB_PASSWORD"))
-        conn (:connection opts (env/get "MONGODB_CONNECTION"))]
+(defn connect! [& [opts]]
+  (let [user (env/require "MONGODB_USERNAME")
+        pass (env/require "MONGODB_PASSWORD")
+        conn (env/require "MONGODB_CONNECTION")]
     (connect conn
-      {:auth {:user user :password pass}
-       :useNewUrlParser true})))
+      (merge opts
+        {:auth {:user user :password pass}
+         :useNewUrlParser true
+         :useUnifiedTopology true}))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -1,96 +1,138 @@
 (ns degree9.es6
-  (:require [clojure.walk :as w]))
+  (:refer-clojure :exclude [class])
+  (:require [cljs.analyzer :as analyzer]
+            [cljs.compiler :as compiler]))
 
-; (defn parse-args [args]
-;   (loop [opts    (transient {})
-;          methods (transient [])
-;          [arg & args] args]
-;     (if-not (or arg args)
-;       [(persistent! opts) (persistent! methods)]
-;       (cond (map? arg)     (recur (reduce-kv assoc! opts arg) methods args)
-;             (keyword? arg) (recur (assoc! opts arg (first args)) methods (rest args))
-;             :else          (recur opts (conj! methods arg) args)))))
+;; Extends Analyzer Special Forms ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(alter-var-root #'analyzer/specials #(conj % 'js-class* 'js-method* 'js-super*))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Native ES6 Class Super ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defmacro ^:private js-super []
+  `('js* "super"))
 
-(defn- method-fn-name
-  [method-name]
-  (str "__pylon$method$" method-name))
+(defmacro super-as
+  "Defines a scope where JavaScript's implicit \"super\" is bound to the name provided."
+  [name & body]
+  `(let [~name (js-super)]
+     ~@body))
 
-(defn- transform-body [body]
-  (w/postwalk
-   (fn [form]
-     (if (and (seq? form)
-              (= 2 (count form))
-              (= 'clojure.core/deref (first form))
-              (symbol? (second form))
-              (= "." (subs (name (second form)) 0 1)))
-       (list (symbol (str ".-" (subs (name (second form)) 1))) (symbol "this"))
-       form))
-   body))
+(defmethod analyzer/parse 'js-super*
+  [op env [_ & params :as form] _ _]
+  (analyzer/disallowing-recur
+    {:env env
+     :op :js-super
+     :form form
+     :params (when params (mapv (partial analyzer/analyze (assoc env :context :expr)) params))}))
 
-(defn- method-def
-  [ctor method-name sig body]
-  (let [sig-with-this (apply vector 'this sig)
-        body (transform-body body)]
-    `(fn ~(symbol method-name) ~sig-with-this
-       (let [~'__pylon_method_name ~method-name
-             ~'__pylon_prototype (.-prototype ~ctor)]
-         ~@body))))
+(defmethod compiler/emit* :js-super
+  [{:keys [params]}]
+  (if-not params
+    (compiler/emits "super")
+    (compiler/emits "super(" (interpose "," params) ")")))
 
-(defn- method-from-spec [spec]
-  (if (= 'defn (first spec)) (method-from-spec (rest spec))
-    (let [name (name (first spec))]
-      {:name name
-       :fn-name (method-fn-name name)
-       :sig (second spec)
-       :body (drop 2 spec)})))
+(defmacro super [& params]
+  `(~'js-super* ~@params))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn- parse-args [args]
-  (loop [args args opts {}]
-    (cond
-     (keyword? (first args))
-     (recur (drop 2 args) (assoc opts (first args) (second args)))
-     :else [opts args])))
+;; Native ES6 Class compiler extension ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn ^:private analyze-with-locals [{:keys [locals] :as env} params expr]
+  (let [[locals _] (reduce (analyzer/analyze-fn-method-param env)
+                           [locals []]
+                           (map-indexed vector params))]
+    (analyzer/analyze (assoc env :locals locals) expr)))
+
+(defmethod analyzer/parse 'js-method*
+  [op env [_ method params & exprs :as form] _ _]
+  (let [params (remove '#{&} params)
+        statements (->> (butlast exprs)
+                        (mapv (partial analyze-with-locals
+                                      (assoc env :context :statement)
+                                      (vec params))))
+        ret        (->> (last exprs)
+                        (analyze-with-locals (assoc env :context :return)
+                                             (vec params)))]
+    (analyzer/disallowing-recur
+      {:env env
+       :op :js-method
+       :children (if statements [:statements :ret] [:ret])
+       :form form
+       :method method
+       :params params
+       :statements statements
+       :ret ret})))
+
+(defmethod compiler/emit* :js-method
+  [{:keys [method params statement ret]}]
+  (compiler/emitln method "(" (interpose "," params) "){")
+  (doseq [s statement]
+    (compiler/emitln s))
+  (when ret (compiler/emitln ret))
+  (compiler/emitln "}"))
+
+(defn ^:private methodize [[method params & body]]
+  `(~'js-method* ~method ~params ~@body))
+
+(defmethod analyzer/parse 'js-class*
+  [op env [_ class extends & methods :as form] _ _]
+  (analyzer/disallowing-recur
+    {:env env
+     :op :js-class
+     :children [:methods]
+     :form form
+     :class class
+     :extends (when extends (analyzer/analyze-symbol env extends))
+     :methods (mapv (partial analyzer/analyze env) methods)}))
+
+(defmethod compiler/emit* :js-class
+  [{:keys [env class extends methods]}]
+  (when (= :return (:context env))
+    (compiler/emits "return "))
+  (compiler/emits "class " class)
+  (when extends
+    (compiler/emits " extends " extends))
+  (compiler/emitln " {")
+  (doseq [m methods]
+    (compiler/emitln m))
+  (compiler/emits "}"))
+
+(defmacro ^:private class
+  "Create a named or unnamed javascript class. (es6+)"
+  [& [name & [extends :as methods] :as body]]
+  (let [name    (when (symbol? name) name)
+        extends (when (symbol? extends) extends)
+        methods (if name methods body)
+        methods (if extends (rest methods) methods)]
+   `(~'js-class* ~name ~extends ~@(map methodize methods))))
 
 (defmacro defclass
-  [class-name & args]
-  (let [[{:keys [extends mixin]} specs] (parse-args args)
-        methods (map method-from-spec specs)
-        ctor (gensym "ctor")
-        class-string (str (ns-name *ns*) "." class-name)]
-    `(let [~ctor (create-ctor)]
+  "Define a named javascript class. (es6+)"
+  [name & [extends :as methods]]
+  (let [extends (when (symbol? extends) extends)
+        methods (if extends (rest methods) methods)]
+    `(def ~name (class ~name ~extends ~@methods))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-       ;; Build the constructor
-       (def ~class-name ~ctor)
+;; Extends Analyzer Special Forms ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(alter-var-root #'analyzer/specials #(conj % 'spread*))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-       ;; Extend with superclass prototype
-       ~(when extends
-          `(do
-             (goog/inherits ~class-name ~extends)
-             (aset (.-prototype ~class-name) "__pylon$superclass" ~extends)))
+;; ES6 Spread Oporator ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defmethod analyzer/parse 'spread*
+  [op env [_ param :as form] _ _]
+  (analyzer/disallowing-recur
+    {:env env
+     :op :spread
+     :form form
+     :param (analyzer/analyze (assoc env :context :expr) param)}))
 
-       ;; Extend with mixins
-       ~@(for [m mixin]
-           `(let [proto# (or (.-prototype ~m) ~m)]
-              (goog/mixin (.-prototype ~class-name) proto#)))
+(defmethod compiler/emit* :spread
+  [{:keys [param]}]
+  (compiler/emits "..." param))
 
-       (aset (.-prototype ~ctor) "__pylon$classname" ~class-string)
+(defmacro js-spread [param]
+  `(~'spread* ~param))
 
-       ;; Define methods
-       ~@(for [{:keys [name fn-name sig body]} methods
-               :let [dashname (symbol (str "-" name))]]
-           `(let [func# ~(method-def class-name name sig body)]
-              ;; Apply the method to the prototype
-              (aset (.-prototype ~class-name) ~fn-name func#)
-              (set! (.. ~class-name -prototype ~dashname)
-                    (method-wrapper ~fn-name))
-              ;; Export the method name
-              (goog/exportProperty (.-prototype ~class-name)
-                                   ~name (.. ~class-name -prototype ~dashname))))
-
-       ;; Export the class
-       (goog/exportSymbol ~class-string ~class-name))))
-
-(defmacro super [& args]
-  `(let [super# (aget ~'__pylon_prototype "__pylon$superclass")]
-     (invoke-super super# ~'__pylon_method_name ~'this ~args)))
+; (defmacro ^:private js-spread [param]
+;   `('js* "...~{param}"))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

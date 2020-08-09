@@ -1,8 +1,8 @@
 (ns degree9.auth.azureb2c
   (:require [degree9.debug :as dbg]
-            [goog.object :as obj]
-            [meta.server :as server]
+            [degree9.object :as obj]
             [degree9.env :as env]
+            [degree9.error :as err]
             [degree9.auth.oauth :as oauth]))
 
 (def ^:private debug (dbg/debug "degree9:enterprise:auth:azureb2c"))
@@ -10,9 +10,9 @@
 (set! (.. oauth/OAuthStrategy -prototype -getProfile)
   (fn [data & args]
     (debug "getProfile raw data " data)
-    (-> data
-      (obj/get "id_token")
-      (obj/get "payload"))))
+    (if-let [error (obj/get data :error)]
+      (throw (err/error (obj/get error :error_description)))
+      (obj/get-in data [:id_token :payload]))))
 
 (set! (.. oauth/OAuthStrategy -prototype -getEntityData)
   (fn [data & args]
