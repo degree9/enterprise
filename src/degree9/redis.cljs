@@ -1,24 +1,19 @@
 (ns degree9.redis
   (:require ["redis" :as rs]
-            [clojure.string :as s]))
+            [degree9.env :as env]
+            [degree9.debug :as dbg]
+            [degree9.string :as s]))
 
-(defn- redis-url [& {:keys [host port password db]}]
-  (s/join
-    (cond-> ["rediss://"]
-      password (conj (str ":" password "@"))
-      host     (conj (str host))
-      port     (conj (str ":" port))
-      db       (conj (str "/" db)))))
+(dbg/defdebug debug "degree9:enterprise:redis")
 
-(defn- mkclient [& [opts]]
-  (.client rs (redis-url opts)))
+(defn- mkclient [& {:keys [host port password]}]
+  (.createClient rs port host (clj->js {:auth_pass password :tls {:servername host}})))
 
 (defn redis [& [opts]]
-  (let [host     (env/get "REDIS_HOST")
-        port     (env/get "REDIS_PORT")
-        password (env/get "REDIS_PASSWORD")
-        db       (env/get "REDIS_DB")
-        client   (:client opts (mkclient {:host host :port port :password password :db db}))]
+  (let [host     (env/require "REDISCACHEHOSTNAME")
+        port     (env/require "REDISCACHEPORT")
+        password (env/require "REDISCACHEKEY")
+        client   (:client opts (mkclient {:host host :port port :password password}))]
     (debug "Initializing redis service.")
     (reify
       Object
@@ -34,3 +29,14 @@
       ;  (patch-namespace api id data))
       (remove [this id params]))))
       ;  (delete-namespace api id)))))
+
+;; D9 Public Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn connect! [& [opts]]
+  (let [host     (env/require "REDISCACHEHOSTNAME")
+        port     (env/require "REDISCACHEPORT")
+        password (env/require "REDISCACHEKEY")]
+    (debug "Initializing redis client.")
+    (mkclient
+      (merge opts
+        {:host host :port port :password password}))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

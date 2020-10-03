@@ -2,7 +2,7 @@
   (:require [degree9.debug :as dbg]
             [degree9.object :as obj]
             [degree9.es6 :as es6]
-            [clojure.string :as cstr]
+            [degree9.string :as cstr]
             ["@feathersjs/authentication" :as auth]))
 
 (dbg/defdebug debug "degree9:enterprise:auth:api-key")

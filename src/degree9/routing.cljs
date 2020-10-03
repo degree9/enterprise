@@ -33,10 +33,10 @@
 
 ;; App Route State ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn- path->kw [path]
-  (mapv keyword (remove empty? (clojure.string/split path "/"))))
+  (mapv keyword (remove empty? (degree9.string/split path "/"))))
 
 (defn- kw->path [& korks]
-  (clojure.string/join "/" (mapv name (flatten korks))))
+  (degree9.string/join "/" (mapv name (flatten korks))))
 
 (j/defc= route (path->kw path) #(reset! path (kw->path %)))
 

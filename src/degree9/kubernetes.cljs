@@ -3,7 +3,7 @@
   (:require
    ["@kubernetes/client-node" :as k8s]
    [goog.object :as obj]
-   [clojure.string :as s]
+   [degree9.string :as s]
    [feathers.errors :as error]
    [degree9.env :as env]
    [degree9.debug :as dbg]))

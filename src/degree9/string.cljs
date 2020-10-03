@@ -7,9 +7,15 @@
 
 (def join cstr/join)
 
-(def blank? cstr/blank?)
+(def split cstr/split)
 
-(def not-blank? (comp cstr/blank? not))
+(def split-lines cstr/split-lines)
+
+(defn blank? [s]
+  (cstr/blank? s))
+
+(defn not-blank? [s]
+  (not (cstr/blank? s)))
 
 (defn pad-start
   ([s length] (.padStart (str s) length))

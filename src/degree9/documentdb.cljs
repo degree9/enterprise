@@ -1,6 +1,6 @@
 (ns degree9.documentdb
  (:require
-  [clojure.string :as s]
+  [degree9.string :as s]
   [goog.object :as obj]
   [meta.promise :as p]
   [feathers.services :as svc]

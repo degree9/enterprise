@@ -3,7 +3,7 @@
   (:refer-clojure :exclude [require get keys])
   (:require ["fs" :as fs]
             ["path" :as path]
-            [clojure.string :as cstr]
+            [degree9.string :as cstr]
             [degree9.debug :as dbg]
             [goog.object :as obj]
             [goog.string :as gstring]

@@ -13,7 +13,7 @@
  {:pre [(or (string? endpoint) (url? endpoint))]
   :post [(url? %)]}
  (let [; normalise the root of the endpoint path
-       endpoint (if (clojure.string/starts-with? endpoint "/")
+       endpoint (if (degree9.string/starts-with? endpoint "/")
                  endpoint
                  (str "/" endpoint))]
   (->
