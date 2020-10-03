@@ -1,6 +1,6 @@
 (ns degree9.regex
   (:refer-clojure :exclude [name])
-  (:require [clojure.string :as cstr]))
+  (:require [degree9.string :as cstr]))
 
 ;; JS RegExp Protocols ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (extend-type js/RegExp

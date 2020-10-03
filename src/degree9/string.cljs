@@ -7,6 +7,10 @@
 
 (def join cstr/join)
 
+(def split cstr/split)
+
+(def split-lines cstr/split-lines)
+
 (defn blank? [s]
   (cstr/blank? s))
 

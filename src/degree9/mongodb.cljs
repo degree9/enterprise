@@ -44,11 +44,13 @@
   "Create a feathers service backed by MongoDB."
   ([app path opts hooks]
    (debug "Initializing MongoDB collection service with options %s" opts)
-   (server/api app path (mongodb opts) hooks))
+   (server/api app path (mongodb (clj->js opts)) hooks))
   ([app path db-model db-schema hooks]
-   (api app path #js{:Model (model db-model (schema db-schema))} hooks))
+   (api app path {:Model (model db-model (schema db-schema))} hooks))
   ([app path db-model db-schema schema-opts hooks]
-   (api app path #js{:Model (model db-model (schema db-schema schema-opts))} hooks)))
+   (api app path {:Model (model db-model (schema db-schema schema-opts))} hooks))
+  ([app path db-conn db-model db-schema schema-opts hooks]
+   (api app path {:Model (model db-conn db-model (schema db-schema schema-opts))} hooks)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; D9 Public Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

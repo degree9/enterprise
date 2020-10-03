@@ -1,6 +1,6 @@
 (ns degree9.pathway
   (:require [clojure.spec.alpha :as spec]
-            [clojure.string :as str]
+            [degree9.string :as str]
             [degree9.debug :as dbg]
             [degree9.pathway.spec :as pspec]))
 

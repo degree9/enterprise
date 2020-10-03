@@ -1,7 +1,7 @@
 (ns degree9.paysafe.core
   (:refer-clojure :exclude [get])
   (:require [goog.crypt.base64 :as base64]
-            [clojure.string :as cstr]
+            [degree9.string :as cstr]
             [degree9.env :as env]
             [degree9.request :as req]))
 
