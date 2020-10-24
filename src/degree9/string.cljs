@@ -1,4 +1,5 @@
 (ns degree9.string
+  (:refer-clojure :exclude [replace])
   (:require [clojure.string :as cstr]
             [goog.string    :as gstr]
             [goog.string.format]))
@@ -6,6 +7,8 @@
 (def format gstr/format)
 
 (def join cstr/join)
+
+(def replace cstr/replace)
 
 (def split cstr/split)
 

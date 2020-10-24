@@ -3,7 +3,8 @@
             [goog.Uri.QueryData :as qd]
             [javelin.core :as j]
             [hoplon.history :as h]
-            [degree9.pathway :as pw])
+            [degree9.string :as str])
+            ;[degree9.pathway :as pw])
   (:require-macros degree9.routing))
 
 ;; History State ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -22,7 +23,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; URI Query State ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(j/defc= query (.getQueryData uri) #(reset! uri (.setQueryData @uri (qd/createFromMap (clj->js %)))))
+(defn- clj->query [data]
+  (qd/createFromMap (clj->js data)))
+
+(j/defc= query (.getQueryData uri) #(reset! uri (.setQueryData @uri (clj->query %))))
 
 (defn query-cell [key & [default]]
   (j/cell= (.get query (name key) default) #(reset! query (.set @query (name key) %))))
@@ -33,16 +37,16 @@
 
 ;; App Route State ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn- path->kw [path]
-  (mapv keyword (remove empty? (degree9.string/split path "/"))))
+  (mapv keyword (remove empty? (str/split path "/"))))
 
 (defn- kw->path [& korks]
-  (degree9.string/join "/" (mapv name (flatten korks))))
+  (str/join "/" (mapv name (flatten korks))))
 
 (j/defc= route (path->kw path) #(reset! path (kw->path %)))
 
-(defn route=
-  ([router] (route= router nil))
-  ([router default] (j/cell= (pw/match-route router path default))))
+; (defn router
+;   ([routes] (router routes nil))
+;   ([routes default] (j/cell= (pw/match-route routes path default))))
 
 (defn route!
   ([path] (route! path {}))
