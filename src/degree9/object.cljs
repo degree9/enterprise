@@ -33,6 +33,9 @@
 
 (defn reduce-kv [f i o]
   (clj->js (reduce-kv f i (js->clj o))))
+
+(defn from-entries [entries]
+  (.fromEntries js/Object entries))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; JS Object Protocols ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

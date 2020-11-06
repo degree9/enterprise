@@ -1,6 +1,5 @@
 (ns degree9.app
-  (:require [javelin.core :as j]))
+  (:require ["path" :as path]))
 
-(j/defc context {})
-
-(def context! (partial swap! context))
+(defn client-routing [app]
+  (.use app "*" (fn [req res] (.sendFile res (.resolve path "index.html")))))

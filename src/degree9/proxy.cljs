@@ -10,5 +10,5 @@
 (defn api
   "Mount a remote service to a local endpoint."
   [app path uri hooks]
-  (debug "Mount remote service at %s" path)
+  (debug "Mount remote service %s at %s" uri path)
   (server/api app path (remote/service path {:uri uri}) hooks))
