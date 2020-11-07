@@ -42,6 +42,6 @@
 (extend-type object
   ILookup
   (-lookup
-   ([o k] (prn o k) (get o k))
+   ([o k] (get o k))
    ([o k default] (get o k default))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
