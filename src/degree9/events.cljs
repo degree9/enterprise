@@ -1,19 +1,20 @@
-(ns degree9.events)
+(ns degree9.events
+  (:require [degree9.events.target :as target]))
 
 ;; Event Types ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (def types
   {:popstate "popstate"})
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Event API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Event Target API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn listen [target type listener]
-  (.addEventListener target (get types type) listener))
+  (target/addEventListener target (get types type) listener))
 
 (defn unlisten [target type listener]
-  (.removeEventListener target (get types type) listener))
+  (target/removeEventListener target (get types type) listener))
 
 (defn dispatch! [target event]
-  (.dispatchEvent target event))
+  (target/dispatchEvent target event))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Event Objects ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

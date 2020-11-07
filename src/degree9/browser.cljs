@@ -18,3 +18,6 @@
 
 (defn session-storage []
   (:sessionStorage (get-window)))
+
+(defn indexed-db []
+  (:indexedDB (get-window)))

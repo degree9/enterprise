@@ -16,3 +16,11 @@
 
 (defn clj->search [data]
   (js/URLSearchParams. (clj->js data)))
+
+;; URLSearchParams Protocols ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(extend-type js/URLSearchParams
+  ILookup
+  (-lookup
+   ([o k] (.get o (name k)))
+   ([o k default] (or (.get o (name k)) default))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
