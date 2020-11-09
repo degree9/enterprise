@@ -1,13 +1,14 @@
 (ns degree9.url
-  (:require [degree9.browser :as bom]
-            [degree9.object :as obj]))
+  (:require [degree9.object :as obj]
+            [degree9.browser.location :as loc]))
+
 
 (defn create-url
-  ([] (create-url (bom/get-location)))
+  ([] (create-url (loc/location)))
   ([location] (js/URL. location)))
 
 (defn create-search-params
-  ([] (create-search-params (:search (bom/get-location))))
+  ([] (create-search-params (:search (loc/location))))
   ([search] (js/URLSearchParams. search)))
 
 (defn search->clj [search]

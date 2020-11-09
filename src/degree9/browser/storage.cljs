@@ -1,5 +1,6 @@
 (ns degree9.browser.storage
-  (:refer-clojure :exclude [key get assoc dissoc empty]))
+  (:refer-clojure :exclude [key get assoc dissoc empty])
+  (:require [degree9.browser :as bom]))
 
 (defprotocol IStorage
   "Interface for interacting with Web Storage API."
@@ -16,6 +17,12 @@
   (set-item    [this index value] (.setItem this index value))
   (remove-item [this index]       (.removeItem this index))
   (clear       [this]             (.clear this)))
+
+(defn local-storage []
+  (bom/localStorage js/window))
+
+(defn session-storage []
+  (bom/sessionStorage js/window))
 
 (defn get [store key & [default]]
   (or (js->clj (get-item store (name key))) default))

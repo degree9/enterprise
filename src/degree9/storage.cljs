@@ -6,20 +6,20 @@
             [degree9.events :as events]))
 
 (defn local-storage [key & [default]]
-  (let [local (bom/local-storage)
+  (let [local (store/local-storage)
         store (j/cell (store/get local key default))]
     (j/with-let [store= (j/cell= store (partial store/assoc local key))]
-      (events/listen (bom/get-window) :storage
+      (bom/listen :storage
         (fn [event]
           (when (and (= (:key event) key)
                      (= (:storageArea event) local))
             (reset! store (js->clj (:newValue event)))))))))
 
 (defn session-storage [key & [default]]
-  (let [session (bom/session-storage)
+  (let [session (store/session-storage)
         store (j/cell (store/get session key default))]
     (j/with-let [store= (j/cell= store (partial store/assoc session key))]
-      (events/listen (bom/get-window) :storage
+      (bom/listen :storage
         (fn [event]
           (when (and (= (:key event) key)
                      (= (:storageArea event) session))
