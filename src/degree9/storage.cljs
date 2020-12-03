@@ -1,7 +1,7 @@
 (ns degree9.storage
   (:require [javelin.core :as j]
             [degree9.object :as obj]
-            [degree9.browser :as bom]
+            [degree9.browser.window :as win]
             [degree9.browser.storage :as store]
             [degree9.events :as events]))
 
@@ -9,7 +9,7 @@
   (let [local (store/local-storage)
         store (j/cell (store/get local key default))]
     (j/with-let [store= (j/cell= store (partial store/assoc local key))]
-      (bom/listen :storage
+      (win/listen :storage
         (fn [event]
           (when (and (= (:key event) key)
                      (= (:storageArea event) local))
@@ -19,7 +19,7 @@
   (let [session (store/session-storage)
         store (j/cell (store/get session key default))]
     (j/with-let [store= (j/cell= store (partial store/assoc session key))]
-      (bom/listen :storage
+      (win/listen :storage
         (fn [event]
           (when (and (= (:key event) key)
                      (= (:storageArea event) session))

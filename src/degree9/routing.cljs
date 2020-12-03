@@ -1,7 +1,7 @@
 (ns degree9.routing
   (:require [javelin.core :as j]
             [degree9.string :as str]
-            [degree9.browser :as bom]
+            [degree9.browser.window :as win]
             [degree9.browser.document :as doc]
             [degree9.browser.history :as history]
             [degree9.browser.location :as loc]
@@ -13,7 +13,7 @@
 (defn- state-cell []
   (let [history (j/cell (:state (history/history)))]
     (j/with-let [history= (j/cell= history (partial reset! history))]
-      (bom/listen :popstate
+      (win/listen :popstate
         (fn [event] (reset! history= (:state event)))))))
 
 (def state (state-cell))
@@ -23,7 +23,7 @@
 (defn- url-cell []
   (let [url (j/cell (url/create-url))]
     (j/with-let [url= (j/cell= url (partial reset! url))]
-      (bom/listen :popstate
+      (win/listen :popstate
         (fn [event] (reset! url= (url/create-url)))))))
 
 (def url (url-cell))
@@ -33,7 +33,7 @@
 (defn- search-cell []
   (let [params (j/cell (url/create-search-params))]
     (j/with-let [params= (j/cell= params (partial reset! params))]
-      (bom/listen :popstate
+      (win/listen :popstate
         (fn [event] (reset! params= (url/create-search-params)))))))
 
 (def search (search-cell))
@@ -43,7 +43,7 @@
 (defn- path-cell []
   (let [path (j/cell (:pathname (loc/location)))]
     (j/with-let [path= (j/cell= path (partial reset! path))]
-      (bom/listen :popstate
+      (win/listen :popstate
         (fn [event] (reset! path= (:pathname (loc/location))))))))
 
 (def path (path-cell))

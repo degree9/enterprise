@@ -1,6 +1,7 @@
 (ns degree9.browser.history
-  (:require [degree9.browser :as bom]
-            [degree9.events :as events]))
+  (:require [degree9.events :as events]
+            [degree9.browser.window :as bom]))
+
 
 (defprotocol IHistory
   "Interface for interacting with HTML5 History API."

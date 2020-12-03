@@ -1,6 +1,6 @@
 (ns degree9.browser.storage
   (:refer-clojure :exclude [key get assoc dissoc empty])
-  (:require [degree9.browser :as bom]))
+  (:require [degree9.browser.window :as bom]))
 
 (defprotocol IStorage
   "Interface for interacting with Web Storage API."

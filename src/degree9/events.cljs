@@ -3,18 +3,19 @@
 
 ;; Event Types ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (def types
-  {:popstate "popstate"})
+  {:popstate "popstate"
+   :resize   "resize"})
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Event Target API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defn listen [target type listener]
-  (target/addEventListener target (get types type) listener))
+(defn listen [target event listener]
+  (target/addEventListener target (get types event (name event)) listener))
 
-(defn unlisten [target type listener]
-  (target/removeEventListener target (get types type) listener))
+(defn unlisten [target event listener]
+  (target/removeEventListener target (get types event (name event)) listener))
 
 (defn dispatch! [target event]
-  (target/dispatchEvent target event))
+  (target/dispatchEvent target (get types event (name event))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Event Objects ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
