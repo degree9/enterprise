@@ -20,7 +20,7 @@
     "Alias for (emitter/removeListener event listener)."))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(extend-type e/EventEmitter
+(extend-type object
   IEventEmitter
   (addListener
     [this event listener]

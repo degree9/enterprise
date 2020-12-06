@@ -2,7 +2,6 @@
   (:require [degree9.events :as events]
             [degree9.browser.window :as bom]))
 
-
 (defprotocol IHistory
   "Interface for interacting with HTML5 History API."
   (back [this] "Move backward through history.")

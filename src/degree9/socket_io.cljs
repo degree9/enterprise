@@ -7,3 +7,6 @@
   ([] (client))
   ([url] (client url))
   ([url opts] (client url (clj->js opts))))
+
+(defn connect-error [socket listener]
+  (emitter/on socket "connect_error" listener))
