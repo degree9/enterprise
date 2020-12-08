@@ -15,14 +15,20 @@
   (target/removeEventListener target (get types event (name event)) listener))
 
 (defn dispatch! [target event]
-  (target/dispatchEvent target (get types event (name event))))
+  (target/dispatchEvent target event))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Event Objects ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defn create-event
-  ([type init] (create-event js/Event type init))
-  ([event type init] (event. (get types type) (clj->js init))))
+(defn create-event [event type init]
+  (event. (get types type) (clj->js init)))
 
-(defn popstate [state]
-  (create-event js/PopStateEvent :popstate {:state state}))
+(defmulti event! (fn [type init] type))
+
+(defmethod event! :default
+  [event init]
+  (create-event js/Event. event init))
+
+(defmethod event! :popstate
+  [event init]
+  (create-event js/PopStateEvent. event {:state init}))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

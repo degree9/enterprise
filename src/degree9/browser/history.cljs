@@ -32,4 +32,4 @@
   (replaceState (history) (clj->js state) title url))
 
 (defn popstate! [state]
-  (bom/dispatch! (events/popstate state)))
+  (bom/dispatch! (events/event! :popstate state)))
