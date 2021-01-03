@@ -14,6 +14,12 @@
 
 (def split-lines cstr/split-lines)
 
+(defn prepend [s affix]
+  (str affix s))
+
+(defn append [s affix]
+  (str s affix))
+
 (defn blank? [s]
   (cstr/blank? s))
 

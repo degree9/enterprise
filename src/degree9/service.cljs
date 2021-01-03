@@ -53,8 +53,8 @@
    (server/api app path (µservice client service) hooks)))
 
 ;; Multi-Service ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defn- api-service [app [prefix url services] hooks]
-  (reduce (fn [app service] (api app (str prefix service) url service hooks)) app services))
+(defn- api-service [app [prefix client services] hooks]
+  (reduce (fn [app service] (api app (str prefix service) client service hooks)) app services))
 
 (defn- reduce-apis [app services hooks]
   (reduce (fn [app service] (api-service app service hooks)) app services))
