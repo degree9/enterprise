@@ -53,7 +53,7 @@
 (defn route!
   "Provides client (SPA) routing without reloading the page."
   ([path] (route! path nil))
-  ([path query] (route! path query @state))
+  ([path query] (route! path query {}))
   ([path query state]
    (let [title  (:title (doc/document))
          search (url/clj->search query)
