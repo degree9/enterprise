@@ -1,7 +1,6 @@
 (ns degree9.auth
   (:require
    [javelin.core :as j]
-   [goog.object :as obj]
    [meta.client :as client]
    [meta.promise :as prom])
   (:require-macros degree9.auth))

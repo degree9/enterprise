@@ -11,9 +11,11 @@
   ([] (create-search-params (:search (loc/location))))
   ([search] (js/URLSearchParams. search)))
 
-(defn search->clj [search]
-  (let [entries (:entries search)]
-    (js->clj (obj/from-entries entries))))
+(defn search->clj
+  ([search] (search->clj search :keywordize-keys false))
+  ([search & {:keys [keywordize-keys]}]
+   (let [entries (.entries search)]
+     (js->clj (obj/from-entries entries) :keywordize-keys keywordize-keys))))
 
 (defn clj->search [data]
   (js/URLSearchParams. (clj->js data)))
