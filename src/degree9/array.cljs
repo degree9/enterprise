@@ -3,7 +3,7 @@
   (:require [goog.array :as arr]))
 
 (defn conj [a o]
-  (arr/insert (clj->js a) (clj->js o)))
+  (doto a (arr/insert (clj->js o))))
 
 ;; JS Object Protocols ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (extend-type array
