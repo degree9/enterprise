@@ -1,53 +1,64 @@
 (ns degree9.routing
-  (:require [goog.Uri :as uri]
-            [goog.Uri.QueryData :as qd]
-            [javelin.core :as j]
-            [hoplon.history :as h]
-            [degree9.pathway :as pw])
+  (:require [javelin.core :as j]
+            [degree9.string :as str]
+            [degree9.browser.window :as win]
+            [degree9.browser.document :as doc]
+            [degree9.browser.history :as history]
+            [degree9.browser.location :as loc]
+            [degree9.events :as events]
+            [degree9.url :as url])
   (:require-macros degree9.routing))
 
-;; History State ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(def history (h/history-cell))
+;; HTML5 History State ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn- state-cell []
+  (let [history (j/cell (:state (history/history)))]
+    (j/with-let [history= (j/cell= history (partial reset! history))]
+      (win/listen :popstate
+        (fn [event] (reset! history= (:state event)))))))
+
+(def state (state-cell))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; URI State ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(j/defc= uri (uri/parse history) #(reset! history (.toString %)))
+;; URL ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn- url-cell []
+  (let [url (j/cell (url/create-url))]
+    (j/with-let [url= (j/cell= url (partial reset! url))]
+      (win/listen :popstate
+        (fn [event] (reset! url= (url/create-url)))))))
+
+(def url (url-cell))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; URI Path State ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(j/defc= path (.getPath uri) #(reset! uri (.setPath @uri %)))
+;; URLSearchParams ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn- search-cell []
+  (let [params (j/cell (url/create-search-params))]
+    (j/with-let [params= (j/cell= params (partial reset! params))]
+      (win/listen :popstate
+        (fn [event] (reset! params= (url/create-search-params)))))))
 
-(defn path! [p]
-  (reset! path p))
+(def search (search-cell))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; URI Query State ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(j/defc= query (.getQueryData uri) #(reset! uri (.setQueryData @uri (qd/createFromMap (clj->js %)))))
+;; URL Pathname ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn- path-cell []
+  (let [path (j/cell (:pathname (loc/location)))]
+    (j/with-let [path= (j/cell= path (partial reset! path))]
+      (win/listen :popstate
+        (fn [event] (reset! path= (:pathname (loc/location))))))))
 
-(defn query-cell [key & [default]]
-  (j/cell= (.get query (name key) default) #(reset! query (.set @query (name key) %))))
-
-(defn query! [q]
-  (reset! query q))
+(def path (path-cell))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; App Route State ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defn- path->kw [path]
-  (mapv keyword (remove empty? (clojure.string/split path "/"))))
-
-(defn- kw->path [& korks]
-  (clojure.string/join "/" (mapv name (flatten korks))))
-
-(j/defc= route (path->kw path) #(reset! path (kw->path %)))
-
-(defn route=
-  ([router] (route= router nil))
-  ([router default] (j/cell= (pw/match-route router path default))))
-
+;; Routing Public API ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn route!
-  ([path] (route! path {}))
-  ([path query]
-   (j/dosync
-     (path! path)
-     (query! query))))
+  "Provides client (SPA) routing without reloading the page."
+  ([path] (route! path nil))
+  ([path query] (route! path query {}))
+  ([path query state]
+   (let [title  (:title (doc/document))
+         search (url/clj->search query)
+         token  (if query (str/join "?" [path (str search)]) path)]
+     (j/dosync
+       (history/push-state! state title token)
+       (history/popstate! state)))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

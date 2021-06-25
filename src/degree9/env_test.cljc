@@ -12,8 +12,8 @@
 
 #?(:node
    (deftest ??get
-    (is (clojure.string/includes? (env/get :env-test-var) "foo"))
-    (is (clojure.string/includes? (env/get "ENV_TEST_VAR") "foo"))
+    (is (degree9.string/includes? (env/get :env-test-var) "foo"))
+    (is (degree9.string/includes? (env/get "ENV_TEST_VAR") "foo"))
     ; no fallback yields nil for no match
     (is (= nil (env/get :no-match)))
     ; should fallback to foo with no match

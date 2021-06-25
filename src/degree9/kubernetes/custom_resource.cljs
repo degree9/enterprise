@@ -1,6 +1,6 @@
 (ns degree9.kubernetes.custom-resource
   (:require [goog.object :as obj]
-            [clojure.string :as s]
+            [degree9.string :as s]
             [degree9.debug :as dbg]
             [degree9.kubernetes.core :as k8s]))
 

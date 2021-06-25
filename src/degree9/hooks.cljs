@@ -93,7 +93,7 @@
 
 
 ;; Default Entity Hooks ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defn- default-entity
+(defn default-entity
   "Merges `entity` with `context.data`."
   [entity]
   (fn [{:keys [data] :as context}]

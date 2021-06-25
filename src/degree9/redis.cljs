@@ -1,36 +1,21 @@
 (ns degree9.redis
-  (:require ["redis" :as rs]
-            [clojure.string :as s]))
+  (:require ["ioredis" :as ioredis]
+            [degree9.env :as env]
+            [degree9.debug :as dbg]))
 
-(defn- redis-url [& {:keys [host port password db]}]
-  (s/join
-    (cond-> ["rediss://"]
-      password (conj (str ":" password "@"))
-      host     (conj (str host))
-      port     (conj (str ":" port))
-      db       (conj (str "/" db)))))
+(dbg/defdebug debug "degree9:enterprise:redis")
 
-(defn- mkclient [& [opts]]
-  (.client rs (redis-url opts)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defn- mkclient [{:keys [protocol host port password] :or {protocol "rediss://"}}]
+  (let [url (str protocol ":" password "@" host ":" port)]
+    (debug "Connecting redis client to %s:%s" host port)
+    (ioredis. url)))
 
-(defn redis [& [opts]]
-  (let [host     (env/get "REDIS_HOST")
-        port     (env/get "REDIS_PORT")
-        password (env/get "REDIS_PASSWORD")
-        db       (env/get "REDIS_DB")
-        client   (:client opts (mkclient {:host host :port port :password password :db db}))]
-    (debug "Initializing redis service.")
-    (reify
-      Object
-      (find [this params])
-      ;  (list-namespace api))
-      (get [this id params])
-      ;  (read-namespace api id))
-      (create [this data params])
-      ;  (create-namespace api data))
-      (update [this id data params])
-      ;  (replace-namespace api id data))
-      (patch [this id data params])
-      ;  (patch-namespace api id data))
-      (remove [this id params]))))
-      ;  (delete-namespace api id)))))
+(defn connect! [& [opts]]
+  (let [host     (env/require "REDISCACHEHOSTNAME")
+        port     (env/require "REDISCACHEPORT")
+        password (env/require "REDISCACHEKEY")]
+    (debug "Initializing redis client")
+    (mkclient
+      (merge {:host host :port port :password password} opts))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

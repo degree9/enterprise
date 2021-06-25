@@ -11,7 +11,7 @@
    `anonymous` channel."
   [app]
   (chan/login app
-    #(let [conn (obj/get %2 "connection")]
+    #(when-let [conn (obj/get %2 "connection")]
        (debug "Joining Channel: Authenticated" conn)
        (when conn
          (chan/leave (chan/channel app "anonymous") conn)

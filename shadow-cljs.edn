@@ -21,8 +21,12 @@
   [degree9/covenant "0.1.0-SNAPSHOT"]
 
   ; testing
-  [degree9/boot-semver "1.9.0-SNAPSHOT" :scope "test"]
-  [crisptrutski/boot-cljs-test "0.3.5-SNAPSHOT" :scope "test"]]
+  [degree9/boot-semver "1.11.0" :scope "test"]
+  [crisptrutski/boot-cljs-test "0.3.5-SNAPSHOT" :scope "test"]
+
+  ; shadow
+  [thheller/shadow-cljs "2.8.107"]]
+
 
  ; http server
  :http {:host "127.0.0.1"}

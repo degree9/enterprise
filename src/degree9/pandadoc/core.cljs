@@ -1,7 +1,7 @@
-(ns degree9.pandadocs.core
+(ns degree9.pandadoc.core
   (:refer-clojure :exclude [get])
   (:require [goog.crypt.base64 :as base64]
-            [clojure.string :as cstr]
+            [degree9.string :as cstr]
             [degree9.env :as env]
             [degree9.request :as req]))
 
@@ -13,7 +13,7 @@
     (throw (js/Error. (.-statusText res)))))
 
 (defn- pandadoc-url [path & [query]]
-  (str (env/get "PANDADOC" "https://api.pandadoc.com/public/v1/documents/") path))
+  (str (env/get "PANDADOC" "https://api.pandadoc.com/public/v1/") path))
 
 (defn- pandadoc-headers [headers]
   (let [username (env/get "PANDADOC")

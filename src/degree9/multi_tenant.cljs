@@ -7,16 +7,17 @@
 (dbg/defdebug debug "degree9:enterprise:multi-tenant")
 
 (defn current-tenant [field]
-  (fn [hook]
+  (fn [context]
     (if-let [tenant (env/get "APP_TENANT_ID")]
-      (-> hook
+      (-> context
+        (obj/set-in [field] tenant)
         (obj/set-in [:data field] tenant)
         (obj/set-in [:params :query field] tenant))
       (throw (js/Error. "Tenant ID has not been configured.")))))
 
 (defn default-tenant [field]
-  (fn [hook]
+  (fn [context]
     (let [tenant  (env/get "APP_TENANT_ID")
-          current (obj/get-in hook [:params :query field])]
-      (if current hook
-        (obj/set-in hook [:params :query field] tenant)))))
+          current (obj/get-in context [:params :query field])]
+      (if current context
+        (obj/set-in context [:params :query field] tenant)))))
