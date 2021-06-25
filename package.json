@@ -39,7 +39,7 @@
     "node-fetch": "^2.6.0",
     "request": "^2.88.2",
     "request-compose": "=1.2.0",
-    "shopify-api-node": "^2.25.1",
+    "shopify-api-node": "^3.6.12",
     "swagger-client": "^3.10.12",
     "twilio": "^3.48.1",
     "ws": "^5.2.2",
