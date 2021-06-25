@@ -10,6 +10,9 @@
 
 (defn user-cell []
   (j/cell= (:user authentication)))
+
+(defn token-cell []
+  (j/cell= (:accessToken authentication)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Helper Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
