@@ -44,7 +44,7 @@
     "twilio": "^3.48.1",
     "ws": "^5.2.2",
     "xmlhttprequest": "^1.8.0",
-    "xregexp": "^4.3.0"
+    "xregexp": "^5.1.0"
   },
   "devDependencies": {
     "karma": "^4.4.1",
