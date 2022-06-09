@@ -36,7 +36,7 @@
     "hellosign-sdk": "^1.6.0",
     "jquery": "^3.5.1",
     "mongoose": "^5.9.21",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^3.2.6",
     "request": "^2.88.2",
     "request-compose": "=1.2.0",
     "shopify-api-node": "^2.25.1",
